@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tec con Causa – Proyectos</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="estilos-comunes.css" />
+  <link rel="stylesheet" href="proyectos.css" />
+</head>
+
+<body>
+
+  <div class="fondo-decorativo">
+    <div class="blob esquina1"></div>
+    <div class="blob esquina2"></div>
+  </div>
+  <!-- ===== BARRA DE NAVEGACIÓN ===== -->
+  <nav class="nav-arc">
+    <a href="dashboard.html" class="nav-logo">
+      <img src="\assets\img\logo_borderw.png" alt="logo" class="logo-img">
+      <span>Tec con Causa</span>
+    </a>
+
+
+    <div class="nav-links">
+      <a href="dashboard.html" class="activo">Dashboard</a>
+      <a href="proyectos.html">Proyectos</a>
+    </div>
+  </nav>
+
+
+  <!-- ===== CONTENIDO PRINCIPAL ===== -->
+  <main>
+
+    <!-- Encabezado -->
+    <div class="encabezado-pagina">
+      <h1>Proyectos</h1>
+      <p>Iniciativas que están transformando comunidades</p>
+    </div>
+
+    <!-- ===== CUADRÍCULA DE PROYECTOS ===== -->
+    <!-- Las tarjetas se generan con JavaScript abajo -->
+    <div class="cuadricula-proyectos" id="cuadriculaProyectos">
+      <!-- Aquí el JS va a insertar las tarjetas -->
+    </div>
+
+  </main>
+
+
+  <!-- ===== JAVASCRIPT ===== -->
+  <script>
+
+    // ---- Lista de todos los proyectos ----
+    // Cada proyecto es un objeto con sus datos
+    var proyectos = [
+      {
+        id: 'educacion-digital',
+        titulo: 'Educación Digital',
+        estado: 'En proceso',
+        progreso: 75,
+        color: '#5CA09E',
+        descripcion: 'Llevando tecnología a comunidades rurales para mejorar el acceso a la educación y cerrar la brecha digital.',
+        ubicacion: 'Puebla, Veracruz',
+        participantes: '120 estudiantes',
+        detalles: 'Instalación de 15 computadoras y capacitación en herramientas digitales básicas.'
+      },
+      {
+        id: 'alimentacion-sustentable',
+        titulo: 'Alimentación Sustentable',
+        estado: 'Activo',
+        progreso: 100,
+        color: '#E89042',
+        descripcion: 'Huertos comunitarios para promover la seguridad alimentaria y la autosuficiencia.',
+        ubicacion: 'Oaxaca, Chiapas',
+        participantes: '80 familias',
+        detalles: 'Creación de 10 huertos comunitarios con cultivos orgánicos.'
+      },
+      {
+        id: 'salud-mental',
+        titulo: 'Salud Mental',
+        estado: 'En proceso',
+        progreso: 60,
+        color: '#9B5BA5',
+        descripcion: 'Programas de apoyo psicológico para estudiantes y comunidades vulnerables.',
+        ubicacion: 'CDMX, Estado de México',
+        participantes: '200 beneficiarios',
+        detalles: 'Sesiones semanales de apoyo psicológico y talleres de bienestar emocional.'
+      },
+      {
+        id: 'medio-ambiente',
+        titulo: 'Medio Ambiente',
+        estado: 'Planeación',
+        progreso: 30,
+        color: '#D7685B',
+        descripcion: 'Iniciativas de reciclaje y conservación ambiental para un futuro sostenible.',
+        ubicacion: 'Jalisco, Guanajuato',
+        participantes: '50 voluntarios',
+        detalles: 'Programa de reciclaje y reforestación de áreas urbanas.'
+      },
+      {
+        id: 'desarrollo-comunitario',
+        titulo: 'Desarrollo Comunitario',
+        estado: 'Activo',
+        progreso: 85,
+        color: '#7AB8DD',
+        descripcion: 'Fortalecimiento de capacidades locales y liderazgo comunitario.',
+        ubicacion: 'Morelos, Guerrero',
+        participantes: '60 líderes',
+        detalles: 'Talleres de liderazgo y emprendimiento social.'
+      }
+    ];
+
+    // ---- Función para obtener la clase del badge según el estado ----
+    function claseDelBadge(estado) {
+      if (estado === 'Activo')     return 'badge-activo';
+      if (estado === 'En proceso') return 'badge-proceso';
+      return 'badge-planeacion';
+    }
+
+    // ---- Creamos una tarjeta HTML para cada proyecto ----
+    var contenedor = document.getElementById('cuadriculaProyectos');
+
+    for (var i = 0; i < proyectos.length; i++) {
+      var p = proyectos[i];
+
+      // Creamos el HTML de la tarjeta como texto
+      // template literals (los backticks `) nos dejan poner variables dentro con ${...}
+      var htmlTarjeta = `
+        <a class="tarjeta-proyecto" href="proyecto-detalle.html?id=${p.id}">
+
+          <!-- Ícono + Badge -->
+          <div class="tarjeta-arriba">
+            <div class="proyecto-icono" style="background-color: ${p.color};">
+              <!-- Ícono genérico de proyecto -->
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
+                   stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+              </svg>
+            </div>
+            <span class="badge ${claseDelBadge(p.estado)}">${p.estado}</span>
+          </div>
+
+          <!-- Texto -->
+          <div>
+            <div class="proyecto-titulo">${p.titulo}</div>
+            <div class="proyecto-descripcion">${p.descripcion}</div>
+          </div>
+
+          <!-- Barra de progreso -->
+          <div>
+            <div class="progreso-etiquetas">
+              <span>Progreso</span>
+              <span>${p.progreso}%</span>
+            </div>
+            <div class="barra-fondo">
+              <!-- El width usa el porcentaje del proyecto -->
+              <div class="barra-relleno" style="width: ${p.progreso}%; background-color: ${p.color};"></div>
+            </div>
+          </div>
+
+          <!-- Datos: ubicación y participantes -->
+          <div class="datos-grid">
+            <div class="dato-item">
+              <div>
+                <div class="dato-etiqueta">Ubicación</div>
+                <div class="dato-valor">${p.ubicacion}</div>
+              </div>
+            </div>
+            <div class="dato-item">
+              <div>
+                <div class="dato-etiqueta">Participantes</div>
+                <div class="dato-valor">${p.participantes}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Detalle extra -->
+          <div class="proyecto-detalles">${p.detalles}</div>
+
+          <!-- Botón -->
+          <div class="btn-ver" style="background-color: ${p.color};">
+            Ver más detalles
+          </div>
+
+        </a>
+      `;
+
+      // Insertamos la tarjeta en el contenedor
+      contenedor.innerHTML = contenedor.innerHTML + htmlTarjeta;
+    }
+
+  </script>
+
+</body>
+</html>

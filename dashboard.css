@@ -1,0 +1,189 @@
+/* =============================================
+   ESTILOS DEL DASHBOARD
+   ============================================= */
+
+/* ---- TÍTULO DE BIENVENIDA ---- */
+.titulo-pagina {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 0.3rem;
+}
+
+.subtitulo-pagina {
+  font-size: 1rem;
+  color: #64748b;
+  margin-bottom: 2rem;
+}
+
+/* ---- CUADRÍCULA DE ESTADÍSTICAS ---- */
+/* grid = cuadrícula automática que ajusta el número de columnas */
+.cuadricula-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;          /* espacio entre tarjetas */
+  margin-bottom: 2rem;
+}
+
+
+
+.tarjeta-stat {
+  background-color: white;
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tarjeta-stat:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px); /* sube un poco al pasar el mouse */
+}
+
+.stat-etiqueta {
+  font-size: 0.78rem;
+  color: #64748b;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stat-numero {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-top: 0.2rem;
+}
+
+/* El círculo de color con el ícono */
+.stat-icono {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---- FILA DE GRÁFICAS ---- */
+.fila-graficas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;  /* dos columnas iguales */
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+/* ---- FILA DE ABAJO (3 columnas) ---- */
+.fila-inferior {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.25rem;
+}
+
+/* ---- TARJETA CON TÍTULO ---- */
+.tarjeta-titulo {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 0.2rem;
+}
+
+.tarjeta-desc {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-bottom: 1rem;
+}
+
+/* El canvas es donde Chart.js dibuja la gráfica */
+.contenedor-grafica {
+  height: 260px;
+  position: relative;
+}
+
+/* ---- ACTIVIDAD RECIENTE ---- */
+.item-actividad {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.item-actividad:last-child {
+  border-bottom: none;
+}
+
+/* El puntito de color */
+.punto {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;   /* lo hace círculo */
+  margin-top: 5px;
+  flex-shrink: 0;       /* que no se encoja */
+}
+
+.actividad-titulo {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.actividad-descripcion {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.actividad-tiempo {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin-top: 0.2rem;
+}
+
+/* ---- PRÓXIMOS EVENTOS ---- */
+.item-evento {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+  background-color: #f1f5f9;
+  margin-bottom: 0.6rem;
+}
+
+.item-evento:last-child {
+  margin-bottom: 0;
+}
+
+.item-evento:hover {
+  background-color: #e2e8f0;
+}
+
+.evento-icono {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background-color: #7AB8DD;  /* azul clarito */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.evento-nombre {
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.evento-fecha {
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+/* ---- RESPONSIVE: pantallas pequeñas ---- */
+@media (max-width: 900px) {
+  .fila-graficas,
+  .fila-inferior {
+    grid-template-columns: 1fr;  /* una sola columna en móvil */
+  }
+}
