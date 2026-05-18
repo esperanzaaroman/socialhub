@@ -1,0 +1,307 @@
+
+.encabezado-catalogo {
+  background: linear-gradient(135deg, #0F2579 0%, #1a3a8a 60%, #312e81 100%);
+  color: white;
+  padding: 3.5rem 2.5rem 2.5rem;
+  text-align: center;
+}
+
+.encabezado-catalogo h1 {
+  font-size: 2.8rem;
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+}
+
+.encabezado-catalogo p {
+  font-size: 1.05rem;
+  opacity: 0.75;
+  max-width: 500px;
+  margin: 0 auto 2rem;
+}
+
+/* ---- BARRA DE BÚSQUEDA Y FILTROS ---- */
+.barra-filtros {
+  background-color: white;
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  max-width: 900px;
+  margin: -1.5rem auto 0;
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+/* Campo de búsqueda */
+.campo-busqueda {
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background-color: #f1f5f9;
+  border-radius: 10px;
+  padding: 0.6rem 1rem;
+}
+
+.campo-busqueda svg {
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+.campo-busqueda input {
+  border: none;
+  background: none;
+  outline: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  color: #0f172a;
+  width: 100%;
+  padding: 0;
+}
+
+.campo-busqueda input::placeholder {
+  color: #94a3b8;
+}
+
+/* Selects de filtro */
+.filtro-select {
+  padding: 0.6rem 2rem 0.6rem 0.9rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #0f172a;
+  background-color: white;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+}
+
+.filtro-select:focus {
+  border-color: #6366f1;
+}
+
+/* Contador de resultados */
+.contador-resultados {
+  max-width: 1100px;
+  margin: 1.75rem auto 1rem;
+  padding: 0 2rem;
+  font-size: 0.88rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* ---- CUADRÍCULA DE PROYECTOS ---- */
+.catalogo-contenido {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem 4rem;
+}
+
+.cuadricula-catalogo {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ---- TARJETA DE PROYECTO (catálogo público) ---- */
+.tarjeta-catalogo {
+  background-color: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: #0f172a;
+  transition: all 0.25s ease;
+}
+
+.tarjeta-catalogo:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.14);
+}
+
+/* Banner superior de la tarjeta */
+.catalogo-banner {
+  height: 110px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Letra grande decorativa de fondo */
+.catalogo-letra-fondo {
+  position: absolute;
+  right: 0.75rem;
+  bottom: -1rem;
+  font-size: 6rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.18);
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* Chips de ODS */
+.chips-ods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.chip-ods {
+  background-color: rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: white;
+  padding: 0.18rem 0.55rem;
+  border-radius: 99px;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+/* Badge de estado */
+.badge-catalogo {
+  padding: 0.25rem 0.65rem;
+  border-radius: 99px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  background-color: rgba(255, 255, 255, 0.92);
+  white-space: nowrap;
+}
+
+/* ---- CUERPO DE LA TARJETA ---- */
+.catalogo-cuerpo {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.catalogo-titulo {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.catalogo-desc {
+  font-size: 0.85rem;
+  color: #64748b;
+  line-height: 1.55;
+}
+
+/* Estadísticas rápidas */
+.catalogo-stats {
+  display: flex;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.catalogo-stat {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.catalogo-stat svg {
+  flex-shrink: 0;
+}
+
+/* Barra de progreso */
+.catalogo-progreso-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin-bottom: 0.3rem;
+}
+
+.catalogo-progreso-label span:last-child {
+  font-weight: 700;
+  color: #334155;
+}
+
+.catalogo-barra-fondo {
+  height: 6px;
+  background-color: #e2e8f0;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.catalogo-barra-relleno {
+  height: 100%;
+  border-radius: 99px;
+}
+
+/* Botón de ver proyecto */
+.catalogo-btn {
+  display: block;
+  text-align: center;
+  padding: 0.65rem;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: white;
+  text-decoration: none;
+  margin-top: auto;
+  transition: opacity 0.2s ease;
+}
+
+.catalogo-btn:hover {
+  opacity: 0.88;
+}
+
+/* ---- ESTADO VACÍO ---- */
+.estado-vacio {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: #64748b;
+  display: none;
+}
+
+.estado-vacio svg {
+  margin-bottom: 1rem;
+  opacity: 0.3;
+}
+
+.estado-vacio h3 {
+  font-size: 1.2rem;
+  color: #334155;
+  margin-bottom: 0.5rem;
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 700px) {
+  .barra-filtros {
+    flex-direction: column;
+    margin: -1rem 1rem 0;
+  }
+
+  .campo-busqueda {
+    width: 100%;
+  }
+
+  .filtro-select {
+    width: 100%;
+  }
+
+  .cuadricula-catalogo {
+    grid-template-columns: 1fr;
+  }
+
+  .encabezado-catalogo h1 {
+    font-size: 2rem;
+  }
+}

@@ -1,0 +1,186 @@
+.profile-hero {
+  background: linear-gradient(135deg, var(--azul-tec) 0%, #1a3a9e 100%);
+  padding: 48px 0 0;
+}
+
+.profile-hero-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.profile-header {
+  display: flex;
+  align-items: flex-end;
+  gap: 28px;
+  padding-bottom: 32px;
+}
+
+.profile-avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1e40af, var(--morado));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  font-weight: 800;
+  color: white;
+  font-family: 'Sora', sans-serif;
+  border: 4px solid rgba(255,255,255,0.2);
+}
+
+.profile-info { flex: 1; }
+.profile-name { font-size: 32px; font-weight: 800; color: var(--blanco); margin-bottom: 6px; letter-spacing: -0.5px; }
+.profile-role { color: rgba(255,255,255,0.7); font-size: 15px; margin-bottom: 10px; }
+
+.profile-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+.profile-tag {
+  background: rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.85);
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+
+.profile-nav {
+  display: flex;
+  gap: 4px;
+  margin-top: 32px;
+}
+
+.profile-nav-item {
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.6);
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+}
+
+.profile-nav-item:hover { color: rgba(255,255,255,0.9); }
+.profile-nav-item.active { color: var(--blanco); border-bottom-color: var(--naranja); }
+
+
+.profile-layout {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 32px;
+  align-items: start;
+}
+
+
+.profile-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.profile-stat {
+  background: var(--blanco);
+  border: 1px solid var(--gris-200);
+  border-radius: var(--radius);
+  padding: 20px;
+  text-align: center;
+}
+
+.profile-stat-val {
+  font-family: 'Sora', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--gris-900);
+  margin-bottom: 4px;
+}
+
+.profile-stat-lab { font-size: 12px; color: var(--gris-400); font-weight: 500; }
+
+
+.proyecto-mini {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  background: var(--blanco);
+  border: 1px solid var(--gris-200);
+  border-radius: var(--radius);
+  margin-bottom: 12px;
+  transition: var(--transition);
+  text-decoration: none;
+}
+
+.proyecto-mini:hover { box-shadow: var(--shadow); transform: translateX(4px); border-color: var(--azul-tec); }
+
+.proyecto-mini-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+}
+
+.proyecto-mini-icon.edu { background: linear-gradient(135deg, #1e40af, #3b82f6); }
+.proyecto-mini-icon.salud { background: linear-gradient(135deg, #065f46, #10b981); }
+.proyecto-mini-icon.tech { background: linear-gradient(135deg, #4c1d95, #8b5cf6); }
+
+.proyecto-mini-info { flex: 1; }
+.proyecto-mini-name { font-size: 14px; font-weight: 700; color: var(--gris-900); margin-bottom: 4px; }
+.proyecto-mini-meta { font-size: 12px; color: var(--gris-400); }
+
+.profile-post {
+  background: var(--blanco);
+  border: 1px solid var(--gris-200);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin-bottom: 12px;
+  transition: var(--transition);
+}
+.profile-post:hover { box-shadow: var(--shadow-sm); }
+
+
+.profile-sidebar-card {
+  background: var(--blanco);
+  border: 1px solid var(--gris-200);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: var(--gris-600);
+  transition: var(--transition);
+  text-decoration: none;
+}
+.contact-link:hover { background: var(--gris-50); color: var(--azul-tec); }
+
+.skills-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+.skill-tag {
+  padding: 5px 12px;
+  background: var(--gris-100);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gris-600);
+}

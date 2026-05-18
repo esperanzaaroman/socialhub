@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SocialHub — Todos los Proyectos</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="admin-proyectos.css">
+</head>
+<body>
+
+<!-- NAVBAR ADMIN -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="admin-dashboard.html" class="navbar-logo">
+      <img src="assets/img/logo.png" alt="Logo SocialHub" class="navbar-logo-icon">
+      <div class="navbar-logo-text">
+        <div class="navbar-logo-title">SocialHub</div>
+        <div class="navbar-logo-sub">Servicio Social</div>
+      </div>
+    </a>
+    <div class="navbar-links">
+      <a href="admin-dashboard.html" class="navbar-link">Dashboard</a>
+      <a href="admin-proyectos.html" class="navbar-link active">Proyectos</a>
+      <a href="foro.html?rol=admin" class="navbar-link">Foro</a>
+      <a href="publico-proyectos.html" class="navbar-link">Vista pública</a>
+    </div>
+    <div class="navbar-right">
+      <span class="navbar-badge" style="background:rgba(139,92,246,0.18);color:var(--morado);border-color:rgba(139,92,246,0.3);">Admin</span>
+      <a href="#" class="navbar-avatar" style="background:var(--morado);border-color:rgba(139,92,246,0.5);">🛡️</a>
+    </div>
+  </div>
+</nav>
+
+<div class="dash-layout">
+  <!-- SIDEBAR -->
+  <aside class="dash-sidebar">
+    <div class="sidebar-user">
+      <div class="sidebar-user-wrap">
+        <div class="avatar avatar-md" style="background:linear-gradient(135deg,var(--morado),var(--azul-tec));">🛡️</div>
+        <div>
+          <div class="sidebar-user-name">Dra. Claudia Reyes</div>
+          <div class="sidebar-user-role">Administradora</div>
+        </div>
+      </div>
+    </div>
+    <div class="sidebar-section-label">General</div>
+    <a href="admin-dashboard.html" class="sidebar-link"><span class="icon">📈</span> Dashboard Global</a>
+    <a href="admin-proyectos.html" class="sidebar-link active"><span class="icon">🗂️</span> Todos los Proyectos</a>
+    <a href="foro.html?rol=admin" class="sidebar-link"><span class="icon">💬</span> Foro</a>
+    <div class="sidebar-section-label" style="margin-top:12px;">Sistema</div>
+    <a href="login.html" class="sidebar-link"><span class="icon">🚪</span> Cerrar sesión</a>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="dash-main">
+
+    <!-- HEADER -->
+    <div class="page-head">
+      <div>
+        <div class="page-head-title">🗂️ Todos los Proyectos</div>
+        <div class="page-head-sub">Supervisión global · 38 proyectos registrados en el sistema</div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-sm" style="background:var(--gris-100);color:var(--gris-600);" onclick="document.getElementById('modalFiltros').classList.add('open')">⚙ Filtros avanzados</button>
+        <button class="btn btn-primary btn-sm" onclick="document.getElementById('modalExport').classList.add('open')">⬇ Exportar</button>
+      </div>
+    </div>
+
+    <!-- KPI ROW -->
+    <div class="kpi-row">
+      <div class="kpi-mini">
+        <span class="kpi-mini-icon">📂</span>
+        <div>
+          <div class="kpi-mini-val">38</div>
+          <div class="kpi-mini-lab">Total proyectos</div>
+        </div>
+      </div>
+      <div class="kpi-mini">
+        <span class="kpi-mini-icon" style="color:var(--verde)">✅</span>
+        <div>
+          <div class="kpi-mini-val" style="color:var(--verde)">24</div>
+          <div class="kpi-mini-lab">Activos</div>
+        </div>
+      </div>
+      <div class="kpi-mini">
+        <span class="kpi-mini-icon" style="color:var(--naranja)">⏸</span>
+        <div>
+          <div class="kpi-mini-val" style="color:var(--naranja)">5</div>
+          <div class="kpi-mini-lab">Pausados</div>
+        </div>
+      </div>
+      <div class="kpi-mini">
+        <span class="kpi-mini-icon" style="color:var(--azul)">🏁</span>
+        <div>
+          <div class="kpi-mini-val" style="color:var(--azul)">7</div>
+          <div class="kpi-mini-lab">Completados</div>
+        </div>
+      </div>
+      <div class="kpi-mini">
+        <span class="kpi-mini-icon" style="color:var(--gris-400)">📝</span>
+        <div>
+          <div class="kpi-mini-val" style="color:var(--gris-500)">2</div>
+          <div class="kpi-mini-lab">Borradores</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar-bar">
+      <div class="search-wrap">
+        <span class="search-ic">🔍</span>
+        <input type="text" class="search-inp" placeholder="Buscar por nombre, líder, categoría...">
+      </div>
+      <select class="filter-pill">
+        <option>Todos los estados</option>
+        <option>Activo</option>
+        <option>Pausado</option>
+        <option>Completado</option>
+        <option>Borrador</option>
+      </select>
+      <select class="filter-pill">
+        <option>Todas las categorías</option>
+        <option>Educación</option>
+        <option>Salud</option>
+        <option>Medio Ambiente</option>
+        <option>Tecnología</option>
+        <option>Arte y Cultura</option>
+        <option>Comunidad</option>
+      </select>
+      <select class="filter-pill">
+        <option>Todos los periodos</option>
+        <option>Invierno 2024</option>
+        <option>Feb–Jun 2024</option>
+        <option>Verano 2024</option>
+        <option>Ago–Dic 2024</option>
+      </select>
+      <div class="toolbar-sep"></div>
+      <a href="#" class="export-btn">📊 CSV</a>
+      <a href="#" class="export-btn">📄 PDF</a>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrap">
+      <div class="table-header">
+        <div class="table-header-title">Listado de proyectos</div>
+        <span class="results-count">Mostrando 1–10 de 38 resultados</span>
+      </div>
+
+      <div style="overflow-x:auto;">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th style="width:280px;">Proyecto</th>
+              <th>Estado</th>
+              <th>Líder</th>
+              <th>Periodo</th>
+              <th>Beneficiarios</th>
+              <th>Horas</th>
+              <th>Avance</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr>
+              <td>
+                <div class="proj-name-cell">
+                  <div class="proj-icon-badge" style="background:#dbeafe;">📚</div>
+                  <div>
+                    <div class="proj-cell-name">Tutorías para Secundaria en Zonas Rurales</div>
+                    <div class="proj-cell-ods">ODS 4 · Educación</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="status-badge sb-activo">● Activo</span></td>
+              <td>
+                <div class="lider-cell">
+                  <div class="lider-av">AG</div>
+                  <a href="lider-perfil.html?rol=admin" style="font-size:13px;color:var(--azul);font-weight:500;">Ana García</a>
+                </div>
+              </td>
+              <td><span style="font-size:12px;color:var(--gris-500);">Ago–Dic 2024</span></td>
+              <td><strong style="color:var(--verde);">128</strong></td>
+              <td><span style="color:var(--gris-700);">480h</span></td>
+              <td>
+                <div class="prog-cell">
+                  <div class="prog-bar-sm"><div class="prog-fill-sm" style="width:72%;background:var(--verde);"></div></div>
+                  <span class="prog-pct">72%</span>
+                </div>
+              </td>
+              <td>
+                <div class="action-btns">
+                  <a href="proyecto-detalle.html?rol=admin" class="action-btn ab-view">👁 Ver</a>
+                  <a href="#" class="action-btn ab-edit">✏</a>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <div class="proj-name-cell">
+                  <div class="proj-icon-badge" style="background:#d1fae5;">💊</div>
+                  <div>
+                    <div class="proj-cell-name">Brigadas de Salud Preventiva</div>
+                    <div class="proj-cell-ods">ODS 3 · Salud</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="status-badge sb-activo">● Activo</span></td>
+              <td>
+                <div class="lider-cell">
+                  <div class="lider-av">CM</div>
+                  <a href="lider-perfil.html?rol=admin" style="font-size:13px;color:var(--azul);font-weight:500;">Carlos Mendoza</a>
+                </div>
+              </td>
+              <td><span style="font-size:12px;color:var(--gris-500);">Feb–Jun 2024</span></td>
+              <td><strong style="color:var(--verde);">95</strong></td>
+              <td><span style="color:var(--gris-700);">310h</span></td>
+              <td>
+                <div class="prog-cell">
+                  <div class="prog-bar-sm"><div class="prog-fill-sm" style="width:58%;background:var(--naranja);"></div></div>
+                  <span class="prog-pct">58%</span>
+                </div>
+              </td>
+              <td>
+                <div class="action-btns">
+                  <a href="proyecto-detalle.html?rol=admin" class="action-btn ab-view">👁 Ver</a>
+                  <a href="#" class="action-btn ab-edit">✏</a>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <div class="proj-name-cell">
+                  <div class="proj-icon-badge" style="background:#dcfce7;">🌱</div>
+                  <div>
+                    <div class="proj-cell-name">Reforestación Urbana Poblana</div>
+                    <div class="proj-cell-ods">ODS 15 · Medio Ambiente</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="status-badge sb-activo">● Activo</span></td>
+              <td>
+                <div class="lider-cell">
+                  <div class="lider-av">SR</div>
+                  <a href="lider-perfil.html?rol=admin" style="font-size:13px;color:var(--azul);font-weight:500;">Sofía Ramírez</a>
+                </div>
+              </td>
+              <td><span style="font-size:12px;color:var(--gris-500);">Ago–Dic 2024</span></td>
+              <td><strong style="color:var(--verde);">200</strong></td>
+              <td><span style="color:var(--gris-700);">620h</span></td>
+              <td>
+                <div class="prog-cell">
+                  <div class="prog-bar-sm"><div class="prog-fill-sm" style="width:88%;background:var(--verde);"></div></div>
+                  <span class="prog-pct">88%</span>
+                </div>
+              </td>
+              <td>
+                <div class="action-btns">
+                  <a href="proyecto-detalle.html?rol=admin" class="action-btn ab-view">👁 Ver</a>
+                  <a href="#" class="action-btn ab-edit">✏</a>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <div class="proj-name-cell">
+                  <div class="proj-icon-badge" style="background:var(--morado-light);">💻</div>
+                  <div>
+                    <div class="proj-cell-name">Alfabetización Digital para Adultos</div>
+                    <div class="proj-cell-ods">ODS 9 · Tecnología</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="status-badge sb-pausado">⏸ Pausado</span></td>
+              <td>
+                <div class="lider-cell">
+                  <div class="lider-av">LT</div>
+                  <a href="lider-perfil.html?rol=admin" style="font-size:13px;color:var(--azul);font-weight:500;">Luis Torres</a>
+                </div>
+              </td>
+              <td><span style="font-size:12px;color:var(--gris-500);">Verano 2024</span></td>
+              <td><strong style="color:var(--naranja);">34</strong></td>
+              <td><span style="color:var(--gris-700);">120h</span></td>
+              <td>
+                <div class="prog-cell">
+                  <div class="prog-bar-sm"><div class="prog-fill-sm" style="width:30%;background:var(--naranja);"></div></div>
+                  <span class="prog-pct">30%</span>
+                </div>
+              </td>
+              <td>
+                <div class="action-btns">
+                  <a href="proyecto-detalle.html?rol=admin" class="action-btn ab-view">👁 Ver</a>
+                  <a href="#" class="action-btn ab-warn">⚠ Revisar</a>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <div class="proj-name-cell">
+                  <div class="proj-icon-badge" style="background:#fef3c7;">🏘️</div>
+                  <div>
+                    <div class="proj-cell-name">Mejora de Espacios Públicos — San Andrés</div>
+                    <div class="proj-cell-ods">ODS 11 · Comunidad</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="status-badge sb-completado">✓ Completado</span></td>
+              <td>
+                <div class="lider-cell">
+                  <div class="lider-av">MH</div>
+                  <a href="lider-perfil.html?rol=admin" style="font-size:13px;color:var(--azul);font-weight:500;">Mariana Herrera</a>
+                </div>
+              </td>
+              <td><span style="font-size:12px;color:var(--gris-500);">Feb–Jun 2024</span></td>
+              <td><strong style="color:var(--azul);">420</strong></td>
+              <td><span style="color:var(--gris-700);">980h</span></td>
+              <td>
+                <div class="prog-cell">
+                  <div class="prog-bar-sm"><div class="prog-fill-sm" style="width:100%;background:var(--azul);"></div></div>
+                  <span class="prog-pct">100%</span>
+                </div>
+              </td>
+              <td>
+                <div class="action-btns">
+                  <a href="proyecto-detalle.html?rol=admin" class="action-btn ab-view">👁 Ver</a>
+                  <a href="#" class="action-btn ab-edit">📄 Reporte</a>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <div class="proj-name-cell">
+                  <div class="proj-icon-badge" style="background:#fee2e2;">🎭</div>
+                  <div>
+                    <div class="proj-cell-name">Talleres de Arte para Niños en Riesgo</div>
+                    <div class="proj-cell-ods">ODS 4 · Arte y Cultura</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="status-badge sb-activo">● Activo</span></td>
+              <td>
+                <div class="lider-cell">
+                  <div class="lider-av">PV</div>
+                  <a href="lider-perfil.html?rol=admin" style="font-size:13px;color:var(--azul);font-weight:500;">Patricia Vega</a>
+                </div>
+              </td>
+              <td><span style="font-size:12px;color:var(--gris-500);">Ago–Dic 2024</span></td>
+              <td><strong style="color:var(--verde);">72</strong></td>
+              <td><span style="color:var(--gris-700);">240h</span></td>
+              <td>
+                <div class="prog-cell">
+                  <div class="prog-bar-sm"><div class="prog-fill-sm" style="width:45%;background:var(--verde);"></div></div>
+                  <span class="prog-pct">45%</span>
+                </div>
+              </td>
+              <td>
+                <div class="action-btns">
+                  <a href="proyecto-detalle.html?rol=admin" class="action-btn ab-view">👁 Ver</a>
+                  <a href="#" class="action-btn ab-edit">✏</a>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <div class="proj-name-cell">
+                  <div class="proj-icon-badge" style="background:#d1fae5;">🍱</div>
+                  <div>
+                    <div class="proj-cell-name">Banco de Alimentos Comunitario</div>
+                    <div class="proj-cell-ods">ODS 2 · Alimentación</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="status-badge sb-activo">● Activo</span></td>
+              <td>
+                <div class="lider-cell">
+                  <div class="lider-av">JO</div>
+                  <a href="lider-perfil.html?rol=admin" style="font-size:13px;color:var(--azul);font-weight:500;">Jorge Ortega</a>
+                </div>
+              </td>
+              <td><span style="font-size:12px;color:var(--gris-500);">Invierno 2024</span></td>
+              <td><strong style="color:var(--verde);">188</strong></td>
+              <td><span style="color:var(--gris-700);">390h</span></td>
+              <td>
+                <div class="prog-cell">
+                  <div class="prog-bar-sm"><div class="prog-fill-sm" style="width:65%;background:var(--verde);"></div></div>
+                  <span class="prog-pct">65%</span>
+                </div>
+              </td>
+              <td>
+                <div class="action-btns">
+                  <a href="proyecto-detalle.html?rol=admin" class="action-btn ab-view">👁 Ver</a>
+                  <a href="#" class="action-btn ab-edit">✏</a>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <div class="proj-name-cell">
+                  <div class="proj-icon-badge" style="background:var(--gris-100);">🧪</div>
+                  <div>
+                    <div class="proj-cell-name">Ciencias para Jóvenes Rurales</div>
+                    <div class="proj-cell-ods">ODS 4 · Educación STEM</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="status-badge sb-borrador">📝 Borrador</span></td>
+              <td>
+                <div class="lider-cell">
+                  <div class="lider-av">RN</div>
+                  <span style="font-size:13px;color:var(--gris-500);">Roberto Núñez</span>
+                </div>
+              </td>
+              <td><span style="font-size:12px;color:var(--gris-400);">—</span></td>
+              <td><span style="color:var(--gris-400);">—</span></td>
+              <td><span style="color:var(--gris-400);">—</span></td>
+              <td>
+                <div class="prog-cell">
+                  <div class="prog-bar-sm"><div class="prog-fill-sm" style="width:0%;background:var(--gris-300);"></div></div>
+                  <span class="prog-pct" style="color:var(--gris-400)">0%</span>
+                </div>
+              </td>
+              <td>
+                <div class="action-btns">
+                  <a href="#" class="action-btn ab-edit">✏ Editar</a>
+                  <a href="#" class="action-btn ab-warn">🗑</a>
+                </div>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <!-- PAGINATION -->
+      <div class="pagination">
+        <div class="pag-info">Mostrando 1–8 de 38 proyectos</div>
+        <div class="pag-btns">
+          <button class="pag-btn">← Anterior</button>
+          <button class="pag-btn active">1</button>
+          <button class="pag-btn">2</button>
+          <button class="pag-btn">3</button>
+          <button class="pag-btn">4</button>
+          <button class="pag-btn">Siguiente →</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL FILTROS AVANZADOS -->
+<div class="modal-overlay" id="modalFiltros">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-head-title">⚙ Filtros Avanzados</div>
+      <button class="modal-close-btn" onclick="document.getElementById('modalFiltros').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-bdy">
+      <div class="form-grid-2">
+        <div>
+          <label class="form-label-s">Estado</label>
+          <select class="form-inp-s">
+            <option>Todos</option>
+            <option>Activo</option>
+            <option>Pausado</option>
+            <option>Completado</option>
+            <option>Borrador</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label-s">Categoría</label>
+          <select class="form-inp-s">
+            <option>Todas</option>
+            <option>Educación</option>
+            <option>Salud</option>
+            <option>Medio Ambiente</option>
+            <option>Tecnología</option>
+            <option>Comunidad</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label-s">ODS</label>
+          <select class="form-inp-s">
+            <option>Todos</option>
+            <option>ODS 2</option>
+            <option>ODS 3</option>
+            <option>ODS 4</option>
+            <option>ODS 9</option>
+            <option>ODS 11</option>
+            <option>ODS 15</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label-s">Periodo</label>
+          <select class="form-inp-s">
+            <option>Todos</option>
+            <option>Invierno 2024</option>
+            <option>Feb–Jun 2024</option>
+            <option>Verano 2024</option>
+            <option>Ago–Dic 2024</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label-s">Beneficiarios mínimos</label>
+          <input type="number" class="form-inp-s" placeholder="Ej. 50">
+        </div>
+        <div>
+          <label class="form-label-s">Horas mínimas</label>
+          <input type="number" class="form-inp-s" placeholder="Ej. 100">
+        </div>
+      </div>
+      <div>
+        <label class="form-label-s">Avance mínimo (%)</label>
+        <input type="range" min="0" max="100" value="0" style="width:100%;accent-color:var(--azul-tec);">
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-sm" style="background:var(--gris-100);color:var(--gris-600);" onclick="document.getElementById('modalFiltros').classList.remove('open')">Cancelar</button>
+      <button class="btn btn-primary btn-sm" onclick="document.getElementById('modalFiltros').classList.remove('open')">Aplicar filtros</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EXPORTAR -->
+<div class="modal-overlay" id="modalExport">
+  <div class="modal-box" style="max-width:400px">
+    <div class="modal-head">
+      <div class="modal-head-title">⬇ Exportar Reporte</div>
+      <button class="modal-close-btn" onclick="document.getElementById('modalExport').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-bdy">
+      <p style="font-size:14px;color:var(--gris-600);margin-bottom:16px;">Selecciona el formato y rango de datos a exportar.</p>
+      <label class="form-label-s">Formato</label>
+      <select class="form-inp-s">
+        <option>CSV (Excel)</option>
+        <option>PDF — Reporte ejecutivo</option>
+        <option>JSON (API)</option>
+      </select>
+      <label class="form-label-s">Incluir</label>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;">
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gris-700);cursor:pointer;"><input type="checkbox" checked style="accent-color:var(--azul-tec)"> Datos generales de proyectos</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gris-700);cursor:pointer;"><input type="checkbox" checked style="accent-color:var(--azul-tec)"> Métricas de beneficiarios</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gris-700);cursor:pointer;"><input type="checkbox" style="accent-color:var(--azul-tec)"> Horas por voluntario</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gris-700);cursor:pointer;"><input type="checkbox" style="accent-color:var(--azul-tec)"> Distribución ODS</label>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-sm" style="background:var(--gris-100);color:var(--gris-600);" onclick="document.getElementById('modalExport').classList.remove('open')">Cancelar</button>
+      <button class="btn btn-verde btn-sm" onclick="document.getElementById('modalExport').classList.remove('open')">⬇ Descargar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.modal-overlay').forEach(function(m) {
+  m.addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('open');
+  });
+});
+</script>
+
+</body>
+</html>

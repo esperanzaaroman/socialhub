@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SocialHub — Perfil: Ana Martínez</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="lider-perfil.css">
+<script>
+const params = new URLSearchParams(window.location.search);
+const rol = params.get('rol') || 'publico';
+document.addEventListener('DOMContentLoaded', function() {
+  const navEl = document.getElementById('nav-links');
+  const navRight = document.getElementById('nav-right');
+  const editBtn = document.getElementById('edit-btn');
+  if (rol === 'lider') {
+    navEl.innerHTML = `<a href="lider-dashboard.html" class="navbar-link">Dashboard</a><a href="lider-proyectos.html" class="navbar-link">Mis Proyectos</a><a href="foro.html?rol=lider" class="navbar-link">Foro</a>`;
+    navRight.innerHTML = `<span class="navbar-badge">Líder Social</span><a href="lider-perfil.html?rol=lider" class="navbar-avatar" style="border-color:var(--naranja);">A</a>`;
+    if (editBtn) editBtn.style.display = 'inline-flex';
+  } else if (rol === 'admin') {
+    navEl.innerHTML = `<a href="admin-dashboard.html" class="navbar-link">Dashboard</a><a href="admin-proyectos.html" class="navbar-link">Proyectos</a><a href="foro.html?rol=admin" class="navbar-link">Foro</a>`;
+    navRight.innerHTML = `<span class="navbar-badge">Administrador</span><a href="#" class="navbar-avatar" style="background:var(--morado);">👑</a>`;
+  } else {
+    navEl.innerHTML = `<a href="publico-inicio.html" class="navbar-link">Inicio</a><a href="publico-proyectos.html" class="navbar-link">Proyectos</a><a href="foro.html?rol=publico" class="navbar-link">Foro</a>`;
+    navRight.innerHTML = '';
+  }
+});
+</script>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="publico-inicio.html" class="navbar-logo">
+      <img src="assets/img/logo.png" alt="Logo SocialHub" class="navbar-logo-icon">
+      <div class="navbar-logo-text">
+        <span class="navbar-logo-title">SocialHub</span>
+        <span class="navbar-logo-sub">Servicio Social Universitario</span>
+      </div>
+    </a>
+    <div class="navbar-links" id="nav-links"></div>
+    <div class="navbar-right" id="nav-right"></div>
+  </div>
+</nav>
+
+<div class="profile-hero">
+  <div class="profile-hero-inner">
+    <div class="breadcrumb" style="margin-bottom:20px;">
+      <a href="publico-proyectos.html" style="color:rgba(255,255,255,0.5);">Proyectos</a>
+      <span style="color:rgba(255,255,255,0.3);">/</span>
+      <span style="color:rgba(255,255,255,0.8);">Ana Martínez García</span>
+    </div>
+    <div class="profile-header">
+      <div class="profile-avatar-wrap">
+        <div class="profile-avatar">A</div>
+      </div>
+      <div class="profile-info">
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:8px;">
+          <h1 class="profile-name" style="margin:0;">Ana Martínez García</h1>
+          <a id="edit-btn" href="#" class="btn btn-outline-white btn-sm" style="display:none;">✏️ Editar perfil</a>
+        </div>
+        <div class="profile-role">🎓 Lic. Ciencias de la Educación · 7mo semestre · Campus Monterrey</div>
+        <div class="profile-tags">
+          <span class="profile-tag">📚 Educación</span>
+          <span class="profile-tag">🌿 Medio Ambiente</span>
+          <span class="profile-tag">💬 Foro activo</span>
+          <span class="profile-tag">⭐ 2 proyectos liderados</span>
+        </div>
+      </div>
+    </div>
+    <div class="profile-nav">
+      <a href="#proyectos" class="profile-nav-item active">Proyectos</a>
+      <a href="#impacto" class="profile-nav-item">Impacto</a>
+      <a href="#foro" class="profile-nav-item">Publicaciones</a>
+    </div>
+  </div>
+</div>
+
+<div class="profile-layout">
+
+  <div>
+
+    <div class="profile-stats" id="impacto">
+      <div class="profile-stat">
+        <div style="font-size:24px;margin-bottom:8px;">👥</div>
+        <div class="profile-stat-val">48</div>
+        <div class="profile-stat-lab">Beneficiarios directos</div>
+      </div>
+      <div class="profile-stat">
+        <div style="font-size:24px;margin-bottom:8px;">⏱</div>
+        <div class="profile-stat-val">320h</div>
+        <div class="profile-stat-lab">Horas de servicio</div>
+      </div>
+      <div class="profile-stat">
+        <div style="font-size:24px;margin-bottom:8px;">📂</div>
+        <div class="profile-stat-val">2</div>
+        <div class="profile-stat-lab">Proyectos liderados</div>
+      </div>
+      <div class="profile-stat">
+        <div style="font-size:24px;margin-bottom:8px;">💬</div>
+        <div class="profile-stat-val">14</div>
+        <div class="profile-stat-lab">Posts en foro</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:24px;" id="proyectos">
+      <div class="card-body">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+          <h3 style="font-family:'Sora',sans-serif;font-size:18px;font-weight:700;">📂 Proyectos liderados</h3>
+        </div>
+
+        <a href="proyecto-detalle.html" class="proyecto-mini">
+          <div class="proyecto-mini-icon edu">📚</div>
+          <div class="proyecto-mini-info">
+            <div class="proyecto-mini-name">Aprende Conmigo: Tutorías Comunitarias</div>
+            <div class="proyecto-mini-meta">📚 Educación · Ago–Dic 2025 · 48 beneficiarios · 320h</div>
+          </div>
+          <span class="tag tag-verde">Activo</span>
+        </a>
+
+        <a href="proyecto-detalle.html" class="proyecto-mini">
+          <div class="proyecto-mini-icon salud">🌿</div>
+          <div class="proyecto-mini-info">
+            <div class="proyecto-mini-name">Huerto Escolar Sustentable</div>
+            <div class="proyecto-mini-meta">🌿 Medio Ambiente · Feb–Jun 2025 · 32 beneficiarios · 180h</div>
+          </div>
+          <span class="tag tag-gris">Completado</span>
+        </a>
+      </div>
+    </div>
+
+    <div id="foro">
+      <h3 style="font-family:'Sora',sans-serif;font-size:18px;font-weight:700;margin-bottom:16px;">💬 Publicaciones en el foro</h3>
+
+      <div class="profile-post">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+          <div class="avatar avatar-sm" style="background:linear-gradient(135deg,#1e40af,#3b82f6);">A</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--gris-900);">Ana Martínez García</div>
+            <div style="font-size:11px;color:var(--gris-400);">hace 3 días · en Aprende Conmigo</div>
+          </div>
+          <span class="tag tag-azul" style="margin-left:auto;">Métricas</span>
+        </div>
+        <div style="font-family:'Sora',sans-serif;font-size:15px;font-weight:700;margin-bottom:6px;">Actualización octubre: 8 nuevos beneficiarios incorporados</div>
+        <div style="font-size:13px;color:var(--gris-500);line-height:1.6;margin-bottom:12px;">Este mes tuvimos una incorporación récord gracias a las jornadas de difusión...</div>
+        <div style="display:flex;gap:16px;font-size:13px;color:var(--gris-400);">
+          <span>❤️ 12 likes</span><span>💬 4 comentarios</span>
+        </div>
+      </div>
+
+      <div class="profile-post">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+          <div class="avatar avatar-sm" style="background:linear-gradient(135deg,#1e40af,#3b82f6);">A</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--gris-900);">Ana Martínez García</div>
+            <div style="font-size:11px;color:var(--gris-400);">hace 1 semana · en General</div>
+          </div>
+          <span class="tag tag-morado" style="margin-left:auto;">Colaboración</span>
+        </div>
+        <div style="font-family:'Sora',sans-serif;font-size:15px;font-weight:700;margin-bottom:6px;">¿Alguien quiere colaborar en talleres de lectura este noviembre?</div>
+        <div style="font-size:13px;color:var(--gris-500);line-height:1.6;margin-bottom:12px;">Buscamos estudiantes de Letras o Comunicación que quieran apoyar...</div>
+        <div style="display:flex;gap:16px;font-size:13px;color:var(--gris-400);">
+          <span>❤️ 7 likes</span><span>💬 9 comentarios</span>
+        </div>
+      </div>
+
+      <div class="profile-post">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+          <div class="avatar avatar-sm" style="background:linear-gradient(135deg,#1e40af,#3b82f6);">A</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--gris-900);">Ana Martínez García</div>
+            <div style="font-size:11px;color:var(--gris-400);">hace 3 semanas · en Aprende Conmigo</div>
+          </div>
+          <span class="tag tag-naranja" style="margin-left:auto;">Pregunta</span>
+        </div>
+        <div style="font-family:'Sora',sans-serif;font-size:15px;font-weight:700;margin-bottom:6px;">¿Cómo registran evidencias fotográficas otros líderes?</div>
+        <div style="font-size:13px;color:var(--gris-500);line-height:1.6;margin-bottom:12px;">Quiero mejorar mi proceso de documentación. ¿Usan alguna app o sistema especial?</div>
+        <div style="display:flex;gap:16px;font-size:13px;color:var(--gris-400);">
+          <span>❤️ 5 likes</span><span>💬 11 comentarios</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="profile-sidebar-card">
+      <div class="info-card-title" style="font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--gris-800);margin-bottom:14px;">📋 Información académica</div>
+      <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;">
+        <div style="display:flex;gap:8px;align-items:flex-start;">
+          <span style="color:var(--gris-400);width:20px;">🎓</span>
+          <span style="color:var(--gris-600);">Lic. Ciencias de la Educación, 7mo semestre</span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:flex-start;">
+          <span style="color:var(--gris-400);width:20px;">🏛️</span>
+          <span style="color:var(--gris-600);">Campus Monterrey, EGADE</span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:flex-start;">
+          <span style="color:var(--gris-400);width:20px;">📅</span>
+          <span style="color:var(--gris-600);">Prestador desde Agosto 2024</span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:flex-start;">
+          <span style="color:var(--gris-400);width:20px;">🌍</span>
+          <span style="color:var(--gris-600);">Monterrey, Nuevo León</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-sidebar-card">
+      <div style="font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--gris-800);margin-bottom:14px;">🛠 Habilidades</div>
+      <div class="skills-wrap">
+        <span class="skill-tag">Pedagogía</span>
+        <span class="skill-tag">Diseño curricular</span>
+        <span class="skill-tag">Trabajo en equipo</span>
+        <span class="skill-tag">Lectoescritura</span>
+        <span class="skill-tag">Español avanzado</span>
+        <span class="skill-tag">Inglés B2</span>
+        <span class="skill-tag">Gestión de proyectos</span>
+        <span class="skill-tag">Excel</span>
+      </div>
+    </div>
+
+    <div class="profile-sidebar-card">
+      <div style="font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--gris-800);margin-bottom:14px;">📊 Impacto acumulado</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid var(--gris-100);">
+          <span style="color:var(--gris-500);">Total beneficiarios</span>
+          <span style="font-weight:700;color:var(--gris-900);">80</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid var(--gris-100);">
+          <span style="color:var(--gris-500);">Total horas</span>
+          <span style="font-weight:700;color:var(--gris-900);">500h</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid var(--gris-100);">
+          <span style="color:var(--gris-500);">Proyectos activos</span>
+          <span style="font-weight:700;color:var(--verde);">1</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 0;">
+          <span style="color:var(--gris-500);">Proyectos completados</span>
+          <span style="font-weight:700;color:var(--gris-600);">1</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-sidebar-card">
+      <div style="font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--gris-800);margin-bottom:14px;">🎯 ODS trabajados</div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div class="ods-chip" style="justify-content:center;">ODS 4 — Educación de calidad</div>
+        <div class="ods-chip" style="justify-content:center;background:var(--verde);">ODS 13 — Acción por el clima</div>
+        <div class="ods-chip" style="justify-content:center;background:var(--morado);">ODS 11 — Ciudades sostenibles</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo-text">🌍 SocialHub</div>
+        <p class="footer-desc">Plataforma de gestión y visualización de proyectos de servicio social universitario.</p>
+      </div>
+      <div>
+        <div class="footer-heading">Explorar</div>
+        <div class="footer-links">
+          <a href="publico-proyectos.html" class="footer-link">Todos los proyectos</a>
+          <a href="foro.html" class="footer-link">Foro comunitario</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-heading">Universidad</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Servicio Social</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 SocialHub · Departamento de Servicio Social</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
