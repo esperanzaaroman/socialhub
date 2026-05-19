@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 const widgetController = require('../controllers/widgetController');
 
-router.post('/',widgetController.createWidget);
-
+router.get('/', widgetController.getWidgets);
+router.get('/:id', widgetController.getWidgetById);
+router.post('/', widgetController.createWidget);
+router.patch('/:id', widgetController.updateWidget);
+router.delete('/:id', widgetController.deleteWidget);
 
 module.exports = router;
-
-

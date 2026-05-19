@@ -163,7 +163,7 @@ CREATE TABLE plantilla (
     FOREIGN KEY (id_visualizacion) REFERENCES visualizacion(id_visualizacion) ON DELETE SET NULL
 );
 
-CREATE TABLE Dashboard_widget (
+CREATE TABLE dashboard_widget (
     id_widget INT AUTO_INCREMENT PRIMARY KEY,
     id_proyecto INT,
     id_metrica INT,
