@@ -61,14 +61,16 @@
         <div class="page-head-title">🗂️ Todos los Proyectos</div>
         <div class="page-head-sub">Supervisión global · 38 proyectos registrados en el sistema</div>
       </div>
-      <div style="display:flex;gap:10px;">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
         <button class="btn btn-sm" style="background:var(--gris-100);color:var(--gris-600);" onclick="document.getElementById('modalFiltros').classList.add('open')">⚙ Filtros avanzados</button>
         <button class="btn btn-primary btn-sm" onclick="document.getElementById('modalExport').classList.add('open')">⬇ Exportar</button>
+        <button class="btn btn-sm" style="background:var(--morado);color:#fff;border-color:var(--morado);" onclick="document.getElementById('modalNuevoLider').classList.add('open')">+ Nuevo líder</button>
+        <button class="btn btn-sm" style="background:var(--verde-dark);color:#fff;border-color:var(--verde-dark);" onclick="document.getElementById('modalNuevoProyecto').classList.add('open')">+ Nuevo proyecto</button>
       </div>
     </div>
 
     <!-- KPI ROW -->
-    <div class="kpi-row">
+    <div class="kpi-row" style="grid-template-columns:repeat(4,1fr);">
       <div class="kpi-mini">
         <span class="kpi-mini-icon">📂</span>
         <div>
@@ -97,13 +99,6 @@
           <div class="kpi-mini-lab">Completados</div>
         </div>
       </div>
-      <div class="kpi-mini">
-        <span class="kpi-mini-icon" style="color:var(--gris-400)">📝</span>
-        <div>
-          <div class="kpi-mini-val" style="color:var(--gris-500)">2</div>
-          <div class="kpi-mini-lab">Borradores</div>
-        </div>
-      </div>
     </div>
 
     <!-- TOOLBAR -->
@@ -117,7 +112,6 @@
         <option>Activo</option>
         <option>Pausado</option>
         <option>Completado</option>
-        <option>Borrador</option>
       </select>
       <select class="filter-pill">
         <option>Todas las categorías</option>
@@ -401,39 +395,7 @@
               </td>
             </tr>
 
-            <tr>
-              <td>
-                <div class="proj-name-cell">
-                  <div class="proj-icon-badge" style="background:var(--gris-100);">🧪</div>
-                  <div>
-                    <div class="proj-cell-name">Ciencias para Jóvenes Rurales</div>
-                    <div class="proj-cell-ods">ODS 4 · Educación STEM</div>
-                  </div>
-                </div>
-              </td>
-              <td><span class="status-badge sb-borrador">📝 Borrador</span></td>
-              <td>
-                <div class="lider-cell">
-                  <div class="lider-av">RN</div>
-                  <span style="font-size:13px;color:var(--gris-500);">Roberto Núñez</span>
-                </div>
-              </td>
-              <td><span style="font-size:12px;color:var(--gris-400);">—</span></td>
-              <td><span style="color:var(--gris-400);">—</span></td>
-              <td><span style="color:var(--gris-400);">—</span></td>
-              <td>
-                <div class="prog-cell">
-                  <div class="prog-bar-sm"><div class="prog-fill-sm" style="width:0%;background:var(--gris-300);"></div></div>
-                  <span class="prog-pct" style="color:var(--gris-400)">0%</span>
-                </div>
-              </td>
-              <td>
-                <div class="action-btns">
-                  <a href="#" class="action-btn ab-edit">✏ Editar</a>
-                  <a href="#" class="action-btn ab-warn">🗑</a>
-                </div>
-              </td>
-            </tr>
+
 
           </tbody>
         </table>
@@ -472,7 +434,6 @@
             <option>Activo</option>
             <option>Pausado</option>
             <option>Completado</option>
-            <option>Borrador</option>
           </select>
         </div>
         <div>
@@ -555,6 +516,197 @@
     <div class="modal-ft">
       <button class="btn btn-sm" style="background:var(--gris-100);color:var(--gris-600);" onclick="document.getElementById('modalExport').classList.remove('open')">Cancelar</button>
       <button class="btn btn-verde btn-sm" onclick="document.getElementById('modalExport').classList.remove('open')">⬇ Descargar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MODAL NUEVO PROYECTO ===================== -->
+<div class="modal-overlay" id="modalNuevoProyecto">
+  <div class="modal-box" style="max-width:640px;">
+    <div class="modal-head">
+      <div class="modal-head-title">🗂️ Nuevo Proyecto</div>
+      <button class="modal-close-btn" onclick="document.getElementById('modalNuevoProyecto').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-bdy" style="max-height:70vh;overflow-y:auto;">
+
+      <!-- Nombre -->
+      <label class="form-label-s">Nombre del proyecto *</label>
+      <input type="text" class="form-inp-s" placeholder="Ej. Tutorías Comunitarias Norte" maxlength="50">
+
+      <!-- Descripción corta -->
+      <label class="form-label-s">Descripción corta * <span style="color:var(--gris-400);font-weight:400;">(máx. 200 caracteres)</span></label>
+      <textarea class="form-inp-s" rows="2" placeholder="Resumen breve visible en el catálogo público..." maxlength="200" style="resize:vertical;"></textarea>
+
+      <!-- Descripción larga -->
+      <label class="form-label-s">Descripción larga</label>
+      <textarea class="form-inp-s" rows="4" placeholder="Objetivos, metodología, contexto del proyecto..." style="resize:vertical;"></textarea>
+
+      <!-- Categoría / ODS -->
+      <div class="form-grid-2">
+        <div>
+          <label class="form-label-s">Categoría *</label>
+          <select class="form-inp-s">
+            <option value="">Seleccionar...</option>
+            <option>Educación</option>
+            <option>Salud</option>
+            <option>Medio Ambiente</option>
+            <option>Tecnología</option>
+            <option>Arte y Cultura</option>
+            <option>Comunidad</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label-s">ODS principal *</label>
+          <select class="form-inp-s">
+            <option value="">Seleccionar...</option>
+            <option value="ods1">ODS 1 – Sin pobreza</option>
+            <option value="ods2">ODS 2 – Hambre cero</option>
+            <option value="ods3">ODS 3 – Salud y bienestar</option>
+            <option value="ods4">ODS 4 – Educación de calidad</option>
+            <option value="ods6">ODS 6 – Agua limpia</option>
+            <option value="ods9">ODS 9 – Industria e innovación</option>
+            <option value="ods10">ODS 10 – Reducción de desigualdades</option>
+            <option value="ods11">ODS 11 – Ciudades sostenibles</option>
+            <option value="ods12">ODS 12 – Consumo responsable</option>
+            <option value="ods13">ODS 13 – Acción por el clima</option>
+            <option value="ods15">ODS 15 – Vida de ecosistemas</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Periodo / Estado -->
+      <div class="form-grid-2">
+        <div>
+          <label class="form-label-s">Periodo *</label>
+          <select class="form-inp-s">
+            <option value="">Seleccionar...</option>
+            <option value="regular">Regular (Ago–Dic / Feb–Jun)</option>
+            <option value="intensivo invierno">Intensivo invierno</option>
+            <option value="intensivo verano">Intensivo verano</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label-s">Estado inicial *</label>
+          <select class="form-inp-s">
+            <option value="pendiente">Pendiente</option>
+            <option value="en_proceso">En proceso</option>
+            <option value="activo">Activo</option>
+            <option value="completado">Completado</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Fechas -->
+      <div class="form-grid-2">
+        <div>
+          <label class="form-label-s">Fecha de inicio *</label>
+          <input type="date" class="form-inp-s">
+        </div>
+        <div>
+          <label class="form-label-s">Fecha de fin estimada *</label>
+          <input type="date" class="form-inp-s">
+        </div>
+      </div>
+
+      <!-- Zona / Video URL -->
+      <div class="form-grid-2">
+        <div>
+          <label class="form-label-s">Zona de impacto</label>
+          <input type="text" class="form-inp-s" placeholder="Ej. Colonia Centro, Puebla" maxlength="100">
+        </div>
+        <div>
+          <label class="form-label-s">URL de video (YouTube)</label>
+          <input type="url" class="form-inp-s" placeholder="https://youtube.com/watch?v=..." maxlength="100">
+        </div>
+      </div>
+
+      <!-- Asignar líder -->
+      <label class="form-label-s">Asignar líder</label>
+      <select class="form-inp-s" style="margin-bottom:0;">
+        <option value="">Sin asignar (asignar después)</option>
+        <option>Ana García — Lic. Ciencias de la Educación</option>
+        <option>Carlos Ramos — Ingeniería en TI</option>
+        <option>Sofía López — Medicina</option>
+        <option>Jorge Ortega — Nutrición</option>
+      </select>
+      <p style="font-size:11px;color:var(--gris-400);margin-top:4px;margin-bottom:0;">Puedes asignar o cambiar el líder en cualquier momento desde el detalle del proyecto.</p>
+
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-sm" style="background:var(--gris-100);color:var(--gris-600);" onclick="document.getElementById('modalNuevoProyecto').classList.remove('open')">Cancelar</button>
+      <button class="btn btn-sm" style="background:var(--verde-dark);color:#fff;border-color:var(--verde-dark);" onclick="document.getElementById('modalNuevoProyecto').classList.remove('open')">✓ Crear proyecto</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MODAL NUEVO LÍDER ===================== -->
+<div class="modal-overlay" id="modalNuevoLider">
+  <div class="modal-box" style="max-width:580px;">
+    <div class="modal-head">
+      <div class="modal-head-title">👤 Nuevo Líder Social</div>
+      <button class="modal-close-btn" onclick="document.getElementById('modalNuevoLider').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-bdy" style="max-height:70vh;overflow-y:auto;">
+
+      <!-- Nombre de usuario -->
+      <label class="form-label-s">Nombre completo *</label>
+      <input type="text" class="form-inp-s" placeholder="Ej. Ana Martínez García" maxlength="50">
+
+      <!-- Correo / Contraseña -->
+      <div class="form-grid-2">
+        <div>
+          <label class="form-label-s">Correo institucional *</label>
+          <input type="email" class="form-inp-s" placeholder="nombre@tec.mx" maxlength="50">
+        </div>
+        <div>
+          <label class="form-label-s">Contraseña temporal *</label>
+          <input type="password" class="form-inp-s" placeholder="Mín. 8 caracteres" maxlength="50">
+        </div>
+      </div>
+
+      <!-- Carrera / Estado -->
+      <div class="form-grid-2">
+        <div>
+          <label class="form-label-s">Carrera *</label>
+          <input type="text" class="form-inp-s" placeholder="Ej. Lic. Ciencias de la Educación" maxlength="100">
+        </div>
+        <div>
+          <label class="form-label-s">Estado de la cuenta</label>
+          <select class="form-inp-s">
+            <option value="activo">Activo</option>
+            <option value="inactivo">Inactivo</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Teléfono -->
+      <label class="form-label-s">Teléfono</label>
+      <input type="tel" class="form-inp-s" placeholder="Ej. 2221234567" maxlength="10">
+
+      <!-- Biografía -->
+      <label class="form-label-s">Biografía breve</label>
+      <textarea class="form-inp-s" rows="3" placeholder="Descripción del líder, experiencia relevante, áreas de interés..." maxlength="200" style="resize:vertical;"></textarea>
+
+      <!-- LinkedIn / Instagram -->
+      <div class="form-grid-2">
+        <div>
+          <label class="form-label-s">LinkedIn <span style="color:var(--gris-400);font-weight:400;">(usuario)</span></label>
+          <input type="text" class="form-inp-s" placeholder="ana-martinez-garcia" maxlength="50">
+        </div>
+        <div>
+          <label class="form-label-s">Instagram <span style="color:var(--gris-400);font-weight:400;">(usuario)</span></label>
+          <input type="text" class="form-inp-s" placeholder="@ana.martinez" maxlength="50">
+        </div>
+      </div>
+
+      <div style="background:var(--azul-light);border-radius:var(--radius-sm);padding:10px 14px;font-size:12px;color:#1e40af;margin-top:4px;">
+        ℹ️ Se creará un usuario de tipo <strong>Líder</strong> en el sistema. El líder recibirá un correo de activación y podrá cambiar su contraseña al iniciar sesión por primera vez.
+      </div>
+
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-sm" style="background:var(--gris-100);color:var(--gris-600);" onclick="document.getElementById('modalNuevoLider').classList.remove('open')">Cancelar</button>
+      <button class="btn btn-sm" style="background:var(--morado);color:#fff;border-color:var(--morado);" onclick="document.getElementById('modalNuevoLider').classList.remove('open')">✓ Crear líder</button>
     </div>
   </div>
 </div>
