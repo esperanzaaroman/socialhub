@@ -179,3 +179,39 @@ CREATE TABLE Dashboard_widget (
     FOREIGN KEY (id_metrica) REFERENCES metricas_proyecto(id_metrica) ON DELETE CASCADE,
     FOREIGN KEY (id_plantilla) REFERENCES plantilla(id_plantilla) ON DELETE CASCADE
 );
+
+CREATE TABLE publicacion_foro (
+    id_publi INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    texto TEXT,
+    fecha_publicacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+    id_proyecto INT,
+    multimedia_publi VARCHAR(200),
+
+    FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario),
+    FOREIGN KEY (id_proyecto) REFERENCES proyecto(id_proyecto)
+);
+
+
+CREATE TABLE like_foro (
+    id_like INT AUTO_INCREMENT PRIMARY KEY,
+    id_publi INT NOT NULL,
+    id_usuario INT NOT NULL,
+    fecha_like DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (id_publi) REFERENCES publicacion_foro(id_publi),
+    FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
+);
+
+
+CREATE TABLE comentario_foro (
+    id_comentario INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    id_publi INT NOT NULL,
+    texto TEXT,
+    fecha_publicacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario),
+    FOREIGN KEY (id_publi) REFERENCES publicacion_foro(id_publi)
+);
+
