@@ -6,20 +6,27 @@
   <title>SocialHub – Inicio</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="estilos-comunes.css" />
+  <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="publico-inicio.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 </head>
 <body>
 
-  <nav class="nav-publico">
-    <a href="publico-inicio.html" class="nav-logo">
-      <img src="assets/img/logo.png" alt="logo" class="logo-img" style="height:50px;">
-      <span>SocialHub</span>
-    </a>
-    <div class="nav-links">
-      <a href="publico-inicio.html" class="activo">Inicio</a>
-      <a href="publico-proyectos.html">Proyectos</a>
-      <a href="login.html" class="btn-admin">Acceso Admin / Líder</a>
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="publico-inicio.html" class="navbar-logo">
+        <img src="assets/img/logo.png" alt="Logo SocialHub" class="navbar-logo-icon">
+        <div class="navbar-logo-text">
+          <span class="navbar-logo-title">SocialHub</span>
+          <span class="navbar-logo-sub">Servicio Social Universitario</span>
+        </div>
+      </a>
+      <div class="navbar-links">
+        <a href="publico-inicio.html" class="navbar-link active">Inicio</a>
+        <a href="publico-proyectos.html" class="navbar-link">Proyectos</a>
+        <a href="foro.html?rol=publico" class="navbar-link">Foro</a>
+      </div>
+      <div class="navbar-right"></div>
     </div>
   </nav>
 
@@ -100,7 +107,7 @@
           </svg>
         </div>
         <div class="metrica-numero">235+</div>
-        <div class="metrica-label">prestadores de servicio</div>
+        <div class="metrica-label">Líderes sociales</div>
       </div>
 
       <!-- Horas de Servicio -->
@@ -122,7 +129,7 @@
   <section class="seccion-impacto" id="impacto" style="margin-top: 4rem;">
     <div class="impacto-inner">
       <div class="seccion-encabezado">
-        <div class="chip">Métricas Globales</div>
+        <div class="chip">Impacto del Programa</div>
         <h2>Impacto en números</h2>
         <p>Todos los proyectos alineados con los Objetivos de Desarrollo Sostenible de la ONU</p>
       </div>
@@ -174,7 +181,6 @@
           </div>
           <div class="destacado-stats">
             <div><span>245</span> beneficiarios</div>
-            <div><span>32</span>prestadores de servicio</div>
             <div><span>1,840</span> horas</div>
           </div>
         </div>
@@ -198,7 +204,6 @@
           </div>
           <div class="destacado-stats">
             <div><span>520</span> beneficiarios</div>
-            <div><span>45</span> prestadores de servicio</div>
             <div><span>2,300</span> horas</div>
           </div>
         </div>
@@ -223,7 +228,6 @@
           </div>
           <div class="destacado-stats">
             <div><span>1,200</span> beneficiarios</div>
-            <div><span>68</span> prestadores de servicio</div>
             <div><span>3,200</span> horas</div>
           </div>
         </div>
@@ -326,8 +330,8 @@
       <a href="publico-proyectos.html" class="btn-cta-verde">
         Ver catálogo completo →
       </a>
-      <a href="login.html" class="btn-cta-borde">
-        Acceso administradores
+      <a href="lideres.html" class="btn-cta-verde">
+        Conoce a nuestros líderes sociales →
       </a>
     </div>
   </section>
