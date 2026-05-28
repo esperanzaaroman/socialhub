@@ -6,49 +6,26 @@
   <title>SocialHub – Proyectos</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="estilos-comunes.css" />
+  <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="publico-proyectos.css" />
 </head>
 <body>
 
-  <style>
-    /* Mini-nav para esta página (mismos estilos que publico-inicio.css) */
-    .nav-publico {
-      position: sticky; top: 0; z-index: 100;
-      background: linear-gradient(135deg, #4f46e5, #6366f1, #7c3aed);
-      padding: 0 2.5rem; height: 64px;
-      display: flex; align-items: center; justify-content: space-between;
-      box-shadow: 0 4px 20px rgba(79,70,229,0.35);
-    }
-    .nav-publico .nav-logo {
-      display: flex; align-items: center; gap: 0.6rem; text-decoration: none;
-    }
-    .nav-publico .nav-logo span { color: white; font-size: 1.4rem; font-weight: 700; }
-    .nav-publico .nav-links { display: flex; align-items: center; gap: 0.4rem; }
-    .nav-publico .nav-links a {
-      color: rgba(255,255,255,0.8); text-decoration: none;
-      padding: 0.4rem 0.9rem; border-radius: 8px;
-      font-size: 0.95rem; font-weight: 500; transition: all 0.2s;
-    }
-    .nav-publico .nav-links a:hover,
-    .nav-publico .nav-links a.activo {
-      background-color: rgba(255,255,255,0.15); color: white;
-    }
-    .btn-admin-nav {
-      background-color: rgba(255,255,255,0.15) !important;
-      border: 1px solid rgba(255,255,255,0.3) !important;
-      font-weight: 600 !important;
-    }
-  </style>
-
-  <nav class="nav-publico">
-    <a href="publico-inicio.html" class="nav-logo">
-      <img src="assets/img/logo.png" alt="logo" class="logo-img" style="height:50px;">
-      <span>SocialHub</span>
-    </a>
-    <div class="nav-links">
-      <a href="publico-inicio.html">Inicio</a>
-      <a href="publico-proyectos.html" class="activo">Proyectos</a>
-      <a href="login.html" class="btn-admin-nav">Acceso Admin / Líder</a>
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="publico-inicio.html" class="navbar-logo">
+        <img src="assets/img/logo.png" alt="Logo SocialHub" class="navbar-logo-icon">
+        <div class="navbar-logo-text">
+          <span class="navbar-logo-title">SocialHub</span>
+          <span class="navbar-logo-sub">Servicio Social Universitario</span>
+        </div>
+      </a>
+      <div class="navbar-links">
+        <a href="publico-inicio.html" class="navbar-link">Inicio</a>
+        <a href="publico-proyectos.html" class="navbar-link active">Proyectos</a>
+        <a href="foro.html?rol=publico" class="navbar-link">Foro</a>
+      </div>
+      <div class="navbar-right"></div>
     </div>
   </nav>
 
@@ -78,15 +55,6 @@
       <option value="ods11">ODS 11 – Ciudades sostenibles</option>
       <option value="ods12">ODS 12 – Consumo responsable</option>
       <option value="ods13">ODS 13 – Acción por el clima</option>
-    </select>
-
-    <!-- Filtro por estado -->
-    <select class="filtro-select" id="filtroEstado">
-      <option value="">Todos los estados</option>
-      <option value="Activo">Activo</option>
-      <option value="En proceso">En proceso</option>
-      <option value="Completado">Completado</option>
-      <option value="Pendiente">Pendiente</option>
     </select>
 
     <!-- Filtro por población -->
@@ -291,18 +259,7 @@
                 ${icoCorazon} <span style="font-weight:600; color:#0f172a;">${benef}</span> <span style="color:#64748b;">beneficiarios</span>
               </div>
               <div class="catalogo-stat" style="color: #64748b;">
-                ${icoPersonas} <span style="font-weight:600; color:#0f172a;">${p.voluntarios}</span> vol.
-              </div>
-            </div>
-
-            <!-- Progreso -->
-            <div>
-              <div class="catalogo-progreso-label">
-                <span>Progreso</span>
-                <span>${p.progreso}%</span>
-              </div>
-              <div class="catalogo-barra-fondo">
-                <div class="catalogo-barra-relleno" style="width: ${p.progreso}%; background-color: ${p.color};"></div>
+                ${icoPersonas} <span style="font-weight:600; color:#0f172a;">${p.voluntarios}</span> <span style="color:#64748b;">Prestadores de servicio</span>
               </div>
             </div>
 
@@ -337,7 +294,6 @@
     function aplicarFiltros() {
       var textoBusq  = document.getElementById('inputBusqueda').value.toLowerCase().trim();
       var odsSelec   = document.getElementById('filtroODS').value;
-      var estadoSelec = document.getElementById('filtroEstado').value;
       var poblSelec  = document.getElementById('filtroPoblacion').value;
 
       var filtrados = proyectos.filter(function(p) {
@@ -349,13 +305,10 @@
         // Filtro ODS
         var pasaODS = odsSelec === '' || p.ods.includes(odsSelec);
 
-        // Filtro estado
-        var pasaEstado = estadoSelec === '' || p.estado === estadoSelec;
-
         // Filtro población
         var pasaPoblacion = poblSelec === '' || p.poblacion === poblSelec;
 
-        return pasaTexto && pasaODS && pasaEstado && pasaPoblacion;
+        return pasaTexto && pasaODS && pasaPoblacion;
       });
 
       renderizar(filtrados);
@@ -364,7 +317,6 @@
     // Escuchamos los cambios en los filtros
     document.getElementById('inputBusqueda').addEventListener('input', aplicarFiltros);
     document.getElementById('filtroODS').addEventListener('change', aplicarFiltros);
-    document.getElementById('filtroEstado').addEventListener('change', aplicarFiltros);
     document.getElementById('filtroPoblacion').addEventListener('change', aplicarFiltros);
 
     // Renderizado inicial

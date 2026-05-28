@@ -1,8 +1,8 @@
 CREATE TABLE usuario (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL,
-    correo VARCHAR(50) NOT NULL,
-    contrasena VARCHAR(50) NOT NULL,
+    correo VARCHAR(50) NOT NULL UNIQUE,
+    contrasena VARCHAR(255) NOT NULL,
     fecha_registro DATE,
     foto_perfil VARCHAR(200),
     telefono VARCHAR(15),
@@ -163,7 +163,7 @@ CREATE TABLE plantilla (
     FOREIGN KEY (id_visualizacion) REFERENCES visualizacion(id_visualizacion) ON DELETE SET NULL
 );
 
-CREATE TABLE Dashboard_widget (
+CREATE TABLE dashboard_widget (
     id_widget INT AUTO_INCREMENT PRIMARY KEY,
     id_proyecto INT,
     id_metrica INT,
