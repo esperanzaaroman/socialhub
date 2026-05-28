@@ -5,10 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SocialHub — Aprende Conmigo</title>
 <link rel="stylesheet" href="styles.css">
-<<<<<<< HEAD
 <link rel="stylesheet" href="proyecto-detalle.css">
 
-=======
 <style>
 
 :root {
@@ -299,7 +297,6 @@ h1, .project-section-title {
 }
 
 </style>
->>>>>>> 8df0490bbc0e3e9400596b7a453c42efebb3f91f
 <script>
 const params = new URLSearchParams(window.location.search);
 const rol = params.get('rol') || 'publico';
@@ -324,10 +321,10 @@ document.addEventListener('DOMContentLoaded', function() {
       <a href="admin-dashboard.html" class="navbar-link">Dashboard</a>
       <a href="admin-proyectos.html" class="navbar-link active">Proyectos</a>
       <a href="foro.html?rol=admin" class="navbar-link">Foro</a>`;
-    navRight.innerHTML = `<span class="navbar-badge">Administrador</span><a href="#" class="navbar-avatar" style="background:var(--morado);">👑</a>`;
+    navRight.innerHTML = `<span class="navbar-badge">Administrador</span><a href="#" class="navbar-avatar" style="background:var(--morado);"></a>`;
     breadcrumbHome.href = 'admin-proyectos.html';
     breadcrumbHome.textContent = 'Todos los Proyectos';
-    if (actionBar) { actionBar.style.display = 'flex'; actionBar.innerHTML = `<div><div class="action-bar-label">🛡️ Vista de Administrador</div><div class="action-bar-sub">Supervisando proyecto</div></div><div style="display:flex;gap:8px;"><a href="#" class="btn btn-outline btn-sm">Exportar métricas</a><a href="#" class="btn btn-secondary btn-sm">Contactar líder</a></div>`; }
+    if (actionBar) { actionBar.style.display = 'flex'; actionBar.innerHTML = `<div><div class="action-bar-label">Vista de Administrador</div><div class="action-bar-sub">Supervisando proyecto</div></div><div style="display:flex;gap:8px;"><a href="#" class="btn btn-outline btn-sm">Exportar métricas</a><a href="#" class="btn btn-secondary btn-sm">Contactar líder</a></div>`; }
   } else {
     navEl.innerHTML = `
       <a href="publico-inicio.html" class="navbar-link">Inicio</a>
@@ -448,14 +445,14 @@ document.addEventListener('DOMContentLoaded', () => {
     
     <div class="hero-text-side">
       <div style="display:flex; gap:12px; margin-bottom:16px;">
-        <span class="tag tag-azul">📚 Educación</span>
-        <span class="tag" style="background:rgba(16,185,129,0.25); color:#6ee7b7;">✓ Activo</span>
+        <span class="tag tag-azul id = "proyecto-categoria"> Educación</span>
+        <span class="tag" id="proyecto-estado"style="background:rgba(16,185,129,0.25); color:#6ee7b7;">Activo</span>
       </div>
       <h1 id="proyecto-titulo" style="font-size:40px; font-weight:800; color:white; margin-bottom:12px;">
-        Aprende Conmigo:<br>Tutorías Comunitarias
+        Cargando..
       </h1>
-      <p id="proyecto-desc" style="color:rgba(255,255,255,0.8); font-size:17px; line-height:1.6;">
-        Programa de tutorías académicas para niños de comunidades vulnerables en primaria y secundaria. Más de 48 estudiantes impactados este semestre.
+      <p id="proyecto-resumen" style="color:rgba(255,255,255,0.8); font-size:17px; line-height:1.6;">
+        Cargando...
       </p>
     </div>
 
@@ -495,209 +492,51 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
 </div>
 
-    <!-- ACTION BAR (solo para lider/admin, ocultado dinámicamente) -->
     <div class="action-bar" id="action-bar" style="display:none;">
 
       <div>
-        <div class="action-bar-label">✏️ Este es tu proyecto</div>
+        <div class="action-bar-label">Este es tu proyecto</div>
         <div class="action-bar-sub">Puedes editar y actualizar métricas</div>
       </div>
       <div style="display:flex;gap:8px;">
-        <a href="#" class="btn btn-outline btn-sm">✏️ Editar proyecto</a>
-        <a href="#" class="btn btn-verde btn-sm">📊 Subir métricas</a>
+        <a href="#" class="btn btn-outline btn-sm">Editar proyecto</a>
+        <a href="#" class="btn btn-verde btn-sm">Subir métricas</a>
       </div>
     </div>
 
     <!-- METRICAS -->
-    <div class="metrics-grid">
-      <div class="metric-box">
-        <div class="metric-emoji">👥</div>
-        <div class="metric-val">48</div>
-        <div class="metric-lab">Beneficiarios directos</div>
-      </div>
-      <div class="metric-box">
-        <div class="metric-emoji">⏱</div>
-        <div class="metric-val">320h</div>
-        <div class="metric-lab">Horas de servicio</div>
-      </div>
-      <div class="metric-box">
-        <div class="metric-emoji">🎓</div>
-        <div class="metric-val">6</div>
-        <div class="metric-lab">Prestadores activos</div>
-      </div>
-      <div class="metric-box">
-        <div class="metric-emoji">📈</div>
-        <div class="metric-val">85%</div>
-        <div class="metric-lab">Progreso meta</div>
-      </div>
-    </div>
-
-    <!-- PROGRESS -->
-    <div class="card" style="margin-bottom:24px;">
-      <div class="card-body">
-        <div class="project-section-title">📊 Progreso general</div>
-        <div style="display:flex;justify-content:space-between;font-size:14px;color:var(--gris-500);margin-bottom:8px;">
-          <span>Avance hacia la meta de beneficiarios (meta: 60)</span>
-          <span style="font-weight:700;color:var(--verde);">85%</span>
-        </div>
-        <div class="progress-bar" style="height:14px;margin-bottom:20px;">
-          <div class="progress-fill" style="width:85%"></div>
-        </div>
-        <div style="display:flex;justify-content:space-between;font-size:14px;color:var(--gris-500);margin-bottom:8px;">
-          <span>Horas completadas (meta: 400h)</span>
-          <span style="font-weight:700;color:var(--azul);">80%</span>
-        </div>
-        <div class="progress-bar" style="height:14px;margin-bottom:20px;">
-          <div class="progress-fill" style="width:80%;background:linear-gradient(90deg,var(--azul),#60a5fa)"></div>
-        </div>
-        <div style="display:flex;justify-content:space-between;font-size:14px;color:var(--gris-500);margin-bottom:8px;">
-          <span>Prestadores completados (meta: 8)</span>
-          <span style="font-weight:700;color:var(--morado);">75%</span>
-        </div>
-        <div class="progress-bar" style="height:14px;">
-          <div class="progress-fill" style="width:75%;background:linear-gradient(90deg,var(--morado),#a78bfa)"></div>
-        </div>
-      </div>
-    </div>
-
-
-    <div class="card" style="margin-bottom:24px;">
-      <div class="card-body">
-        <div class="project-section-title">👥 Demografía de beneficiarios</div>
-        <div class="grid-2">
-          <div>
-            <div style="font-size:13px;font-weight:700;color:var(--gris-500);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Por género</div>
-            <div class="demo-bar">
-              <div class="demo-label">Niñas</div>
-              <div class="demo-track"><div class="demo-fill" style="width:54%;background:var(--morado)"></div></div>
-              <div class="demo-count">26</div>
+    <div id="metrics-grid"class="metrics-grid">
+        
+    </div>  
+    <template id="widget-template">
+          <div class="metric-box">
+            <h3 class="widget-title">Nombre</h3>
+            <div class="widget-content metric-val">
+              <span class="widget-value">0000</span>
             </div>
-            <div class="demo-bar">
-              <div class="demo-label">Niños</div>
-              <div class="demo-track"><div class="demo-fill" style="width:46%;background:var(--azul)"></div></div>
-              <div class="demo-count">22</div>
+            <div class="widget-footer">
+                <small class="widget-operation">SUM</small>
             </div>
           </div>
-          <div>
-            <div style="font-size:13px;font-weight:700;color:var(--gris-500);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Por rango de edad</div>
-            <div class="demo-bar">
-              <div class="demo-label">6–12 años</div>
-              <div class="demo-track"><div class="demo-fill" style="width:62%;background:var(--verde)"></div></div>
-              <div class="demo-count">30</div>
-            </div>
-            <div class="demo-bar">
-              <div class="demo-label">12–15 años</div>
-              <div class="demo-track"><div class="demo-fill" style="width:33%;background:var(--naranja)"></div></div>
-              <div class="demo-count">16</div>
-            </div>
-            <div class="demo-bar">
-              <div class="demo-label">15–17 años</div>
-              <div class="demo-track"><div class="demo-fill" style="width:4%;background:var(--rojo)"></div></div>
-              <div class="demo-count">2</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  
-    <div class="card" style="margin-bottom:24px;">
-      <div class="card-body">
-        <div class="project-section-title">📋 Descripción del proyecto</div>
-        <p style="font-size:15px;color:var(--gris-600);line-height:1.75;margin-bottom:16px;">
-          <strong>Aprende Conmigo</strong> es un programa de tutorías académicas diseñado para apoyar a niños y jóvenes de comunidades vulnerables en las materias de Matemáticas, Español, Ciencias y Lectoescritura.
-        </p>
-        <p style="font-size:15px;color:var(--gris-600);line-height:1.75;margin-bottom:16px;">
-          El programa opera en la <strong>Colonia Independencia</strong> de Monterrey, trabajando con dos escuelas primarias: Benito Juárez y Francisco I. Madero. Las sesiones se realizan 3 veces por semana en horario extracurricular.
-        </p>
-        <p style="font-size:15px;color:var(--gris-600);line-height:1.75;">
-          Los prestadores de servicio social son estudiantes universitarios de las carreras de Educación, Psicología y áreas STEM, quienes reciben capacitación previa antes de iniciar sus actividades.
-        </p>
-      </div>
-    </div>
-
-
-    <div class="card" style="margin-bottom:24px;">
-      <div class="card-body">
-        <div class="project-section-title">🕐 Actividad reciente</div>
-
-        <div class="update-item">
-          <div class="update-dot green">📊</div>
-          <div class="update-content">
-            <div class="update-title">Métricas del mes de octubre subidas</div>
-            <div class="update-text">Se incorporaron 8 nuevos beneficiarios. Total de horas del mes: 42h por 6 prestadores.</div>
-            <div class="update-date">hace 3 días · por Ana Martínez</div>
-          </div>
-        </div>
-
-        <div class="update-item">
-          <div class="update-dot blue">📸</div>
-          <div class="update-content">
-            <div class="update-title">Evidencia fotográfica subida</div>
-            <div class="update-text">12 fotos del taller de matemáticas de la semana pasada añadidas al registro del proyecto.</div>
-            <div class="update-date">hace 6 días · por Ana Martínez</div>
-          </div>
-        </div>
-
-        <div class="update-item">
-          <div class="update-dot orange">🎯</div>
-          <div class="update-content">
-            <div class="update-title">Meta de beneficiarios actualizada</div>
-            <div class="update-text">La meta fue ajustada de 50 a 60 beneficiarios para el periodo agosto–diciembre.</div>
-            <div class="update-date">hace 2 semanas · por Ana Martínez</div>
-          </div>
-        </div>
-
-        <div class="update-item">
-          <div class="update-dot green">✅</div>
-          <div class="update-content">
-            <div class="update-title">Proyecto aprobado por administrador</div>
-            <div class="update-text">El proyecto fue revisado y aprobado para iniciar actividades en agosto 2025.</div>
-            <div class="update-date">hace 3 meses · por Dept. Servicio Social</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-body">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-          <div class="project-section-title" style="margin-bottom:0;border:none;padding:0;">💬 Publicaciones en foro</div>
-          <a href="foro.html" class="btn btn-outline btn-sm">Ver foro →</a>
-        </div>
-        <div class="foro-post" style="margin-bottom:12px;">
-          <div class="foro-post-header">
-            <div class="avatar avatar-sm" style="background:linear-gradient(135deg,#1e40af,#3b82f6);">A</div>
-            <div class="foro-post-meta">
-              <a href="lider-perfil.html?rol=publico" class="foro-post-author" style="color:var(--azul);">Ana Martínez</a>
-              <div class="foro-post-time">hace 3 días</div>
-            </div>
-            <span class="tag tag-azul">Métricas</span>
-          </div>
-          <div class="foro-post-title">Actualización octubre: 8 nuevos beneficiarios</div>
-          <div class="foro-post-content" style="margin-bottom:0;">Este mes tuvimos una incorporación récord. Los niños están respondiendo muy bien a las tutorías de matemáticas...</div>
-        </div>
-      </div>
-    </div>
-
+        </template>
   </div>
 
   <div>
 
     <div class="info-card">
-      <div class="info-card-title">ℹ️ Información general</div>
-      <div class="info-row"><span class="info-key">Estado</span><span class="tag tag-verde">✓ Activo</span></div>
-      <div class="info-row"><span class="info-key">Categoría</span><span class="info-val">📚 Educación</span></div>
-      <div class="info-row"><span class="info-key">ODS</span><span class="info-val">ODS 4</span></div>
-      <div class="info-row"><span class="info-key">Periodo</span><span class="info-val">Ago–Dic 2025</span></div>
-      <div class="info-row"><span class="info-key">Zona</span><span class="info-val">Monterrey Centro</span></div>
-      <div class="info-row"><span class="info-key">Inicio</span><span class="info-val">14 ago 2025</span></div>
-      <div class="info-row"><span class="info-key">Fin estimado</span><span class="info-val">12 dic 2025</span></div>
+      <div class="info-card-title">Información general</div>
+      <div class="info-row"><span  class="info-key">Estado</span><span id="proyecto-estado" class="tag tag-verde">✓ Activo</span></div>
+      <div class="info-row"><span  class="info-key">Categoría</span><span id="proyecto-categoria" class="info-val">Educación</span></div>
+      <div class="info-row"><span  class="info-key">ODS</span><span id="proyecto-ods" class="info-val">ODS 4</span></div>
+      <div class="info-row"><span  class="info-key">Periodo</span><span id="proyecto-periodo" class="info-val">Ago–Dic 2025</span></div>
+      <div class="info-row"><span  class="info-key">Zona</span><span id="proyecto-zona" class="info-val">Monterrey Centro</span></div>
+      <div class="info-row"><span  class="info-key">Inicio</span><span id="proyecto-inicio" class="info-val">14 ago 2025</span></div>
+      <div class="info-row"><span  class="info-key">Fin estimado</span><span id="proyecto-fin" class="info-val">12 dic 2025</span></div>
     </div>
 
     <!-- LIDER -->
     <div class="lider-card">
-      <div class="info-card-title">👤 Líder del proyecto</div>
+      <div class="info-card-title">Líder del proyecto</div>
       <div class="lider-header">
         <div class="avatar avatar-md" style="background:linear-gradient(135deg,#1e40af,#3b82f6);">A</div>
         <div>
@@ -711,46 +550,6 @@ document.addEventListener('DOMContentLoaded', () => {
       <a href="lider-perfil.html?rol=publico" class="btn btn-outline" style="width:100%;justify-content:center;">Ver perfil completo →</a>
     </div>
 
-    <!-- PRESTADORES -->
-    <div class="info-card">
-      <div class="info-card-title">🎓 Prestadores de servicio</div>
-      <div style="display:flex;flex-direction:column;gap:10px;">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div class="avatar avatar-sm" style="background:linear-gradient(135deg,var(--morado),#a78bfa);">L</div>
-          <div><div style="font-size:13px;font-weight:600;">Laura Sánchez</div><div style="font-size:11px;color:var(--gris-400);">Psicología · 48h</div></div>
-          <span class="tag tag-verde" style="margin-left:auto;">Activo</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div class="avatar avatar-sm" style="background:linear-gradient(135deg,var(--verde),#34d399);">M</div>
-          <div><div style="font-size:13px;font-weight:600;">Miguel Torres</div><div style="font-size:11px;color:var(--gris-400);">Matemáticas · 52h</div></div>
-          <span class="tag tag-verde" style="margin-left:auto;">Activo</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div class="avatar avatar-sm" style="background:linear-gradient(135deg,var(--naranja),#f97316);">P</div>
-          <div><div style="font-size:13px;font-weight:600;">Paula Vega</div><div style="font-size:11px;color:var(--gris-400);">Educación · 60h</div></div>
-          <span class="tag tag-verde" style="margin-left:auto;">Activo</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div class="avatar avatar-sm" style="background:linear-gradient(135deg,#dc2626,#f87171);">R</div>
-          <div><div style="font-size:13px;font-weight:600;">Roberto Díaz</div><div style="font-size:11px;color:var(--gris-400);">ITC · 44h</div></div>
-          <span class="tag tag-verde" style="margin-left:auto;">Activo</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="map-placeholder" style="min-height:180px;margin-bottom:16px;">
-      <div class="map-emoji">🗺️</div>
-      <h3>Zona de impacto</h3>
-      <p>Colonia Independencia, Monterrey, N.L.</p>
-    </div>
-
-    <div class="info-card">
-      <div class="info-card-title">📤 Compartir proyecto</div>
-      <div style="display:flex;gap:8px;">
-        <button class="btn btn-outline btn-sm" style="flex:1;">🔗 Copiar link</button>
-        <button class="btn btn-outline btn-sm" style="flex:1;">📲 Compartir</button>
-      </div>
-    </div>
 
   </div>
 </div>
@@ -760,7 +559,7 @@ document.addEventListener('DOMContentLoaded', () => {
   <div class="footer-inner">
     <div class="footer-grid">
       <div>
-        <div class="footer-logo-text">🌍 SocialHub</div>
+        <div class="footer-logo-text">SocialHub</div>
         <p class="footer-desc">Plataforma de gestión y visualización de proyectos de servicio social universitario.</p>
       </div>
       <div>
@@ -813,7 +612,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <button onclick="resetStyles()" class="btn-reset">Restablecer valores</button>
   </div>
 </div>
-
+<script type="module" src="projectjs/detalle.js"></script>
 </body>
 </html>
 
