@@ -13,7 +13,7 @@ app.use(express.json());
 
 app.get('/api/health', (req, res) => {
     sendSuccess(res, {
-        message: 'Servidor corriendo',
+        message: 'Servidor corriendo', 
         data: { status: 'ok' }
     });
 });
