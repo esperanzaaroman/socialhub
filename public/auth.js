@@ -38,7 +38,7 @@ async function verificarAdmin() {
       await response.json();
 
     // Not admin?
-    if (data.usuario.role !== 'admin') {
+    if (data.role !== 'admin') {
 
       alert('Acceso denegado');
 
@@ -106,7 +106,7 @@ async function verificarLider() {
       await response.json();
 
     // Not leader?
-    if (data.usuario.role !== 'lider') {
+    if (data.role !== 'lider') {
 
       alert('Acceso denegado');
 
@@ -137,7 +137,6 @@ async function obtenerUsuarioActual() {
   const token =
     localStorage.getItem('token');
 
-  // No session?
   if (!token) {
 
     return {
@@ -157,7 +156,6 @@ async function obtenerUsuarioActual() {
       }
     );
 
-    // Invalid token?
     if (!response.ok) {
 
       localStorage.removeItem('token');
@@ -168,10 +166,10 @@ async function obtenerUsuarioActual() {
 
     }
 
-    const data =
+    const usuario =
       await response.json();
 
-    return data.usuario;
+    return usuario;
 
   } catch (error) {
 

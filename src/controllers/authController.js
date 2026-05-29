@@ -3,7 +3,8 @@ const jwt = require('jsonwebtoken');
 const {
   findUserByEmail,
   isAdmin,
-  isLeader
+  isLeader,
+  findUserById
 } = require('../models/authModel');
 
 async function login(req, res){
@@ -44,11 +45,38 @@ async function login(req, res){
     });
 }
 
-function me(req, res) {
 
-  res.json({
-    usuario: req.usuario
-  });
+async function me(req, res) {
+
+  try {
+
+    const usuarioDB =
+      await findUserById(req.usuario.id);
+
+    if (!usuarioDB) {
+
+      return res.status(404).json({
+        mensaje: 'Usuario no encontrado'
+      });
+
+    }
+
+    res.json({
+      id_usuario: usuarioDB.id_usuario,
+      username: usuarioDB.username,
+      correo: usuarioDB.correo,
+      role: req.usuario.role
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      mensaje: 'Error obteniendo usuario'
+    });
+
+  }
 
 }
 

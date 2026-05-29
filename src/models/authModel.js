@@ -33,4 +33,20 @@ async function isLeader(id_usuario) {
   return rows.length > 0;
 } 
 
-module.exports = { findUserByEmail, isAdmin, isLeader};
+async function findUserById(id_usuario) {
+
+  const [rows] = await pool.query(
+    `
+    SELECT
+      id_usuario,
+      username,
+      correo
+    FROM usuario
+    WHERE id_usuario = ?
+    `,
+    [id_usuario]
+  );
+
+  return rows[0];
+}
+module.exports = { findUserByEmail, isAdmin, isLeader, findUserById};
