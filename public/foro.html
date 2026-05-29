@@ -6,27 +6,135 @@
 <title>SocialHub — Foro Comunitario</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="foro.css">
+<script src="auth.js"></script>
+
 <script>
-const params = new URLSearchParams(window.location.search);
-const rol = params.get('rol') || 'publico';
-document.addEventListener('DOMContentLoaded', function() {
-  const navEl = document.getElementById('nav-links');
-  const navRight = document.getElementById('nav-right');
-  const newPostCard = document.getElementById('new-post-card');
-  if (rol === 'lider') {
-    navEl.innerHTML = `<a href="lider-dashboard.html" class="navbar-link">Dashboard</a><a href="lider-proyectos.html" class="navbar-link">Mis Proyectos</a><a href="foro.html?rol=lider" class="navbar-link active">Foro</a>`;
-    navRight.innerHTML = `<span class="navbar-badge">Líder Social</span><a href="lider-perfil.html?rol=lider" class="navbar-avatar">A</a>`;
-    if (newPostCard) newPostCard.style.display = 'block';
-  } else if (rol === 'admin') {
-    navEl.innerHTML = `<a href="admin-dashboard.html" class="navbar-link">Dashboard</a><a href="admin-proyectos.html" class="navbar-link">Proyectos</a><a href="foro.html?rol=admin" class="navbar-link active">Foro</a>`;
-    navRight.innerHTML = `<span class="navbar-badge">Administrador</span><a href="#" class="navbar-avatar" style="background:var(--morado);">👑</a>`;
-    if (newPostCard) newPostCard.style.display = 'block';
-  } else {
-    navEl.innerHTML = `<a href="publico-inicio.html" class="navbar-link">Inicio</a><a href="publico-proyectos.html" class="navbar-link">Proyectos</a><a href="foro.html?rol=publico" class="navbar-link active">Foro</a>`;
-    navRight.innerHTML = '';
-    if (newPostCard) newPostCard.style.display = 'none';
-  }
+
+document.addEventListener(
+  'DOMContentLoaded',
+  async function() {
+
+    const usuario =
+      await obtenerUsuarioActual();
+
+    const rol =
+      usuario.role || 'publico';
+
+    const navEl =
+      document.getElementById('nav-links');
+
+    const navRight =
+      document.getElementById('nav-right');
+
+    const newPostCard =
+      document.getElementById('new-post-card');
+
+
+
+    // ===== LIDER =====
+    if (rol === 'lider') {
+
+      navEl.innerHTML = `
+        <a href="lider-dashboard.html" class="navbar-link">
+          Dashboard
+        </a>
+
+        <a href="lider-proyectos.html" class="navbar-link">
+          Mis Proyectos
+        </a>
+
+        <a href="foro.html" class="navbar-link active">
+          Foro
+        </a>
+      `;
+
+      navRight.innerHTML = `
+        <span class="navbar-badge">
+          Líder Social
+        </span>
+
+        <a href="lider-perfil.html" class="navbar-avatar">
+          A
+        </a>
+      `;
+
+      if (newPostCard) {
+        newPostCard.style.display =
+          'block';
+      }
+
+    }
+
+
+
+    // ===== ADMIN =====
+    else if (rol === 'admin') {
+
+      navEl.innerHTML = `
+        <a href="admin-dashboard.html" class="navbar-link">
+          Dashboard
+        </a>
+
+        <a href="admin-proyectos.html" class="navbar-link">
+          Proyectos
+        </a>
+
+        <a href="foro.html" class="navbar-link active">
+          Foro
+        </a>
+      `;
+
+      navRight.innerHTML = `
+        <span class="navbar-badge">
+          Administrador
+        </span>
+
+        <a
+          href="#"
+          class="navbar-avatar"
+          style="background:var(--morado);"
+        >
+          👑
+        </a>
+      `;
+
+      if (newPostCard) {
+        newPostCard.style.display =
+          'block';
+      }
+
+    }
+
+
+
+    // ===== PUBLIC =====
+    else {
+
+      navEl.innerHTML = `
+        <a href="publico-inicio.html" class="navbar-link">
+          Inicio
+        </a>
+
+        <a href="publico-proyectos.html" class="navbar-link">
+          Proyectos
+        </a>
+
+        <a href="foro.html" class="navbar-link active">
+          Foro
+        </a>
+      `;
+
+      navRight.innerHTML = '';
+
+      if (newPostCard) {
+        newPostCard.style.display =
+          'none';
+      }
+
+    }
+
 });
+
 </script>
 </head>
 <body>
