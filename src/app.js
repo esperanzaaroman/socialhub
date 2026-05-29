@@ -4,6 +4,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const conexion = require("./config/db");
+console.log(process.env.DB_NAME);
 
 const widgetRoutes = require('./routes/widgetRoutes');
 const adminRoutes = require('./routes/adminRoutes');
