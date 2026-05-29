@@ -293,6 +293,22 @@ body::before {
   color: var(--gris-400);
 }
 
+.error-message {
+
+  display: none;
+
+  background-color: #ffd6d6;
+
+  color: #a00000;
+
+  padding: 12px;
+
+  border-radius: 10px;
+
+  margin-bottom: 15px;
+
+  font-size: 14px;
+}
 .back-link a { color: var(--azul); font-weight: 500; }
 .back-link a:hover { text-decoration: underline; }
 

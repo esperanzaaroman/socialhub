@@ -1,19 +1,37 @@
 const loginBtn = document.getElementById('loginBtn');
+const errorMensaje =
+  document.getElementById('errorMensaje');
+
+function mostrarError(mensaje) {
+
+  errorMensaje.textContent = mensaje;
+
+  errorMensaje.style.display = 'block';
+}
 
 loginBtn.addEventListener('click', async () => {
-  const correo =
-    document.getElementById('correo').value;
-  const contrasena =
-    document.getElementById('contrasena').value;
+    errorMensaje.style.display = 'none';
+    const correo =
+        document.getElementById('correo').value;
+    const contrasena =
+        document.getElementById('contrasena').value;
 
   try {
 
     if (!correo || !contrasena) {
 
-    alert(
-        'Pon tu correo y contraseña primero'
+    mostrarError(
+    'Asegurate de ingresar con tu correo y contraseña'
     );
 
+
+    return;
+    }
+    if (!correo.includes('@')) {
+
+    mostrarError(
+        'Escribe un correo válido'
+        );
     return;
     }
 
@@ -41,6 +59,7 @@ loginBtn.addEventListener('click', async () => {
         'token',
         data.token
       );
+      errorMensaje.style.display = 'none';
 
       alert('Login exitoso');
 
@@ -66,7 +85,8 @@ loginBtn.addEventListener('click', async () => {
 
     } else {
 
-      alert(data.mensaje);
+
+      mostrarError(data.mensaje);
 
     }
 
