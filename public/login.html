@@ -36,19 +36,32 @@
 
     <div class="form-group">
       <label class="form-label">Correo</label>
-      <input type="email" class="form-input" placeholder="nombre@tec.mx">
+      <input
+        type="email"
+        id="correo"
+        class="form-input"
+        placeholder="nombre@tec.mx"
+      >
     </div>
 
     <div class="form-group">
       <label class="form-label">Contraseña</label>
-      <input type="password" class="form-input" placeholder="••••••••">
+      <input
+        type="password"
+        id="contrasena"
+        class="form-input"
+        placeholder="••••••••"
+      >
     </div>
 
     <div class="form-row-end">
-      <a href="#" class="form-link">¿Olvidaste tu contraseña?</a>
+      <a href="#" class="form-link">¿Olvidaste tu contraseña? PUEDE QUE ESTA PARTE LA QUITEMOS</a>
     </div>
 
-    <button class="login-btn" onclick="window.location.href='lider-dashboard.html'">Iniciar sesión</button>
+    <button class="login-btn" id="loginBtn">
+      Iniciar sesión
+    </button>  
+    
 
 
     <div class="demo-access">
@@ -63,6 +76,6 @@
 
   </div>
 </div>
-
+<script src="login.js"></script>
 </body>
 </html>

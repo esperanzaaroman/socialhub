@@ -1,6 +1,10 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { findUserByEmail} = require('../models/authModel');
+const {
+  findUserByEmail,
+  isAdmin,
+  isLeader
+} = require('../models/authModel');
 
 async function login(req, res){
     const {correo, contrasena} = req.body;
@@ -15,13 +19,29 @@ async function login(req, res){
         return res.status(401).json({mensaje: 'Correo o contraseña no son correctos.'});
     }
 
+    let role = null;
+
+    if (await isAdmin(usuario.id_usuario)) {
+        role = 'admin';
+    }
+    else if (await isLeader(usuario.id_usuario)) {
+        role = 'lider';
+}
+
     const token = jwt.sign(
-        { id: usuario.id_usuario, correo: usuario.correo},
+        {
+            id: usuario.id_usuario,
+            correo: usuario.correo,
+            role
+        },
         process.env.JWT_SECRET,
         { expiresIn: '8h'}
     );
 
-    res.json({ token });
+    res.json({
+        token,
+        role
+    });
 }
 
 module.exports = { login }; 
