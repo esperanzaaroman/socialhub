@@ -44,4 +44,12 @@ async function login(req, res){
     });
 }
 
-module.exports = { login }; 
+function me(req, res) {
+
+  res.json({
+    usuario: req.usuario
+  });
+
+}
+
+module.exports = { login, me }; 

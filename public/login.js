@@ -52,6 +52,7 @@ loginBtn.addEventListener('click', async () => {
     );
 
     const data = await response.json();
+    console.log(data.token);
 
     if (response.ok) {
 
