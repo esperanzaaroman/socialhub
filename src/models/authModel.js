@@ -18,10 +18,8 @@ async function isAdmin(id_usuario) {
     `,
     [id_usuario]
   );
-
   return rows.length > 0;
 }
-
 async function isLeader(id_usuario) {
 
   const [rows] = await pool.query(
