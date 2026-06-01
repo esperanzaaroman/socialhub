@@ -16,7 +16,8 @@ async function cargarNavbar(paginaActiva) {
       <a href="admin-dashboard.html" class="navbar-link ${paginaActiva === 'dashboard' ? 'active' : ''}">Dashboard</a>
       <a href="admin-proyectos.html" class="navbar-link ${paginaActiva === 'proyectos' ? 'active' : ''}">Proyectos</a>
       <a href="foro.html" class="navbar-link ${paginaActiva === 'foro' ? 'active' : ''}">Foro</a>
-      <a href="publico-proyectos.html" class="navbar-link ${paginaActiva === 'publico-proyectos' ? 'active' : ''}">Vista pública</a>
+      <a href="publico-inicio.html" class="navbar-link ${paginaActiva === 'inicio' ? 'active' : ''}">Inicio público</a>
+      <a href="publico-proyectos.html" class="navbar-link ${paginaActiva === 'publico-proyectos' ? 'active' : ''}">Proyectos públicos</a>
     `;
 
     navRight.innerHTML = `
@@ -32,7 +33,8 @@ async function cargarNavbar(paginaActiva) {
       <a href="lider-dashboard.html" class="navbar-link ${paginaActiva === 'dashboard' ? 'active' : ''}">Dashboard</a>
       <a href="lider-proyectos.html" class="navbar-link ${paginaActiva === 'proyectos' ? 'active' : ''}">Mis Proyectos</a>
       <a href="foro.html" class="navbar-link ${paginaActiva === 'foro' ? 'active' : ''}">Foro</a>
-      <a href="publico-proyectos.html" class="navbar-link ${paginaActiva === 'publico-proyectos' ? 'active' : ''}">Vista pública</a>
+      <a href="publico-inicio.html" class="navbar-link ${paginaActiva === 'inicio' ? 'active' : ''}">Inicio público</a>
+      <a href="publico-proyectos.html" class="navbar-link ${paginaActiva === 'publico-proyectos' ? 'active' : ''}">Proyectos públicos</a>
     `;
 
     navRight.innerHTML = `
