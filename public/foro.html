@@ -21,6 +21,11 @@ document.addEventListener(
     const rol =
       usuario.role || 'publico';
 
+    const inicial =
+      usuario.username
+        ? usuario.username.charAt(0).toUpperCase()
+        : '?';
+
     const navEl =
       document.getElementById('nav-links');
 
@@ -55,7 +60,7 @@ document.addEventListener(
         </span>
 
         <a href="lider-perfil.html" class="navbar-avatar">
-          A
+          ${inicial}
         </a>
       `;
 
@@ -95,7 +100,7 @@ document.addEventListener(
           class="navbar-avatar"
           style="background:var(--morado);"
         >
-          👑
+          ${inicial}
         </a>
       `;
 
