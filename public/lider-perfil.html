@@ -7,66 +7,9 @@
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="lider-perfil.css">
 <script src="auth.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', async function() {
-  const usuario = await obtenerUsuarioActual();
-  const rol = usuario.role || 'publico';
+<script src="js/navbar.js"></script>
+<script src="js/lider-perfil.js"></script>
 
-  const inicial = usuario.username
-    ? usuario.username.charAt(0).toUpperCase()
-    : '?';
-
-  const navEl = document.getElementById('nav-links');
-  const navRight = document.getElementById('nav-right');
-  const editBtn = document.getElementById('edit-btn');
-
-  if (rol === 'lider') {
-    navEl.innerHTML = `
-      <a href="lider-dashboard.html" class="navbar-link">Dashboard</a>
-      <a href="lider-proyectos.html" class="navbar-link">Mis Proyectos</a>
-      <a href="foro.html" class="navbar-link">Foro</a>
-    `;
-
-    navRight.innerHTML = `
-      <span class="navbar-badge">Líder Social</span>
-      <a href="lider-perfil.html" class="navbar-avatar" style="border-color:var(--naranja);">
-        ${inicial}
-      </a>
-    `;
-
-    if (editBtn) editBtn.style.display = 'inline-flex';
-  }
-
-  else if (rol === 'admin') {
-    navEl.innerHTML = `
-      <a href="admin-dashboard.html" class="navbar-link">Dashboard</a>
-      <a href="admin-proyectos.html" class="navbar-link">Proyectos</a>
-      <a href="foro.html" class="navbar-link">Foro</a>
-    `;
-
-    navRight.innerHTML = `
-      <span class="navbar-badge">Administrador</span>
-      <a href="#" class="navbar-avatar" style="background:var(--morado);">
-        ${inicial}
-      </a>
-    `;
-
-    if (editBtn) editBtn.style.display = 'inline-flex';
-  }
-
-  else {
-    navEl.innerHTML = `
-      <a href="publico-inicio.html" class="navbar-link">Inicio</a>
-      <a href="publico-proyectos.html" class="navbar-link">Proyectos</a>
-      <a href="foro.html" class="navbar-link">Foro</a>
-    `;
-
-    navRight.innerHTML = '';
-
-    if (editBtn) editBtn.style.display = 'none';
-  }
-});
-</script>
 </head>
 <body>
 
@@ -76,7 +19,7 @@ document.addEventListener('DOMContentLoaded', async function() {
       <img src="assets/img/logo.png" alt="Logo SocialHub" class="navbar-logo-icon">
       <div class="navbar-logo-text">
         <span class="navbar-logo-title">SocialHub</span>
-        <span class="navbar-logo-sub">Servicio Social Universitario</span>
+        <span class="navbar-logo-sub">Servicio Social</span>
       </div>
     </a>
     <div class="navbar-links" id="nav-links"></div>

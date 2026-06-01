@@ -7,6 +7,8 @@
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="lider-proyectos.css">
 <script src="auth.js"></script>
+<script src="js/navbar.js"></script>
+<script src="js/lider-proyectos.js"></script>
 </head>
 <body>
 
@@ -20,15 +22,9 @@
         <div class="navbar-logo-sub">Servicio Social</div>
       </div>
     </a>
-    <div class="navbar-links">
-      <a href="lider-dashboard.html" class="navbar-link">Dashboard</a>
-      <a href="lider-proyectos.html" class="navbar-link active">Mis Proyectos</a>
-      <a href="foro.html?rol=lider" class="navbar-link">Foro</a>
-      <a href="publico-proyectos.html" class="navbar-link">Ver público</a>
+    <div class="navbar-links" id="nav-links">
     </div>
-    <div class="navbar-right">
-      <span class="navbar-badge">Líder</span>
-      <a href="lider-perfil.html?rol=lider" class="navbar-avatar" title="Mi perfil">🎓</a>
+    <div class="navbar-right" id="nav-right">
     </div>
   </div>
 </nav>
@@ -146,7 +142,7 @@
           </div>
         </div>
         <div class="proj-card-footer">
-          <a href="proyecto-detalle.html?rol=lider" class="btn btn-primary btn-sm">Ver detalle →</a>
+          <a href="proyecto-detalle.html" class="btn btn-primary btn-sm">Ver detalle →</a>
         </div>
       </div>
     </div>
@@ -247,8 +243,6 @@
 });
 </script>
 <script src="projectjs/crear.js"></script>
-<script>
-  verificarLider();
-</script>
+
 </body>
 </html>

@@ -7,6 +7,8 @@
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="admin-proyectos.css">
 <script src="auth.js"></script>
+<script src="js/navbar.js"></script>
+<script src="js/admin-proyectos.js"></script>
 </head>
 <body>
 
@@ -20,15 +22,9 @@
         <div class="navbar-logo-sub">Servicio Social</div>
       </div>
     </a>
-    <div class="navbar-links">
-      <a href="admin-dashboard.html" class="navbar-link">Dashboard</a>
-      <a href="admin-proyectos.html" class="navbar-link active">Proyectos</a>
-      <a href="foro.html?rol=admin" class="navbar-link">Foro</a>
-      <a href="publico-proyectos.html" class="navbar-link">Vista pública</a>
+    <div class="navbar-links" id="nav-links">
     </div>
-    <div class="navbar-right">
-      <span class="navbar-badge" style="background:rgba(139,92,246,0.18);color:var(--morado);border-color:rgba(139,92,246,0.3);">Admin</span>
-      <a href="#" class="navbar-avatar" style="background:var(--morado);border-color:rgba(139,92,246,0.5);">🛡️</a>
+    <div class="navbar-right" id="nav-right">
     </div>
   </div>
 </nav>
@@ -48,7 +44,7 @@
     <div class="sidebar-section-label">General</div>
     <a href="admin-dashboard.html" class="sidebar-link"><span class="icon">📈</span> Dashboard Global</a>
     <a href="admin-proyectos.html" class="sidebar-link active"><span class="icon">🗂️</span> Todos los Proyectos</a>
-    <a href="foro.html?rol=admin" class="sidebar-link"><span class="icon">💬</span> Foro</a>
+    <a href="foro.html" class="sidebar-link"><span class="icon">💬</span> Foro</a>
     <div class="sidebar-section-label" style="margin-top:12px;">Sistema</div>
     <a
       href="#"
@@ -179,7 +175,7 @@
               <td>
                 <div class="lider-cell">
                   <div class="lider-av">AG</div>
-                  <a href="lider-perfil.html?rol=admin" style="font-size:13px;color:var(--azul);font-weight:500;">Ana García</a>
+                  <a href="lider-perfil.html" style="font-size:13px;color:var(--azul);font-weight:500;">Ana García</a>
                 </div>
               </td>
               <td><span style="font-size:12px;color:var(--gris-500);">Ago–Dic 2024</span></td>
@@ -193,7 +189,7 @@
               </td>
               <td>
                 <div class="action-btns">
-                  <a href="proyecto-detalle.html?rol=admin" class="action-btn ab-view">👁 Ver</a>
+                  <a href="proyecto-detalle.html" class="action-btn ab-view">👁 Ver</a>
                   <a href="#" class="action-btn ab-edit">✏</a>
                 </div>
               </td>
@@ -213,7 +209,7 @@
               <td>
                 <div class="lider-cell">
                   <div class="lider-av">CM</div>
-                  <a href="lider-perfil.html?rol=admin" style="font-size:13px;color:var(--azul);font-weight:500;">Carlos Mendoza</a>
+                  <a href="lider-perfil.html" style="font-size:13px;color:var(--azul);font-weight:500;">Carlos Mendoza</a>
                 </div>
               </td>
               <td><span style="font-size:12px;color:var(--gris-500);">Feb–Jun 2024</span></td>
@@ -227,7 +223,7 @@
               </td>
               <td>
                 <div class="action-btns">
-                  <a href="proyecto-detalle.html?rol=admin" class="action-btn ab-view">👁 Ver</a>
+                  <a href="proyecto-detalle.html" class="action-btn ab-view">👁 Ver</a>
                   <a href="#" class="action-btn ab-edit">✏</a>
                 </div>
               </td>
@@ -247,7 +243,7 @@
               <td>
                 <div class="lider-cell">
                   <div class="lider-av">SR</div>
-                  <a href="lider-perfil.html?rol=admin" style="font-size:13px;color:var(--azul);font-weight:500;">Sofía Ramírez</a>
+                  <a href="lider-perfil.html" style="font-size:13px;color:var(--azul);font-weight:500;">Sofía Ramírez</a>
                 </div>
               </td>
               <td><span style="font-size:12px;color:var(--gris-500);">Ago–Dic 2024</span></td>
@@ -261,7 +257,7 @@
               </td>
               <td>
                 <div class="action-btns">
-                  <a href="proyecto-detalle.html?rol=admin" class="action-btn ab-view">👁 Ver</a>
+                  <a href="proyecto-detalle.html" class="action-btn ab-view">👁 Ver</a>
                   <a href="#" class="action-btn ab-edit">✏</a>
                 </div>
               </td>
@@ -281,7 +277,7 @@
               <td>
                 <div class="lider-cell">
                   <div class="lider-av">LT</div>
-                  <a href="lider-perfil.html?rol=admin" style="font-size:13px;color:var(--azul);font-weight:500;">Luis Torres</a>
+                  <a href="lider-perfil.html" style="font-size:13px;color:var(--azul);font-weight:500;">Luis Torres</a>
                 </div>
               </td>
               <td><span style="font-size:12px;color:var(--gris-500);">Verano 2024</span></td>
@@ -295,7 +291,7 @@
               </td>
               <td>
                 <div class="action-btns">
-                  <a href="proyecto-detalle.html?rol=admin" class="action-btn ab-view">👁 Ver</a>
+                  <a href="proyecto-detalle.html" class="action-btn ab-view">👁 Ver</a>
                   <a href="#" class="action-btn ab-warn">⚠ Revisar</a>
                 </div>
               </td>
@@ -315,7 +311,7 @@
               <td>
                 <div class="lider-cell">
                   <div class="lider-av">MH</div>
-                  <a href="lider-perfil.html?rol=admin" style="font-size:13px;color:var(--azul);font-weight:500;">Mariana Herrera</a>
+                  <a href="lider-perfil.html" style="font-size:13px;color:var(--azul);font-weight:500;">Mariana Herrera</a>
                 </div>
               </td>
               <td><span style="font-size:12px;color:var(--gris-500);">Feb–Jun 2024</span></td>
@@ -329,7 +325,7 @@
               </td>
               <td>
                 <div class="action-btns">
-                  <a href="proyecto-detalle.html?rol=admin" class="action-btn ab-view">👁 Ver</a>
+                  <a href="proyecto-detalle.html" class="action-btn ab-view">👁 Ver</a>
                   <a href="#" class="action-btn ab-edit">📄 Reporte</a>
                 </div>
               </td>
@@ -349,7 +345,7 @@
               <td>
                 <div class="lider-cell">
                   <div class="lider-av">PV</div>
-                  <a href="lider-perfil.html?rol=admin" style="font-size:13px;color:var(--azul);font-weight:500;">Patricia Vega</a>
+                  <a href="lider-perfil.html" style="font-size:13px;color:var(--azul);font-weight:500;">Patricia Vega</a>
                 </div>
               </td>
               <td><span style="font-size:12px;color:var(--gris-500);">Ago–Dic 2024</span></td>
@@ -363,7 +359,7 @@
               </td>
               <td>
                 <div class="action-btns">
-                  <a href="proyecto-detalle.html?rol=admin" class="action-btn ab-view">👁 Ver</a>
+                  <a href="proyecto-detalle.html" class="action-btn ab-view">👁 Ver</a>
                   <a href="#" class="action-btn ab-edit">✏</a>
                 </div>
               </td>
@@ -383,7 +379,7 @@
               <td>
                 <div class="lider-cell">
                   <div class="lider-av">JO</div>
-                  <a href="lider-perfil.html?rol=admin" style="font-size:13px;color:var(--azul);font-weight:500;">Jorge Ortega</a>
+                  <a href="lider-perfil.html" style="font-size:13px;color:var(--azul);font-weight:500;">Jorge Ortega</a>
                 </div>
               </td>
               <td><span style="font-size:12px;color:var(--gris-500);">Invierno 2024</span></td>
@@ -397,7 +393,7 @@
               </td>
               <td>
                 <div class="action-btns">
-                  <a href="proyecto-detalle.html?rol=admin" class="action-btn ab-view">👁 Ver</a>
+                  <a href="proyecto-detalle.html" class="action-btn ab-view">👁 Ver</a>
                   <a href="#" class="action-btn ab-edit">✏</a>
                 </div>
               </td>
@@ -726,8 +722,6 @@ document.querySelectorAll('.modal-overlay').forEach(function(m) {
   });
 });
 </script>
-<script>
-  verificarAdmin();
-</script>
+
 </body>
 </html>
