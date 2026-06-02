@@ -4,7 +4,9 @@ const {
   findUserByEmail,
   isAdmin,
   isLeader,
-  findUserById
+  findUserById,
+  updateUsuarioProfile,
+  updateLiderProfile
 } = require('../models/authModel');
 
 async function login(req, res){
@@ -61,12 +63,19 @@ async function me(req, res) {
 
     }
 
-    res.json({
-      id_usuario: usuarioDB.id_usuario,
-      username: usuarioDB.username,
-      correo: usuarioDB.correo,
-      role: req.usuario.role
-    });
+  res.json({
+    id_usuario: usuarioDB.id_usuario,
+    username: usuarioDB.username,
+    correo: usuarioDB.correo,
+    telefono: usuarioDB.telefono,
+    linkedin: usuarioDB.linkedin,
+    cvu: usuarioDB.cvu,
+    carrera: usuarioDB.carrera,
+    estado: usuarioDB.estado,
+    foto_perfil: usuarioDB.foto_perfil,
+    fecha_registro: usuarioDB.fecha_registro,
+    role: req.usuario.role
+  });
 
   } catch (error) {
 
@@ -80,4 +89,63 @@ async function me(req, res) {
 
 }
 
-module.exports = { login, me }; 
+async function updateProfile(req, res) {
+
+  try {
+
+    const {
+      username,
+      correo,
+      telefono,
+      linkedin,
+      cvu,
+      carrera
+    } = req.body;
+
+    if (!username || !correo) {
+      return res.status(400).json({
+        mensaje: 'Nombre y correo son obligatorios'
+      });
+    }
+
+    await updateUsuarioProfile(
+      req.usuario.id,
+      username,
+      correo,
+      telefono || null,
+      linkedin || null,
+      cvu || null
+    );
+
+    if (
+      req.usuario.role === 'lider' &&
+      carrera !== undefined
+    ) {
+
+      await updateLiderProfile(
+        req.usuario.id,
+        carrera || null
+      );
+
+    }
+
+    res.json({
+      mensaje: 'Perfil actualizado correctamente'
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      mensaje: 'Error actualizando perfil'
+    });
+
+  }
+
+}
+module.exports = {
+  login,
+  me,
+  updateProfile
+};

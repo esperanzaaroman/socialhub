@@ -38,15 +38,84 @@ async function findUserById(id_usuario) {
   const [rows] = await pool.query(
     `
     SELECT
-      id_usuario,
-      username,
-      correo
-    FROM usuario
-    WHERE id_usuario = ?
+      u.id_usuario,
+      u.username,
+      u.correo,
+      u.fecha_registro,
+      u.foto_perfil,
+      u.telefono,
+      u.linkedin,
+      u.cvu,
+      l.carrera,
+      l.estado
+    FROM usuario u
+    LEFT JOIN lider l
+      ON l.id_lider = u.id_usuario
+    WHERE u.id_usuario = ?
     `,
     [id_usuario]
   );
 
   return rows[0];
+
 }
-module.exports = { findUserByEmail, isAdmin, isLeader, findUserById};
+
+async function updateUsuarioProfile(
+  id_usuario,
+  username,
+  correo,
+  telefono,
+  linkedin,
+  cvu
+) {
+
+  const [result] = await pool.query(
+    `
+    UPDATE usuario
+    SET username = ?,
+        correo = ?,
+        telefono = ?,
+        linkedin = ?,
+        cvu = ?
+    WHERE id_usuario = ?
+    `,
+    [
+      username,
+      correo,
+      telefono,
+      linkedin,
+      cvu,
+      id_usuario
+    ]
+  );
+
+  return result;
+}
+
+async function updateLiderProfile(
+  id_usuario,
+  carrera
+) {
+
+  const [result] = await pool.query(
+    `
+    UPDATE lider
+    SET carrera = ?
+    WHERE id_lider = ?
+    `,
+    [
+      carrera,
+      id_usuario
+    ]
+  );
+
+  return result;
+}
+module.exports = {
+  findUserByEmail,
+  isAdmin,
+  isLeader,
+  findUserById,
+  updateUsuarioProfile,
+  updateLiderProfile
+};

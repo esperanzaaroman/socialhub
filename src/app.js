@@ -23,6 +23,7 @@ app.use('/api/widgets', widgetRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/auth', authRoutes);
 
+
 app.get('/api/health', (req, res) => {
     sendSuccess(res, {
         message: 'Servidor corriendo',

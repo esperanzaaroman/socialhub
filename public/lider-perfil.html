@@ -167,27 +167,61 @@
   </div>
 
   <div>
-    <div class="profile-sidebar-card">
-      <div class="info-card-title" style="font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--gris-800);margin-bottom:14px;">📋 Información académica</div>
-      <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;">
-        <div style="display:flex;gap:8px;align-items:flex-start;">
-          <span style="color:var(--gris-400);width:20px;">🎓</span>
-          <span style="color:var(--gris-600);">Lic. Ciencias de la Educación, 7mo semestre</span>
-        </div>
-        <div style="display:flex;gap:8px;align-items:flex-start;">
-          <span style="color:var(--gris-400);width:20px;">🏛️</span>
-          <span style="color:var(--gris-600);">Campus Monterrey, EGADE</span>
-        </div>
-        <div style="display:flex;gap:8px;align-items:flex-start;">
-          <span style="color:var(--gris-400);width:20px;">📅</span>
-          <span style="color:var(--gris-600);">Prestador desde Agosto 2024</span>
-        </div>
-        <div style="display:flex;gap:8px;align-items:flex-start;">
-          <span style="color:var(--gris-400);width:20px;">🌍</span>
-          <span style="color:var(--gris-600);">Monterrey, Nuevo León</span>
-        </div>
-      </div>
+
+  <div class="profile-sidebar-card">
+    <div class="info-card-title" style="font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--gris-800);margin-bottom:14px;">
+      📋 Información del perfil
     </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;">
+
+      <div style="display:flex;gap:8px;align-items:flex-start;">
+        <span style="color:var(--gris-400);width:20px;">🎓</span>
+        <span id="profile-carrera" style="color:var(--gris-600);">
+          Cargando...
+        </span>
+      </div>
+
+      <div style="display:flex;gap:8px;align-items:flex-start;">
+        <span style="color:var(--gris-400);width:20px;">📧</span>
+        <span id="profile-correo" style="color:var(--gris-600);">
+          Cargando...
+        </span>
+      </div>
+
+      <div style="display:flex;gap:8px;align-items:flex-start;">
+        <span style="color:var(--gris-400);width:20px;">📱</span>
+        <span id="profile-telefono" style="color:var(--gris-600);">
+          Cargando...
+        </span>
+      </div>
+
+      <div style="display:flex;gap:8px;align-items:flex-start;">
+        <span style="color:var(--gris-400);width:20px;">🔗</span>
+        <span id="profile-linkedin" style="color:var(--gris-600);">
+          Cargando...
+        </span>
+      </div>
+
+      <div style="display:flex;gap:8px;align-items:flex-start;">
+        <span style="color:var(--gris-400);width:20px;">🆔</span>
+        <span id="profile-cvu" style="color:var(--gris-600);">
+          Cargando...
+        </span>
+      </div>
+      <button
+        id="save-profile-btn"
+        class="btn btn-primary btn-sm"
+        style="display:none;margin-top:14px;"
+      >
+        💾 Guardar cambios
+      </button>
+
+    </div>
+  </div>
+
+
+
 
     <div class="profile-sidebar-card">
       <div style="font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--gris-800);margin-bottom:14px;">🛠 Habilidades</div>
