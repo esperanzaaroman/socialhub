@@ -45,7 +45,6 @@ async function findUserById(id_usuario) {
       u.foto_perfil,
       u.telefono,
       u.linkedin,
-      u.cvu,
       l.carrera,
       l.estado
     FROM usuario u
@@ -66,7 +65,6 @@ async function updateUsuarioProfile(
   correo,
   telefono,
   linkedin,
-  cvu
 ) {
 
   const [result] = await pool.query(
@@ -76,7 +74,6 @@ async function updateUsuarioProfile(
         correo = ?,
         telefono = ?,
         linkedin = ?,
-        cvu = ?
     WHERE id_usuario = ?
     `,
     [
@@ -84,7 +81,6 @@ async function updateUsuarioProfile(
       correo,
       telefono,
       linkedin,
-      cvu,
       id_usuario
     ]
   );

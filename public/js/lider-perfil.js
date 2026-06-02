@@ -48,11 +48,12 @@ document.addEventListener(
     const profileLinkedin =
       document.getElementById('profile-linkedin');
 
-    const profileCvu =
-      document.getElementById('profile-cvu');
 
     const saveProfileBtn =
       document.getElementById('save-profile-btn');
+    
+    const profileMessage =
+      document.getElementById('profile-message');
 
     let modoEdicion = false;
 
@@ -133,21 +134,49 @@ document.addEventListener(
 
     }
 
+
+
+
+
     if (profileLinkedin) {
 
-      profileLinkedin.textContent =
-        usuario.linkedin ||
-        'LinkedIn no registrado';
+      if (usuario.linkedin) {
+
+        let linkedinUrl =
+          usuario.linkedin;
+
+        if (
+          !linkedinUrl.startsWith('http://') &&
+          !linkedinUrl.startsWith('https://')
+        ) {
+          linkedinUrl =
+            `https://${linkedinUrl}`;
+        }
+
+        profileLinkedin.innerHTML =
+          `<a
+            href="${linkedinUrl}"
+            target="_blank"
+            rel="noopener noreferrer"
+            style="color:var(--azul);font-weight:600;"
+          >
+            ${usuario.linkedin}
+          </a>`;
+
+      }
+      else {
+
+        profileLinkedin.textContent =
+          'LinkedIn no registrado';
+
+      }
 
     }
+    
 
-    if (profileCvu) {
 
-      profileCvu.textContent =
-        usuario.cvu ||
-        'CVU no registrado';
 
-    }
+
 
 
   if (editBtn) {
@@ -166,13 +195,21 @@ document.addEventListener(
 
         if (nombre) {
           nombre.innerHTML =
-            `<input
-              id="input-username"
-              class="form-input"
-              value="${usuario.username || ''}"
-            >`;
-        }
+            `
+            <div style="display:flex;flex-direction:column;gap:4px;">
+              <label style="font-size:12px;font-weight:600;color:var(--gris-100);">
+                Nombre
+              </label>
 
+              <input
+                id="input-username"
+                class="form-input"
+                placeholder="Juan Pérez Guerrero"
+                value="${usuario.username || ''}"
+              >
+            </div>
+            `;
+        }
         if (saveProfileBtn) {
           saveProfileBtn.style.display =
             'inline-flex';
@@ -180,51 +217,96 @@ document.addEventListener(
 
         if (profileCorreo) {
           profileCorreo.innerHTML =
-            `<input
-              id="input-correo"
-              class="form-input"
-              value="${usuario.correo || ''}"
-            >`;
+            `
+            <div style="display:flex;flex-direction:column;gap:4px;">
+              <label style="
+                font-size:12px;
+                font-weight:600;
+                color:var(--gris-500);
+              ">
+                Correo electrónico
+              </label>
+
+              <input
+                id="input-correo"
+                class="form-input"
+                placeholder="nombre@tec.mx"
+                value="${usuario.correo || ''}"
+              >
+            </div>
+            `;
         }
 
-        if (profileTelefono) {
-          profileTelefono.innerHTML =
-            `<input
+      if (profileTelefono) {
+        profileTelefono.innerHTML =
+          `
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            <label style="
+              font-size:12px;
+              font-weight:600;
+              color:var(--gris-500);
+            ">
+              Teléfono
+            </label>
+
+            <input
               id="input-telefono"
               class="form-input"
+              placeholder="2221234567"
               value="${usuario.telefono || ''}"
-            >`;
-        }
+            >
+          </div>
+          `;
+      }
 
-        if (profileLinkedin) {
-          profileLinkedin.innerHTML =
-            `<input
+      if (profileLinkedin) {
+        profileLinkedin.innerHTML =
+          `
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            <label style="
+              font-size:12px;
+              font-weight:600;
+              color:var(--gris-500);
+            ">
+              Perfil de LinkedIn
+            </label>
+
+            <input
               id="input-linkedin"
               class="form-input"
+              placeholder="linkedin.com/in/tu-perfil"
               value="${usuario.linkedin || ''}"
-            >`;
-        }
+            >
+          </div>
+          `;
+      }
 
-        if (profileCvu) {
-          profileCvu.innerHTML =
-            `<input
-              id="input-cvu"
-              class="form-input"
-              value="${usuario.cvu || ''}"
-            >`;
-        }
 
         if (
           rol === 'lider' &&
           profileCarrera
         ) {
           profileCarrera.innerHTML =
-            `<input
-              id="input-carrera"
-              class="form-input"
-              value="${usuario.carrera || ''}"
-            >`;
+            `
+            <div style="display:flex;flex-direction:column;gap:4px;">
+              <label style="
+                font-size:12px;
+                font-weight:600;
+                color:var(--gris-500);
+              ">
+                Carrera
+              </label>
+
+              <input
+                id="input-carrera"
+                class="form-input"
+                placeholder="Ingeniería en Sistemas"
+                value="${usuario.carrera || ''}"
+              >
+            </div>
+            `;
         }
+
 
       }
     );
@@ -253,10 +335,6 @@ document.addEventListener(
             'input-linkedin'
           )?.value;
 
-        const cvu =
-          document.getElementById(
-            'input-cvu'
-          )?.value;
 
         const carrera =
           document.getElementById(
@@ -270,6 +348,62 @@ document.addEventListener(
 
         const token =
   localStorage.getItem('token');
+
+    const emailRegex =
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(correo)) {
+
+      mostrarMensajePerfil(
+        'Ingresa un correo válido',
+        'error'
+      );
+
+      return;
+    }
+
+    const telefonoRegex =
+      /^[0-9]{10}$/;
+
+    if (
+      telefono &&
+      !telefonoRegex.test(telefono)
+    ) {
+
+      mostrarMensajePerfil(
+        'El teléfono debe tener 10 dígitos',
+        'error'
+      );
+
+      return;
+    }
+
+    if (
+      linkedin &&
+      linkedin.length > 150
+    ) {
+
+      mostrarMensajePerfil(
+        'LinkedIn demasiado largo',
+        'error'
+      );
+
+      return;
+    }
+
+    if (
+      linkedin &&
+      !linkedin.includes('linkedin.com')
+    ) {
+
+      mostrarMensajePerfil(
+        'Ingresa una URL válida de LinkedIn',
+        'error'
+      );
+
+      return;
+    }
+
 
     const response =
       await fetch(
@@ -285,7 +419,6 @@ document.addEventListener(
             correo,
             telefono,
             linkedin,
-            cvu,
             carrera
           })
         }
@@ -295,25 +428,61 @@ document.addEventListener(
       await response.json();
 
     if (response.ok) {
+        mostrarMensajePerfil(
+          'Perfil actualizado correctamente ✅',
+          'success'
+        );
 
-      alert(
-        'Perfil actualizado correctamente'
-      );
-
-      window.location.reload();
+        setTimeout(
+          function() {
+            window.location.reload();
+          },
+          1500
+        );
 
     }
     else {
 
-      alert(
-        data.mensaje ||
-        'Error actualizando perfil'
-      );
+        mostrarMensajePerfil(
+          data.mensaje ||
+          'Error actualizando perfil',
+          'error'
+        );
 
     }
 
       }
     );
+
+  }
+
+  function mostrarMensajePerfil(
+    mensaje,
+    tipo
+  ) {
+
+    if (!profileMessage) {
+      return;
+    }
+
+    profileMessage.textContent =
+      mensaje;
+
+    profileMessage.style.display =
+      'block';
+
+    if (tipo === 'success') {
+      profileMessage.style.background =
+        'var(--verde-light)';
+      profileMessage.style.color =
+        'var(--verde-dark)';
+    }
+    else {
+      profileMessage.style.background =
+        '#fee2e2';
+      profileMessage.style.color =
+        '#991b1b';
+    }
 
   }
 

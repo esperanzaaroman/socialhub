@@ -69,7 +69,6 @@ async function me(req, res) {
     correo: usuarioDB.correo,
     telefono: usuarioDB.telefono,
     linkedin: usuarioDB.linkedin,
-    cvu: usuarioDB.cvu,
     carrera: usuarioDB.carrera,
     estado: usuarioDB.estado,
     foto_perfil: usuarioDB.foto_perfil,
@@ -98,7 +97,6 @@ async function updateProfile(req, res) {
       correo,
       telefono,
       linkedin,
-      cvu,
       carrera
     } = req.body;
 
@@ -108,25 +106,59 @@ async function updateProfile(req, res) {
       });
     }
 
+    if (
+      username.length < 3 ||
+      username.length > 50
+    ) {
+      return res.status(400).json({
+        mensaje: 'El nombre debe tener entre 3 y 50 caracteres'
+      });
+    }
+
+    const emailRegex =
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(correo)) {
+      return res.status(400).json({
+        mensaje: 'Correo inválido'
+      });
+    }
+
+    if (
+      telefono &&
+      !/^[0-9]{10}$/.test(telefono)
+    ) {
+      return res.status(400).json({
+        mensaje: 'Teléfono inválido'
+      });
+    }
+
+    if (
+      linkedin &&
+      linkedin.length > 150
+    ) {
+      return res.status(400).json({
+        mensaje: 'LinkedIn demasiado largo'
+      });
+    }
+
+
     await updateUsuarioProfile(
       req.usuario.id,
       username,
       correo,
       telefono || null,
       linkedin || null,
-      cvu || null
     );
 
     if (
       req.usuario.role === 'lider' &&
       carrera !== undefined
     ) {
-
       await updateLiderProfile(
         req.usuario.id,
         carrera || null
       );
-
     }
 
     res.json({
@@ -137,6 +169,15 @@ async function updateProfile(req, res) {
 
     console.error(error);
 
+    if (
+      error.code === 'ER_DUP_ENTRY' ||
+      error.errno === 1062
+    ) {
+      return res.status(409).json({
+        mensaje: 'Ese correo ya está registrado'
+      });
+    }
+
     res.status(500).json({
       mensaje: 'Error actualizando perfil'
     });
@@ -144,6 +185,8 @@ async function updateProfile(req, res) {
   }
 
 }
+
+
 module.exports = {
   login,
   me,
