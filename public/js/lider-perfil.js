@@ -2,26 +2,50 @@ document.addEventListener(
   'DOMContentLoaded',
   async function() {
 
-    const usuario =
-      await obtenerUsuarioActual();
 
-    const rol =
-      usuario.role || 'publico';
+  const usuarioActual =
+    await obtenerUsuarioActual();
+
+  const rol =
+    usuarioActual.role || 'publico';
+
+  const params =
+    new URLSearchParams(window.location.search);
+
+  const idPerfil =
+    params.get('id');
+
+  let usuario =
+    usuarioActual;
+
+  if (idPerfil) {
+
+    const response =
+      await fetch(
+        `http://localhost:3000/api/auth/profile/${idPerfil}`
+      );
+
+    usuario =
+      await response.json();
+
+}
+
+
+
 
     const editBtn =
       document.getElementById('edit-btn');
 
     await cargarNavbar('');
 
-    if (rol === 'lider' || rol === 'admin') {
-      if (editBtn) {
-        editBtn.style.display = 'inline-flex';
-      }
-    }
-    else {
-      if (editBtn) {
-        editBtn.style.display = 'none';
-      }
+    const puedeEditar =
+      usuarioActual.id_usuario === usuario.id_usuario;
+
+    if (editBtn) {
+      editBtn.style.display =
+        puedeEditar
+          ? 'inline-flex'
+          : 'none';
     }
 
     const nombre =

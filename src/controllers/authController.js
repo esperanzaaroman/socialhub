@@ -222,10 +222,51 @@ async function uploadProfilePhoto(req, res) {
 
 }
 
+async function getProfileById(req, res) {
+
+  try {
+
+    const { id } =
+      req.params;
+
+    const perfil =
+      await findUserById(id);
+
+    if (!perfil) {
+      return res.status(404).json({
+        mensaje: 'Perfil no encontrado'
+      });
+    }
+
+    res.json({
+      id_usuario: perfil.id_usuario,
+      username: perfil.username,
+      correo: perfil.correo,
+      telefono: perfil.telefono,
+      linkedin: perfil.linkedin,
+      carrera: perfil.carrera,
+      estado: perfil.estado,
+      foto_perfil: perfil.foto_perfil,
+      fecha_registro: perfil.fecha_registro
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      mensaje: 'Error obteniendo perfil'
+    });
+
+  }
+
+}
+
 
 module.exports = {
   login,
   me,
   updateProfile,
-  uploadProfilePhoto
+  uploadProfilePhoto,
+  getProfileById
 };
