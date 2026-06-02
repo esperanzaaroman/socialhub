@@ -7,7 +7,8 @@ const {
   me,
   updateProfile,
   uploadProfilePhoto,
-  getProfileById
+  getProfileById,
+  getLeaders
 } = require('../controllers/authController');
 
 
@@ -35,6 +36,11 @@ router.put(
   '/profile',
   verifyToken,
   updateProfile
+);
+
+router.get(
+  '/leaders',
+  getLeaders
 );
 
 router.put(

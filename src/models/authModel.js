@@ -59,6 +59,7 @@ async function findUserById(id_usuario) {
 
 }
 
+
 async function updateUsuarioProfile(
   id_usuario,
   username,
@@ -130,6 +131,28 @@ async function updateProfilePhoto(
 
 }
 
+async function findAllLeaders() {
+
+  const [rows] = await pool.query(
+    `
+    SELECT
+      u.id_usuario,
+      u.username,
+      u.correo,
+      u.foto_perfil,
+      l.carrera,
+      l.estado
+    FROM usuario u
+    INNER JOIN lider l
+      ON l.id_lider = u.id_usuario
+    WHERE l.estado = 'activo'
+    ORDER BY u.username ASC
+    `
+  );
+
+  return rows;
+}
+
 
 module.exports = {
   findUserByEmail,
@@ -138,5 +161,6 @@ module.exports = {
   findUserById,
   updateUsuarioProfile,
   updateLiderProfile,
-  updateProfilePhoto
+  updateProfilePhoto,
+  findAllLeaders
 };

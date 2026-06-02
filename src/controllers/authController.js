@@ -7,7 +7,8 @@ const {
   findUserById,
   updateUsuarioProfile,
   updateLiderProfile,
-  updateProfilePhoto
+  updateProfilePhoto,
+  findAllLeaders
 } = require('../models/authModel');
 
 async function login(req, res){
@@ -262,11 +263,32 @@ async function getProfileById(req, res) {
 
 }
 
+async function getLeaders(req, res) {
+
+  try {
+
+    const lideres =
+      await findAllLeaders();
+
+    res.json(lideres);
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      mensaje: 'Error obteniendo líderes'
+    });
+
+  }
+
+}
 
 module.exports = {
   login,
   me,
   updateProfile,
   uploadProfilePhoto,
-  getProfileById
+  getProfileById,
+  getLeaders
 };
