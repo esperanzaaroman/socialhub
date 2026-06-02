@@ -405,6 +405,7 @@ document.addEventListener(
     }
 
 
+
     const response =
       await fetch(
         'http://localhost:3000/api/auth/profile',

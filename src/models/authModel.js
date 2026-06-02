@@ -73,7 +73,7 @@ async function updateUsuarioProfile(
     SET username = ?,
         correo = ?,
         telefono = ?,
-        linkedin = ?,
+        linkedin = ?
     WHERE id_usuario = ?
     `,
     [
