@@ -107,11 +107,36 @@ async function updateLiderProfile(
 
   return result;
 }
+
+async function updateProfilePhoto(
+  id_usuario,
+  foto_perfil
+) {
+
+  const [result] =
+    await pool.query(
+      `
+      UPDATE usuario
+      SET foto_perfil = ?
+      WHERE id_usuario = ?
+      `,
+      [
+        foto_perfil,
+        id_usuario
+      ]
+    );
+
+  return result;
+
+}
+
+
 module.exports = {
   findUserByEmail,
   isAdmin,
   isLeader,
   findUserById,
   updateUsuarioProfile,
-  updateLiderProfile
+  updateLiderProfile,
+  updateProfilePhoto
 };

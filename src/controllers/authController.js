@@ -6,7 +6,8 @@ const {
   isLeader,
   findUserById,
   updateUsuarioProfile,
-  updateLiderProfile
+  updateLiderProfile,
+  updateProfilePhoto
 } = require('../models/authModel');
 
 async function login(req, res){
@@ -186,9 +187,45 @@ async function updateProfile(req, res) {
 
 }
 
+async function uploadProfilePhoto(req, res) {
+
+  try {
+
+    if (!req.file) {
+      return res.status(400).json({
+        mensaje: 'No se subió ninguna imagen'
+      });
+    }
+
+    const foto_perfil =
+      `uploads/perfiles/${req.file.filename}`;
+
+    await updateProfilePhoto(
+      req.usuario.id,
+      foto_perfil
+    );
+
+    res.json({
+      mensaje: 'Foto de perfil actualizada correctamente',
+      foto_perfil
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      mensaje: 'Error subiendo foto de perfil'
+    });
+
+  }
+
+}
+
 
 module.exports = {
   login,
   me,
-  updateProfile
+  updateProfile,
+  uploadProfilePhoto
 };

@@ -31,7 +31,10 @@ document.addEventListener(
       document.getElementById('breadcrumb-profile-name');
 
     const avatar =
-      document.getElementById('profile-avatar');
+      document.getElementById('upload-photo-btn');
+
+    const photoInput =
+      document.getElementById('profile-photo-input');
 
     const profileRole =
       document.getElementById('profile-role');
@@ -65,13 +68,35 @@ document.addEventListener(
       breadcrumbNombre.textContent = usuario.username;
     }
     
-    if (avatar) {
-      avatar.textContent =
-        usuario.username
-          ? usuario.username.charAt(0).toUpperCase()
-          : '?';
-    }
 
+
+    if (avatar) {
+
+      if (usuario.foto_perfil) {
+
+        avatar.innerHTML =
+          `<img
+            src="http://localhost:3000/${usuario.foto_perfil}"
+            alt="Foto de perfil"
+            style="
+              width:100%;
+              height:100%;
+              object-fit:cover;
+              border-radius:50%;
+            "
+          >`;
+
+      }
+      else {
+
+        avatar.textContent =
+          usuario.username
+            ? usuario.username.charAt(0).toUpperCase()
+            : '?';
+
+      }
+
+    }
 
 
 
@@ -429,17 +454,22 @@ document.addEventListener(
       await response.json();
 
     if (response.ok) {
-        mostrarMensajePerfil(
-          'Perfil actualizado correctamente ✅',
-          'success'
-        );
+    mostrarMensajePerfil(
+      'Foto actualizada correctamente ✅',
+      'success'
+    );
 
-        setTimeout(
-          function() {
-            window.location.reload();
-          },
-          1500
-        );
+    avatar.innerHTML =
+      `<img
+        src="http://localhost:3000/${data.foto_perfil}?t=${Date.now()}"
+        alt="Foto de perfil"
+        style="
+          width:100%;
+          height:100%;
+          object-fit:cover;
+          border-radius:50%;
+        "
+      >`;
 
     }
     else {
@@ -486,6 +516,88 @@ document.addEventListener(
     }
 
   }
+
+  if (avatar && photoInput) {
+
+    avatar.addEventListener(
+      'click',
+      function() {
+
+        photoInput.click();
+
+      }
+    );
+
+}
+
+if (photoInput) {
+
+  photoInput.addEventListener(
+    'change',
+    async function() {
+
+      const archivo =
+        photoInput.files[0];
+
+      if (!archivo) {
+        return;
+      }
+
+      const formData =
+        new FormData();
+
+      formData.append(
+        'foto_perfil',
+        archivo
+      );
+
+      const token =
+        localStorage.getItem('token');
+
+      const response =
+        await fetch(
+          'http://localhost:3000/api/auth/profile-photo',
+          {
+            method: 'PUT',
+            headers: {
+              Authorization: `Bearer ${token}`
+            },
+            body: formData
+          }
+        );
+
+      const data =
+        await response.json();
+
+      if (response.ok) {
+
+        mostrarMensajePerfil(
+          'Foto actualizada correctamente ✅',
+          'success'
+        );
+
+        setTimeout(
+          function() {
+            window.location.reload();
+          },
+          2000
+        );
+
+      }
+      else {
+
+        mostrarMensajePerfil(
+          data.mensaje ||
+          'Error subiendo foto',
+          'error'
+        );
+
+      }
+
+    }
+  );
+
+}
 
 
 

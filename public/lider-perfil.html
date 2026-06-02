@@ -36,8 +36,26 @@
     </div>
     <div class="profile-header">
       <div class="profile-avatar-wrap">
-        <div class="profile-avatar" id="profile-avatar">?</div>
+
+          <input
+            type="file"
+            id="profile-photo-input"
+            accept="image/*"
+            style="display:none;"
+          >
+
+          <button
+            id="upload-photo-btn"
+            class="profile-avatar"
+            title="Cambiar foto de perfil"
+            style="border:none;cursor:pointer;"
+          >
+            ?
+          </button>
+
+
       </div>
+
       <div class="profile-info">
         <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:8px;">
           <h1 class="profile-name" id="profile-name" style="margin:0;">Cargando...</h1>
