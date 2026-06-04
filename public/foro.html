@@ -6,28 +6,10 @@
 <title>SocialHub — Foro Comunitario</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="foro.css">
-<script>
-const params = new URLSearchParams(window.location.search);
-const rol = params.get('rol') || 'publico';
-document.addEventListener('DOMContentLoaded', function() {
-  const navEl = document.getElementById('nav-links');
-  const navRight = document.getElementById('nav-right');
-  const newPostCard = document.getElementById('new-post-card');
-  if (rol === 'lider') {
-    navEl.innerHTML = `<a href="lider-dashboard.html" class="navbar-link">Dashboard</a><a href="lider-proyectos.html" class="navbar-link">Mis Proyectos</a><a href="foro.html?rol=lider" class="navbar-link active">Foro</a>`;
-    navRight.innerHTML = `<span class="navbar-badge">Líder Social</span><a href="lider-perfil.html?rol=lider" class="navbar-avatar">A</a>`;
-    if (newPostCard) newPostCard.style.display = 'block';
-  } else if (rol === 'admin') {
-    navEl.innerHTML = `<a href="admin-dashboard.html" class="navbar-link">Dashboard</a><a href="admin-proyectos.html" class="navbar-link">Proyectos</a><a href="foro.html?rol=admin" class="navbar-link active">Foro</a>`;
-    navRight.innerHTML = `<span class="navbar-badge">Administrador</span><a href="#" class="navbar-avatar" style="background:var(--morado);">👑</a>`;
-    if (newPostCard) newPostCard.style.display = 'block';
-  } else {
-    navEl.innerHTML = `<a href="publico-inicio.html" class="navbar-link">Inicio</a><a href="publico-proyectos.html" class="navbar-link">Proyectos</a><a href="foro.html?rol=publico" class="navbar-link active">Foro</a>`;
-    navRight.innerHTML = '';
-    if (newPostCard) newPostCard.style.display = 'none';
-  }
-});
-</script>
+<script src="auth.js"></script>
+<script src="js/navbar.js"></script>
+<script src="js/foro.js"></script>
+
 </head>
 <body>
 
@@ -37,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <img src="assets/img/logo.png" alt="Logo SocialHub" class="navbar-logo-icon">
       <div class="navbar-logo-text">
         <span class="navbar-logo-title">SocialHub</span>
-        <span class="navbar-logo-sub">Servicio Social Universitario</span>
+        <span class="navbar-logo-sub">Servicio Social</span>
       </div>
     </a>
     <div class="navbar-links" id="nav-links"></div>
@@ -60,27 +42,22 @@ document.addEventListener('DOMContentLoaded', function() {
     <!-- NUEVA PUBLICACIÓN (solo lider/admin) -->
     <div class="new-post-card" id="new-post-card" style="display:none;">
       <div class="new-post-row">
-        <div class="avatar avatar-sm" style="background:linear-gradient(135deg,#1e40af,#3b82f6);">A</div>
+    
+          <div
+            class="avatar avatar-sm"
+            id="foro-current-avatar"
+            style="background:linear-gradient(135deg,#1e40af,#3b82f6);"
+          >
+            ?
+          </div>
+
+
+
         <input type="text" class="new-post-input" placeholder="¿Qué quieres compartir con la comunidad?">
         <a href="#" class="btn btn-primary btn-sm">Publicar</a>
       </div>
-      <div style="display:flex;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--gris-100);">
-        <button class="filter-btn btn-sm" style="border:none;background:var(--gris-50);font-size:12px;">📊 Métricas</button>
-        <button class="filter-btn btn-sm" style="border:none;background:var(--gris-50);font-size:12px;">🤝 Colaboración</button>
-        <button class="filter-btn btn-sm" style="border:none;background:var(--gris-50);font-size:12px;">❓ Pregunta</button>
-        <button class="filter-btn btn-sm" style="border:none;background:var(--gris-50);font-size:12px;">🎉 Logro</button>
-      </div>
     </div>
 
-    <!-- CATEGORY TABS -->
-    <div class="cat-tabs">
-      <button class="cat-tab active">📋 Todos</button>
-      <button class="cat-tab">📊 Métricas</button>
-      <button class="cat-tab">❓ Preguntas</button>
-      <button class="cat-tab">🤝 Colaboración</button>
-      <button class="cat-tab">🎉 Logros</button>
-      <button class="cat-tab">💡 Ideas</button>
-    </div>
 
     <!-- POSTS -->
     <div class="foro-posts">
@@ -92,25 +69,15 @@ document.addEventListener('DOMContentLoaded', function() {
           <div style="flex:1;">
             <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
               <a href="lider-perfil.html" style="font-weight:700;font-size:14px;color:var(--gris-900);">Ana Martínez García</a>
-              <span class="tag tag-azul">Métricas</span>
             </div>
-            <div class="post-meta-row">
-              <span style="font-size:12px;color:var(--gris-400);">hace 3 días</span>
-              <span style="font-size:12px;color:var(--gris-300);">·</span>
-              <span style="font-size:12px;color:var(--gris-400);">Lic. Ciencias de la Educación</span>
-            </div>
+
           </div>
         </div>
-        <a href="proyecto-detalle.html" class="post-project-link">📚 Aprende Conmigo: Tutorías</a>
         <div style="font-family:'Sora',sans-serif;font-size:17px;font-weight:700;color:var(--gris-900);margin-bottom:10px;">Actualización octubre: 8 nuevos beneficiarios incorporados 🎉</div>
         <div class="post-body">
           Este mes tuvimos una incorporación récord gracias a las jornadas de difusión que hicimos en la escuela. Los niños están respondiendo muy bien a las tutorías de matemáticas. Ya alcanzamos el 85% de nuestra meta para el semestre. ¡Vamos con todo para diciembre!
         </div>
-        <div class="post-actions">
-          <span class="post-action liked">❤️ 12</span>
-          <span class="post-action">💬 4 comentarios</span>
-          <span class="post-action">🔗 Compartir</span>
-        </div>
+      
         <div class="comments-wrap">
           <div class="comment">
             <div class="avatar avatar-sm" style="background:linear-gradient(135deg,var(--verde),#34d399);">C</div>
@@ -136,188 +103,27 @@ document.addEventListener('DOMContentLoaded', function() {
           <div style="flex:1;">
             <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
               <a href="lider-perfil.html" style="font-weight:700;font-size:14px;color:var(--gris-900);">Carlos Ruiz Hernández</a>
-              <span class="tag tag-morado">Colaboración</span>
-            </div>
-            <div class="post-meta-row">
-              <span style="font-size:12px;color:var(--gris-400);">hace 5 días</span>
-              <span style="font-size:12px;color:var(--gris-300);">·</span>
-              <span style="font-size:12px;color:var(--gris-400);">Ing. Industrial y Sistemas</span>
             </div>
           </div>
         </div>
-        <a href="proyecto-detalle.html" class="post-project-link">EcoConciencia Monterrey</a>
         <div style="font-family:'Sora',sans-serif;font-size:17px;font-weight:700;color:var(--gris-900);margin-bottom:10px;">Buscamos colaboración para taller de reciclaje en noviembre</div>
         <div class="post-body">
           Planeamos un taller masivo de reciclaje para el 15 de noviembre con capacidad para 80 personas. Necesitamos apoyo de estudiantes de Diseño para crear materiales visuales, y de IQA o Ing. Ambiental para reforzar el contenido técnico. ¡Si te interesa, escríbeme!
         </div>
-        <div class="post-actions">
-          <span class="post-action">❤️ 18</span>
-          <span class="post-action">💬 9 comentarios</span>
-          <span class="post-action">🔗 Compartir</span>
-        </div>
       </div>
 
-      <!-- POST 3 -->
-      <div class="foro-post-full">
-        <div class="post-header">
-          <a href="lider-perfil.html" class="avatar avatar-md" style="background:linear-gradient(135deg,#4c1d95,var(--morado));">D</a>
-          <div style="flex:1;">
-            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-              <a href="lider-perfil.html" style="font-weight:700;font-size:14px;color:var(--gris-900);">Daniela Morales</a>
-              <span class="tag tag-naranja">Pregunta</span>
-            </div>
-            <div class="post-meta-row">
-              <span style="font-size:12px;color:var(--gris-400);">hace 1 semana</span>
-              <span style="font-size:12px;color:var(--gris-300);">·</span>
-              <span style="font-size:12px;color:var(--gris-400);">Psicología Clínica</span>
-            </div>
-          </div>
-        </div>
-        <div style="font-family:'Sora',sans-serif;font-size:17px;font-weight:700;color:var(--gris-900);margin-bottom:10px;">¿Cómo contabilizan beneficiarios indirectos en sus reportes?</div>
-        <div class="post-body">
-          Estoy llevando el proyecto de Salud Mental Comunitaria y tengo dudas sobre cómo reportar beneficiarios indirectos (familias de los participantes directos). ¿Algún líder tiene experiencia con esto? El departamento no lo especifica claramente en el manual.
-        </div>
-        <div class="post-actions">
-          <span class="post-action">❤️ 7</span>
-          <span class="post-action">💬 11 comentarios</span>
-          <span class="post-action">🔗 Compartir</span>
-        </div>
-        <div class="comments-wrap">
-          <div class="comment">
-            <div class="avatar avatar-sm" style="background:linear-gradient(135deg,#1e40af,#3b82f6);">A</div>
-            <div class="comment-bubble">
-              <div class="comment-author">Ana Martínez García</div>
-              En mi caso solo cuento los directos para el reporte formal, pero anoto los indirectos en el campo de "observaciones". El depto los toma en cuenta para estadísticas internas.
-            </div>
-          </div>
-        </div>
-      </div>
+      </div> 
 
-      <!-- POST 4 -->
-      <div class="foro-post-full">
-        <div class="post-header">
-          <a href="lider-perfil.html" class="avatar avatar-md" style="background:linear-gradient(135deg,#92400e,var(--naranja));">R</div>
-          <div style="flex:1;">
-            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-              <a href="lider-perfil.html" style="font-weight:700;font-size:14px;color:var(--gris-900);">Roberto Campos</a>
-              <span class="tag tag-verde">Logro</span>
-            </div>
-            <div class="post-meta-row">
-              <span style="font-size:12px;color:var(--gris-400);">hace 10 días</span>
-            </div>
-          </div>
-        </div>
-        <a href="proyecto-detalle.html" class="post-project-link">Digital Seniors</a>
-        <div style="font-family:'Sora',sans-serif;font-size:17px;font-weight:700;color:var(--gris-900);margin-bottom:10px;">¡Llegamos a 200 beneficiarios! 🏆 Meta anual superada</div>
-        <div class="post-body">
-          Es un orgullo compartir que Digital Seniors superó su meta anual de 150 adultos mayores alfabetizados digitalmente, llegando a 200 participantes. Un logro de todo el equipo de 12 prestadores que trabajaron este semestre. ¡Gracias a todos!
-        </div>
-        <div class="post-actions">
-          <span class="post-action liked">❤️ 45</span>
-          <span class="post-action">💬 22 comentarios</span>
-          <span class="post-action">🔗 Compartir</span>
-        </div>
-      </div>
+    </div> 
 
-    </div>
-  </div>
+  </div> 
 
-  <!-- SIDEBAR -->
-  <div>
+</div> 
 
-    <!-- BÚSQUEDA -->
-    <div class="foro-sidebar-card">
-      <input type="text" class="form-input" placeholder="🔍 Buscar en el foro..." style="margin-bottom:0;">
-    </div>
 
-    <!-- TRENDING -->
-    <div class="foro-sidebar-card">
-      <div class="foro-sidebar-title">Temas tendencia</div>
-      <div class="trending-topic"><div class="trending-rank">1</div><div class="trending-text">Métricas de beneficiarios</div><div class="trending-count">28 posts</div></div>
-      <div class="trending-topic"><div class="trending-rank">2</div><div class="trending-text">Taller de reciclaje Nov</div><div class="trending-count">14 posts</div></div>
-      <div class="trending-topic"><div class="trending-rank">3</div><div class="trending-text">Digital Seniors record</div><div class="trending-count">22 posts</div></div>
-      <div class="trending-topic"><div class="trending-rank">4</div><div class="trending-text">Cierre semestre Dic</div><div class="trending-count">10 posts</div></div>
-      <div class="trending-topic"><div class="trending-rank">5</div><div class="trending-text">Nuevos proyectos 2026</div><div class="trending-count">8 posts</div></div>
-    </div>
-
-    <!-- USUARIOS ACTIVOS -->
-    <div class="foro-sidebar-card">
-      <div class="foro-sidebar-title">Líderes más activos</div>
-      <div class="active-user">
-        <a href="lider-perfil.html" class="avatar avatar-sm" style="background:linear-gradient(135deg,#1e40af,#3b82f6);">A</a>
-        <div style="flex:1;"><div style="font-size:13px;font-weight:600;">Ana Martínez</div><div style="font-size:11px;color:var(--gris-400);">14 posts este mes</div></div>
-        <span class="tag tag-naranja" style="font-size:10px;">Top</span>
-      </div>
-      <div class="active-user">
-        <div class="avatar avatar-sm" style="background:linear-gradient(135deg,#065f46,var(--verde));">C</div>
-        <div style="flex:1;"><div style="font-size:13px;font-weight:600;">Carlos Ruiz</div><div style="font-size:11px;color:var(--gris-400);">11 posts este mes</div></div>
-      </div>
-      <div class="active-user">
-        <div class="avatar avatar-sm" style="background:linear-gradient(135deg,#92400e,var(--naranja));">R</div>
-        <div style="flex:1;"><div style="font-size:13px;font-weight:600;">Roberto Campos</div><div style="font-size:11px;color:var(--gris-400);">9 posts este mes</div></div>
-      </div>
-      <div class="active-user">
-        <div class="avatar avatar-sm" style="background:linear-gradient(135deg,#4c1d95,var(--morado));">D</div>
-        <div style="flex:1;"><div style="font-size:13px;font-weight:600;">Daniela Morales</div><div style="font-size:11px;color:var(--gris-400);">7 posts este mes</div></div>
-      </div>
-    </div>
-
-    <!-- CATEGORÍAS -->
-    <div class="foro-sidebar-card">
-      <div class="foro-sidebar-title">Categorías</div>
-      <div style="display:flex;flex-direction:column;gap:4px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:var(--radius-sm);cursor:pointer;transition:var(--transition);" class="filter-check">
-          <span style="font-size:13px;font-weight:500;">Métricas e indicadores</span>
-          <span class="filter-count">34</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:var(--radius-sm);cursor:pointer;transition:var(--transition);" class="filter-check">
-          <span style="font-size:13px;font-weight:500;">Preguntas y dudas</span>
-          <span class="filter-count">28</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:var(--radius-sm);cursor:pointer;transition:var(--transition);" class="filter-check">
-          <span style="font-size:13px;font-weight:500;">Colaboración</span>
-          <span class="filter-count">22</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:var(--radius-sm);cursor:pointer;transition:var(--transition);" class="filter-check">
-          <span style="font-size:13px;font-weight:500;">Logros y avances</span>
-          <span class="filter-count">19</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:var(--radius-sm);cursor:pointer;transition:var(--transition);" class="filter-check">
-          <span style="font-size:13px;font-weight:500;">Ideas y propuestas</span>
-          <span class="filter-count">15</span>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- FOOTER -->
 <footer class="footer">
-  <div class="footer-inner">
-    <div class="footer-grid">
-      <div>
-        <div class="footer-logo-text">SocialHub</div>
-        <p class="footer-desc">Plataforma de gestión y visualización de proyectos de servicio social universitario.</p>
-      </div>
-      <div>
-        <div class="footer-heading">Explorar</div>
-        <div class="footer-links">
-          <a href="publico-proyectos.html" class="footer-link">Todos los proyectos</a>
-          <a href="foro.html" class="footer-link">Foro comunitario</a>
-        </div>
-      </div>
-      <div>
-        <div class="footer-heading">Universidad</div>
-        <div class="footer-links">
-          <a href="#" class="footer-link">Servicio Social</a>
-        </div>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2026 SocialHub · Departamento de Servicio Social</span>
-    </div>
-  </div>
+  <strong>SocialHub</strong> · Tecnológico de Monterrey Campus Puebla ·
+  Oficina de Servicio Social
 </footer>
 
 </body>

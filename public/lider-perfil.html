@@ -3,29 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SocialHub — Perfil: Ana Martínez</title>
+<title>SocialHub — Perfil</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="lider-perfil.css">
-<script>
-const params = new URLSearchParams(window.location.search);
-const rol = params.get('rol') || 'publico';
-document.addEventListener('DOMContentLoaded', function() {
-  const navEl = document.getElementById('nav-links');
-  const navRight = document.getElementById('nav-right');
-  const editBtn = document.getElementById('edit-btn');
-  if (rol === 'lider') {
-    navEl.innerHTML = `<a href="lider-dashboard.html" class="navbar-link">Dashboard</a><a href="lider-proyectos.html" class="navbar-link">Mis Proyectos</a><a href="foro.html?rol=lider" class="navbar-link">Foro</a>`;
-    navRight.innerHTML = `<span class="navbar-badge">Líder Social</span><a href="lider-perfil.html?rol=lider" class="navbar-avatar" style="border-color:var(--naranja);">A</a>`;
-    if (editBtn) editBtn.style.display = 'inline-flex';
-  } else if (rol === 'admin') {
-    navEl.innerHTML = `<a href="admin-dashboard.html" class="navbar-link">Dashboard</a><a href="admin-proyectos.html" class="navbar-link">Proyectos</a><a href="foro.html?rol=admin" class="navbar-link">Foro</a>`;
-    navRight.innerHTML = `<span class="navbar-badge">Administrador</span><a href="#" class="navbar-avatar" style="background:var(--morado);">👑</a>`;
-  } else {
-    navEl.innerHTML = `<a href="publico-inicio.html" class="navbar-link">Inicio</a><a href="publico-proyectos.html" class="navbar-link">Proyectos</a><a href="foro.html?rol=publico" class="navbar-link">Foro</a>`;
-    navRight.innerHTML = '';
-  }
-});
-</script>
+<script src="auth.js"></script>
+<script src="js/navbar.js"></script>
+<script src="js/lider-perfil.js"></script>
+
 </head>
 <body>
 
@@ -35,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <img src="assets/img/logo.png" alt="Logo SocialHub" class="navbar-logo-icon">
       <div class="navbar-logo-text">
         <span class="navbar-logo-title">SocialHub</span>
-        <span class="navbar-logo-sub">Servicio Social Universitario</span>
+        <span class="navbar-logo-sub">Servicio Social</span>
       </div>
     </a>
     <div class="navbar-links" id="nav-links"></div>
@@ -48,18 +32,36 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="breadcrumb" style="margin-bottom:20px;">
       <a href="publico-proyectos.html" style="color:rgba(255,255,255,0.5);">Proyectos</a>
       <span style="color:rgba(255,255,255,0.3);">/</span>
-      <span style="color:rgba(255,255,255,0.8);">Ana Martínez García</span>
+      <span id="breadcrumb-profile-name" style="color:rgba(255,255,255,0.8);">Cargando...</span>
     </div>
     <div class="profile-header">
       <div class="profile-avatar-wrap">
-        <div class="profile-avatar">A</div>
+
+          <input
+            type="file"
+            id="profile-photo-input"
+            accept="image/*"
+            style="display:none;"
+          >
+
+          <button
+            id="upload-photo-btn"
+            class="profile-avatar"
+            title="Cambiar foto de perfil"
+            style="border:none;cursor:pointer;"
+          >
+            ?
+          </button>
+
+
       </div>
+
       <div class="profile-info">
         <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:8px;">
-          <h1 class="profile-name" style="margin:0;">Ana Martínez García</h1>
+          <h1 class="profile-name" id="profile-name" style="margin:0;">Cargando...</h1>
           <a id="edit-btn" href="#" class="btn btn-outline-white btn-sm" style="display:none;">✏️ Editar perfil</a>
         </div>
-        <div class="profile-role">🎓 Lic. Ciencias de la Educación · 7mo semestre · Campus Monterrey</div>
+        <div class="profile-role" id="profile-role">🎓 Carrera </div>
         <div class="profile-tags">
           <span class="profile-tag">📚 Educación</span>
           <span class="profile-tag">🌿 Medio Ambiente</span>
@@ -183,27 +185,62 @@ document.addEventListener('DOMContentLoaded', function() {
   </div>
 
   <div>
-    <div class="profile-sidebar-card">
-      <div class="info-card-title" style="font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--gris-800);margin-bottom:14px;">📋 Información académica</div>
-      <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;">
-        <div style="display:flex;gap:8px;align-items:flex-start;">
-          <span style="color:var(--gris-400);width:20px;">🎓</span>
-          <span style="color:var(--gris-600);">Lic. Ciencias de la Educación, 7mo semestre</span>
-        </div>
-        <div style="display:flex;gap:8px;align-items:flex-start;">
-          <span style="color:var(--gris-400);width:20px;">🏛️</span>
-          <span style="color:var(--gris-600);">Campus Monterrey, EGADE</span>
-        </div>
-        <div style="display:flex;gap:8px;align-items:flex-start;">
-          <span style="color:var(--gris-400);width:20px;">📅</span>
-          <span style="color:var(--gris-600);">Prestador desde Agosto 2024</span>
-        </div>
-        <div style="display:flex;gap:8px;align-items:flex-start;">
-          <span style="color:var(--gris-400);width:20px;">🌍</span>
-          <span style="color:var(--gris-600);">Monterrey, Nuevo León</span>
-        </div>
-      </div>
+
+  <div class="profile-sidebar-card">
+    <div class="info-card-title" style="font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--gris-800);margin-bottom:14px;">
+      📋 Información del perfil
     </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;">
+
+      <div style="display:flex;gap:8px;align-items:flex-start;">
+        <span style="color:var(--gris-400);width:20px;">🎓</span>
+        <span id="profile-carrera" style="color:var(--gris-600);">
+          Cargando...
+        </span>
+      </div>
+
+      <div style="display:flex;gap:8px;align-items:flex-start;">
+        <span style="color:var(--gris-400);width:20px;">📧</span>
+        <span id="profile-correo" style="color:var(--gris-600);">
+          Cargando...
+        </span>
+      </div>
+
+      <div style="display:flex;gap:8px;align-items:flex-start;">
+        <span style="color:var(--gris-400);width:20px;">📱</span>
+        <span id="profile-telefono" style="color:var(--gris-600);">
+          Cargando...
+        </span>
+      </div>
+
+      <div style="display:flex;gap:8px;align-items:flex-start;">
+        <span style="color:var(--gris-400);width:20px;">🔗</span>
+        <span id="profile-linkedin" style="color:var(--gris-600);">
+          Cargando...
+        </span>
+      </div>
+
+
+      <button
+        id="save-profile-btn"
+        class="btn btn-primary btn-sm"
+        style="display:none;margin-top:14px;"
+      >
+        💾 Guardar cambios
+      </button>
+
+      <div
+        id="profile-message"
+        style="display:none;margin-top:12px;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:600;"
+      >
+      </div>
+
+    </div>
+  </div>
+
+
+
 
     <div class="profile-sidebar-card">
       <div style="font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--gris-800);margin-bottom:14px;">🛠 Habilidades</div>

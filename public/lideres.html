@@ -7,6 +7,9 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="lideres.css" />
+<script src="auth.js"></script>
+<script src="js/navbar.js"></script>
+<script src="js/lideres.js"></script>
 </head>
 <body>
 
@@ -16,16 +19,16 @@
         <img src="assets/img/logo.png" alt="Logo SocialHub" class="navbar-logo-icon">
         <div class="navbar-logo-text">
           <span class="navbar-logo-title">SocialHub</span>
-          <span class="navbar-logo-sub">Servicio Social Universitario</span>
+          <span class="navbar-logo-sub">Servicio Social</span>
         </div>
       </a>
-      <div class="navbar-links">
+      <div class="navbar-links" id="nav-links">
         <a href="publico-inicio.html" class="navbar-link">Inicio</a>
         <a href="publico-proyectos.html" class="navbar-link">Proyectos</a>
-        <a href="foro.html?rol=publico" class="navbar-link">Foro</a>
+        <a href="foro.html" class="navbar-link">Foro</a>
         <a href="lideres.html" class="navbar-link active">Líderes</a>
       </div>
-      <div class="navbar-right"></div>
+      <div class="navbar-right" id="nav-right"></div>
     </div>
   </nav>
 
@@ -38,7 +41,7 @@
     <div class="lideres-grid">
 
       <!-- Líder 1 -->
-      <a class="lider-card" href="lider-perfil.html?rol=publico">
+      <a class="lider-card" href="lider-perfil.html">
         <div class="lider-banner" style="background: linear-gradient(135deg, #5CA09E, #3d7a78);"></div>
         <div class="lider-body">
           <div class="lider-avatar" style="background: linear-gradient(135deg, #1e40af, #3b82f6);">A</div>
@@ -63,7 +66,7 @@
       </a>
 
       <!-- Líder 2 -->
-      <a class="lider-card" href="lider-perfil.html?rol=publico">
+      <a class="lider-card" href="lider-perfil.html">
         <div class="lider-banner" style="background: linear-gradient(135deg, #D7685B, #b84e42);"></div>
         <div class="lider-body">
           <div class="lider-avatar" style="background: linear-gradient(135deg, #065f46, #10b981);">C</div>
@@ -88,7 +91,7 @@
       </a>
 
       <!-- Líder 3 -->
-      <a class="lider-card" href="lider-perfil.html?rol=publico">
+      <a class="lider-card" href="lider-perfil.html">
         <div class="lider-banner" style="background: linear-gradient(135deg, #9B5BA5, #7a3f85);"></div>
         <div class="lider-body">
           <div class="lider-avatar" style="background: linear-gradient(135deg, #4c1d95, #8b5cf6);">D</div>
@@ -113,7 +116,7 @@
       </a>
 
       <!-- Líder 4 -->
-      <a class="lider-card" href="lider-perfil.html?rol=publico">
+      <a class="lider-card" href="lider-perfil.html">
         <div class="lider-banner" style="background: linear-gradient(135deg, #E89042, #c47530);"></div>
         <div class="lider-body">
           <div class="lider-avatar" style="background: linear-gradient(135deg, #92400e, #f59e0b);">R</div>
@@ -138,7 +141,7 @@
       </a>
 
       <!-- Líder 5 -->
-      <a class="lider-card" href="lider-perfil.html?rol=publico">
+      <a class="lider-card" href="lider-perfil.html">
         <div class="lider-banner" style="background: linear-gradient(135deg, #7AB8DD, #5a9abf);"></div>
         <div class="lider-body">
           <div class="lider-avatar" style="background: linear-gradient(135deg, #1e40af, #6366f1);">M</div>
@@ -163,7 +166,7 @@
       </a>
 
       <!-- Líder 6 -->
-      <a class="lider-card" href="lider-perfil.html?rol=publico">
+      <a class="lider-card" href="lider-perfil.html">
         <div class="lider-banner" style="background: linear-gradient(135deg, #5CA09E, #3d7a78);"></div>
         <div class="lider-body">
           <div class="lider-avatar" style="background: linear-gradient(135deg, #065f46, #34d399);">L</div>

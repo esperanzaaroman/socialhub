@@ -7,16 +7,11 @@
 .page-subtitle { color: rgba(255,255,255,0.65); font-size: 15px; }
 
 .foro-layout {
-  max-width: 1280px;
+  max-width: 850px;
   margin: 0 auto;
   padding: 40px 24px;
-  display: grid;
-  grid-template-columns: 1fr 300px;
-  gap: 32px;
-  align-items: start;
 }
 
-/* tabs categoría */
 .cat-tabs {
   display: flex;
   gap: 8px;
@@ -211,4 +206,13 @@
   align-items: center;
   gap: 10px;
   margin-bottom: 10px;
+}
+.footer {
+  width: 100%;
+  background: #0f172a;
+  color: rgba(255,255,255,.7);
+  text-align: center;
+  padding: 24px;
+  font-size: 14px;
+  margin-top: 40px;
 }
