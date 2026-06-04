@@ -141,18 +141,30 @@ async function findAllLeaders() {
       u.correo,
       u.foto_perfil,
       l.carrera,
-      l.estado
+      l.estado,
+      GROUP_CONCAT(p.nombre SEPARATOR ', ') AS proyectos
     FROM usuario u
     INNER JOIN lider l
       ON l.id_lider = u.id_usuario
+    LEFT JOIN lider_proyecto lp
+      ON lp.id_lider = l.id_lider
+      AND lp.estado = 'activo'
+    LEFT JOIN proyecto p
+      ON p.id_proyecto = lp.id_proyecto
     WHERE l.estado = 'activo'
+    GROUP BY
+      u.id_usuario,
+      u.username,
+      u.correo,
+      u.foto_perfil,
+      l.carrera,
+      l.estado
     ORDER BY u.username ASC
     `
   );
 
   return rows;
 }
-
 
 module.exports = {
   findUserByEmail,
