@@ -1,25 +1,30 @@
-document.getElementById('form-proyecto').addEventListener('submit',function(e){
+document.getElementById('form-proyecto').addEventListener('submit', async function(e){
     e.preventDefault();
-
     const datosProyecto = {
         titulo: document.getElementById('input-titulo').value,
-        resumen: document.getElementById('input-resumen').value,
-        categoria: document.getElementById('input-categoria').value,
+        descorta: document.getElementById('input-resumen').value,
+        desclarga: document.getElementById('input-desc').value,
+        idcategoria: document.getElementById('categoria').value,
         ods: document.getElementById('ods').value,
-        zona: document.getElementById('input-zona').value,
         finicio: document.getElementById('input-finicio').value,
         ffin: document.getElementById('input-ffin').value,
-        estado: "Activo"
+        estado: document.getElementById('input-estado').value,
+        periodo: document.getElementById('input-periodo').value,
+        video: document.getElementById('input-video').value,
+        idlider: document.getElementById('input-lider').value
+        
     };
 
     try{
-        const respuesta = await fetch('http://loccalhost:300/api/proyectos',{
+        const token = localStorage.getItem('token');
+
+        const respuesta = await fetch('http://localhost:300/api/proyectos',{
             method: 'POST',
-            headers: {'Content-Type':'application/json'},
+            headers: {'Content-Type':'application/json','Authorization': `Bearer ${token}`},
             body: JSON.stringify(datosProyecto)
         });
-        const resultado = await respuesta.JSON();
-        if(respuesta,ok){
+        const resultado = await respuesta.json();
+        if(respuesta.ok){
             window.location.href=`proyecto-detalle.html?id=${resultado.id_proyecto}`;
         }else{
             alert("Error al guardar en el servidor: " + resultado.error);

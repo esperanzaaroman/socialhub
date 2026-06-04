@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require("path");
-const widgetRoutes = require('./routes/widgetRoutes');
 const cors = require('cors');
 require('dotenv').config();
 
@@ -34,7 +33,6 @@ app.get('/api/health', (req, res) => {
     });
 });
 
-const authRoutes = require('./routes/auth'); 
 app.use('/api/auth', authRoutes);           
 app.use(express.static(path.join(__dirname, "../public")));
 
@@ -49,7 +47,38 @@ app.get('/api/health', (req, res) => {
         data: { status: 'ok' }
     });
 });
+app.get("/categoria",async (req,res)=>{
+    try{
+        const sql = "SELECT id_categoria, nombre FROM categoria";
+        const [resultados] = await conexion.query(sql);
 
+        res.json(resultados);
+
+    }catch (err){
+        console.log(err);
+        res.status(500).json(err);
+    }
+});
+app.get("/lider",async (req,res)=>{
+    try{
+        const sql = `SELECT
+                l.id_lider,
+                u.nombre,
+                l.carrera,
+                l.estado
+            FROM lider l
+            INNER JOIN usuario u
+            ON l.id_lider = u.id_usuario
+            WHERE l.estado = 'activo'`;
+        const [resultados] = await conexion.query(sql);
+
+        res.json(resultados);
+
+    }catch (err){
+        console.log(err);
+        res.status(500).json(err);
+    }
+});
 app.get("/ods", async (req, res) => {
     try {
         const sql = "SELECT id_ods, nombre FROM ods";

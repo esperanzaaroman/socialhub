@@ -526,54 +526,38 @@
 
 <!-- ===================== MODAL NUEVO PROYECTO ===================== -->
 <div class="modal-overlay" id="modalNuevoProyecto">
+  <form id="form-proyecto">
   <div class="modal-box" style="max-width:640px;">
     <div class="modal-head">
-      <div class="modal-head-title">🗂️ Nuevo Proyecto</div>
+      <div class="modal-head-title">Nuevo Proyecto</div>
       <button class="modal-close-btn" onclick="document.getElementById('modalNuevoProyecto').classList.remove('open')">✕</button>
     </div>
     <div class="modal-bdy" style="max-height:70vh;overflow-y:auto;">
 
       <!-- Nombre -->
       <label class="form-label-s">Nombre del proyecto *</label>
-      <input type="text" class="form-inp-s" placeholder="Ej. Tutorías Comunitarias Norte" maxlength="50">
+      <input type="text" id="input-titulo" class="form-input" placeholder="Ej. Tutorías en colonias vulnerables">
 
       <!-- Descripción corta -->
       <label class="form-label-s">Descripción corta * <span style="color:var(--gris-400);font-weight:400;">(máx. 200 caracteres)</span></label>
-      <textarea class="form-inp-s" rows="2" placeholder="Resumen breve visible en el catálogo público..." maxlength="200" style="resize:vertical;"></textarea>
+      <textarea  class="form-textarea" rows = "2" id="input-resumen" placeholder="¿Qué problema resuelve? ¿A quién beneficia?"></textarea>
 
       <!-- Descripción larga -->
       <label class="form-label-s">Descripción larga</label>
-      <textarea class="form-inp-s" rows="4" placeholder="Objetivos, metodología, contexto del proyecto..." style="resize:vertical;"></textarea>
+      <textarea  class="form-textarea" id="input-desc" placeholder="Resumen"></textarea>
 
       <!-- Categoría / ODS -->
       <div class="form-grid-2">
         <div>
           <label class="form-label-s">Categoría *</label>
-          <select class="form-inp-s">
-            <option value="">Seleccionar...</option>
-            <option>Educación</option>
-            <option>Salud</option>
-            <option>Medio Ambiente</option>
-            <option>Tecnología</option>
-            <option>Arte y Cultura</option>
-            <option>Comunidad</option>
+          <select class="form-select" id="categoria">
+            Cargando..
           </select>
         </div>
         <div>
           <label class="form-label-s">ODS principal *</label>
-          <select class="form-inp-s">
-            <option value="">Seleccionar...</option>
-            <option value="ods1">ODS 1 – Sin pobreza</option>
-            <option value="ods2">ODS 2 – Hambre cero</option>
-            <option value="ods3">ODS 3 – Salud y bienestar</option>
-            <option value="ods4">ODS 4 – Educación de calidad</option>
-            <option value="ods6">ODS 6 – Agua limpia</option>
-            <option value="ods9">ODS 9 – Industria e innovación</option>
-            <option value="ods10">ODS 10 – Reducción de desigualdades</option>
-            <option value="ods11">ODS 11 – Ciudades sostenibles</option>
-            <option value="ods12">ODS 12 – Consumo responsable</option>
-            <option value="ods13">ODS 13 – Acción por el clima</option>
-            <option value="ods15">ODS 15 – Vida de ecosistemas</option>
+          <select class="form-select" id="ods">
+            Cargando..
           </select>
         </div>
       </div>
@@ -582,7 +566,7 @@
       <div class="form-grid-2">
         <div>
           <label class="form-label-s">Periodo *</label>
-          <select class="form-inp-s">
+          <select class="form-inp-s" id="input-periodo">
             <option value="">Seleccionar...</option>
             <option value="regular">Regular (Ago–Dic / Feb–Jun)</option>
             <option value="intensivo invierno">Intensivo invierno</option>
@@ -591,7 +575,7 @@
         </div>
         <div>
           <label class="form-label-s">Estado inicial *</label>
-          <select class="form-inp-s">
+          <select class="form-inp-s"id="input-estado">
             <option value="pendiente">Pendiente</option>
             <option value="en_proceso">En proceso</option>
             <option value="activo">Activo</option>
@@ -604,43 +588,36 @@
       <div class="form-grid-2">
         <div>
           <label class="form-label-s">Fecha de inicio *</label>
-          <input type="date" class="form-inp-s">
+          <input type="date" class="form-inp-s" id="input-finicio">
         </div>
         <div>
           <label class="form-label-s">Fecha de fin estimada *</label>
-          <input type="date" class="form-inp-s">
+          <input type="date" class="form-inp-s" id="input-ffin">
         </div>
       </div>
 
-      <!-- Zona / Video URL -->
+      <!--Video URL -->
       <div class="form-grid-2">
         <div>
-          <label class="form-label-s">Zona de impacto</label>
-          <input type="text" class="form-inp-s" placeholder="Ej. Colonia Centro, Puebla" maxlength="100">
-        </div>
-        <div>
           <label class="form-label-s">URL de video (YouTube)</label>
-          <input type="url" class="form-inp-s" placeholder="https://youtube.com/watch?v=..." maxlength="100">
+          <input type="url" class="form-inp-s" placeholder="https://youtube.com/watch?v=..." maxlength="100" id = "input-video">
         </div>
       </div>
 
       <!-- Asignar líder -->
       <label class="form-label-s">Asignar líder</label>
-      <select class="form-inp-s" style="margin-bottom:0;">
+      <select class="form-inp-s" style="margin-bottom:0;" id = "input-lider">
         <option value="">Sin asignar (asignar después)</option>
-        <option>Ana García — Lic. Ciencias de la Educación</option>
-        <option>Carlos Ramos — Ingeniería en TI</option>
-        <option>Sofía López — Medicina</option>
-        <option>Jorge Ortega — Nutrición</option>
       </select>
       <p style="font-size:11px;color:var(--gris-400);margin-top:4px;margin-bottom:0;">Puedes asignar o cambiar el líder en cualquier momento desde el detalle del proyecto.</p>
 
     </div>
     <div class="modal-ft">
       <button class="btn btn-sm" style="background:var(--gris-100);color:var(--gris-600);" onclick="document.getElementById('modalNuevoProyecto').classList.remove('open')">Cancelar</button>
-      <button class="btn btn-sm" style="background:var(--verde-dark);color:#fff;border-color:var(--verde-dark);" onclick="document.getElementById('modalNuevoProyecto').classList.remove('open')">✓ Crear proyecto</button>
+      <button type = "submit" class="btn btn-sm" style="background:var(--verde-dark);color:#fff;border-color:var(--verde-dark);" onclick="document.getElementById('modalNuevoProyecto').classList.remove('open')">✓ Crear proyecto</button>
     </div>
   </div>
+  </form>
 </div>
 
 <!-- ===================== MODAL NUEVO LÍDER ===================== -->
@@ -714,7 +691,59 @@
     </div>
   </div>
 </div>
+<script>
+  fetch("/categoria")
+  .then(res=>res.json())
+  .then(data=>{
+    console.log(data);
+    const select = document.getElementById("categoria");
 
+    select.innerHTML="";
+
+    data.forEach(o =>{
+      select.innerHTML += 
+        ` <option value = ${o.id_categoria}>${o.nombre}</option>`;
+    });
+  })
+  fetch("/ods")
+  .then(res=>res.json())
+  .then(data=>{
+    console.log(data);
+    const select = document.getElementById("ods");
+
+    select.innerHTML="";
+
+    data.forEach(o => {
+
+      select.innerHTML +=
+        `<option value = "${o.id_ods}">${o.nombre}</option>`;
+    });
+    
+  })
+  .catch(err => {
+      console.log(err);
+    });
+  fetch("/lider")
+  .then(res=>res.json())
+  .then(data=>{
+    console.log(data);
+    const select = document.getElementById("input-lider");
+
+    select.innerHTML="";
+
+    data.forEach(o => {
+
+      select.innerHTML +=
+        `<option value = "${o.id_lider}">${o.nombre}</option>`;
+    });
+    
+  })
+  .catch(err => {
+      console.log(err);
+    });
+
+</script>
+<script src="projectjs/crear.js"></script>
 <script>
 document.querySelectorAll('.modal-overlay').forEach(function(m) {
   m.addEventListener('click', function(e) {
