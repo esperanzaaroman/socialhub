@@ -21,6 +21,19 @@ const app = express();
 app.use(express.static('public'));
 app.use(cors());
 app.use(express.json());
+
+app.use(express.static(path.join(__dirname,"../public")));
+
+app.use('/api/widgets',widgetRoutes);
+
+app.get('/api/health', (req, res) => {
+    sendSuccess(res, {
+        message: 'Servidor corriendo', 
+        data: { status: 'ok' }
+    });
+});
+
+app.use('/api/auth', authRoutes);           
 app.use(express.static(path.join(__dirname, "../public")));
 
 app.use('/api/widgets', widgetRoutes);
@@ -34,7 +47,38 @@ app.get('/api/health', (req, res) => {
         data: { status: 'ok' }
     });
 });
+app.get("/categoria",async (req,res)=>{
+    try{
+        const sql = "SELECT id_categoria, nombre FROM categoria";
+        const [resultados] = await conexion.query(sql);
 
+        res.json(resultados);
+
+    }catch (err){
+        console.log(err);
+        res.status(500).json(err);
+    }
+});
+app.get("/lider",async (req,res)=>{
+    try{
+        const sql = `SELECT
+                l.id_lider,
+                u.nombre,
+                l.carrera,
+                l.estado
+            FROM lider l
+            INNER JOIN usuario u
+            ON l.id_lider = u.id_usuario
+            WHERE l.estado = 'activo'`;
+        const [resultados] = await conexion.query(sql);
+
+        res.json(resultados);
+
+    }catch (err){
+        console.log(err);
+        res.status(500).json(err);
+    }
+});
 app.get("/ods", async (req, res) => {
     try {
         const sql = "SELECT id_ods, nombre FROM ods";
@@ -53,8 +97,22 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 
+
+app.get("/ods",async (req,res)=>{
+    try{
+        const sql = "SELECT id_ods, nombre FROM ods";
+        const [resultados]=await conexion.query(sql);
+        res.json(resultados);
+    }catch(err){
+        console.log(err);
+
+        res.status(500).json(err);
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
 
+module.exports = app;
 module.exports = app;

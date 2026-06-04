@@ -159,90 +159,9 @@
   </div>
 </div>
 
-<!-- MODAL CREAR PROYECTO -->
- <!---->
-<div class="modal-overlay" id="modalCrear">
-  <form id="form-proyecto">
-    <div class="modal">
-      <div class="modal-header">
-        <div class="modal-title">Nuevo Proyecto</div>
-        <button class="modal-close" onclick="document.getElementById('modalCrear').classList.remove('open')">✕</button>
-      </div>
-      <div class="modal-body">
-        <div class="form-grid">
-          <div class="form-group" style="grid-column:1/-1">
-            <label class="form-label">Nombre del proyecto *</label>
-            <input type="text" id="input-titulo" class="form-input" placeholder="Ej. Tutorías en colonias vulnerables">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Categoría *</label>
-            <select class="form-select" id="input-categoria">
-              <option>Educación</option>
-              <option>Salud</option>
-              <option>Medio Ambiente</option>
-              <option>Tecnología</option>
-              <option>Arte y Cultura</option>
-              <option>Comunidad</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">ODS Principal</label>
-            <select class="form-select" id="ods">
-              Cargando...
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Fecha de inicio</label>
-            <input type="date" class="form-input" id="input-finicio">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Fecha estimada de cierre</label>
-            <input type="date" class="form-input" id="input-ffin">
-          </div>
-          <div class="form-group" style="grid-column:1/-1">
-            <label class="form-label">Zona</label>
-            <input type="text" id="input-zona" class="form-input" placeholder="Ej. Puebla">
-          </div>
-          <div class="form-group" style="grid-column:1/-1">
-            <label class="form-label">Descripción breve *</label>
-            <textarea class="form-textarea" id="input-resumen" placeholder="¿Qué problema resuelve? ¿A quién beneficia?"></textarea>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-sm" style="background:var(--gris-100);color:var(--gris-600);" onclick="document.getElementById('modalCrear').classList.remove('open')">Cancelar</button>
-        <button type="submit" class="btn btn-verde btn-sm">✓ Publicar proyecto</button>
-      </div>
-    </div>
-  </form>
-</div>
-
-<script>
-  fetch("/ods")
-  .then(res=>res.json())
-  .then(data=>{
-    console.log(data);
-    const select = document.getElementById("ods");
-
-    select.innerHTML="";
-
-    data.forEach(o => {
-
-      select.innerHTML +=
-        `<option value = "${o.id_ods}">${o.nombre}</option>`;
-    });
-    
-  })
-  .catch(err => {
-      console.log(err);
-    });
 
 
-  document.getElementById('modalCrear').addEventListener('click', function(e) {
-  if (e.target === this) this.classList.remove('open');
-});
-</script>
-<script src="projectjs/crear.js"></script>
+
 
 </body>
 </html>

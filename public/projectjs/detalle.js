@@ -12,7 +12,6 @@ async function cargarDetalleProyecto(){
             document.getElementById('proyecto-resumen').innerText = proyecto.resumen;
             document.getElementById('proyecto-categoria').innerText = proyecto.categoria;
             document.getElementById('proyecto-ods').innerText = proyecto.ods;
-            document.getElementById('proyecto-zona').innerText = proyecto.zona;
             document.getElementById('proyecto-estado').innerText = proyecto.estado;
             document.getElementById('proyecto-inicio').innerText = proyecto.finicio;
             document.getElementById('proyecto-fin').innerText = proyecto.ffin;
