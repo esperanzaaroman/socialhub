@@ -166,6 +166,68 @@ async function findAllLeaders() {
   return rows;
 }
 
+async function createUser(
+  username,
+  correo,
+  contrasenaHash
+) {
+
+  const [result] = await pool.query(
+    `
+    INSERT INTO usuario (
+      username,
+      correo,
+      contrasena,
+      fecha_registro
+    )
+    VALUES (?, ?, ?, CURDATE())
+    `,
+    [
+      username,
+      correo,
+      contrasenaHash
+    ]
+  );
+
+  return result.insertId;
+}
+
+async function createAdmin(id_usuario) {
+
+  const [result] = await pool.query(
+    `
+    INSERT INTO admin (id_admin)
+    VALUES (?)
+    `,
+    [id_usuario]
+  );
+
+  return result;
+}
+
+async function createLeader(
+  id_usuario,
+  carrera
+) {
+
+  const [result] = await pool.query(
+    `
+    INSERT INTO lider (
+      id_lider,
+      carrera,
+      estado
+    )
+    VALUES (?, ?, 'activo')
+    `,
+    [
+      id_usuario,
+      carrera
+    ]
+  );
+
+  return result;
+}
+
 module.exports = {
   findUserByEmail,
   isAdmin,
@@ -174,5 +236,9 @@ module.exports = {
   updateUsuarioProfile,
   updateLiderProfile,
   updateProfilePhoto,
-  findAllLeaders
+  findAllLeaders,
+  createUser,
+  createAdmin,
+  createLeader
 };
+

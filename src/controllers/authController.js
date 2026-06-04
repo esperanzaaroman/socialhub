@@ -8,7 +8,10 @@ const {
   updateUsuarioProfile,
   updateLiderProfile,
   updateProfilePhoto,
-  findAllLeaders
+  findAllLeaders,
+  createUser,
+  createAdmin,
+  createLeader
 } = require('../models/authModel');
 
 async function login(req, res){
@@ -284,11 +287,90 @@ async function getLeaders(req, res) {
 
 }
 
+
+async function createUserByAdmin(req, res) {
+
+  try {
+
+    const {
+      username,
+      correo,
+      contrasena,
+      role,
+      carrera
+    } = req.body;
+
+    if (!username || !correo || !contrasena || !role) {
+      return res.status(400).json({
+        mensaje: 'Faltan datos obligatorios'
+      });
+    }
+
+    if (role !== 'admin' && role !== 'lider') {
+      return res.status(400).json({
+        mensaje: 'Rol inválido'
+      });
+    }
+
+    if (role === 'lider' && !carrera) {
+      return res.status(400).json({
+        mensaje: 'La carrera es obligatoria para líderes'
+      });
+    }
+
+    const contrasenaHash =
+      await bcrypt.hash(contrasena, 10);
+
+    const id_usuario =
+      await createUser(
+        username,
+        correo,
+        contrasenaHash
+      );
+
+    if (role === 'admin') {
+      await createAdmin(id_usuario);
+    }
+
+    if (role === 'lider') {
+      await createLeader(
+        id_usuario,
+        carrera
+      );
+    }
+
+    res.status(201).json({
+      mensaje: 'Usuario creado correctamente',
+      id_usuario
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    if (
+      error.code === 'ER_DUP_ENTRY' ||
+      error.errno === 1062
+    ) {
+      return res.status(409).json({
+        mensaje: 'Ese correo ya está registrado'
+      });
+    }
+
+    res.status(500).json({
+      mensaje: 'Error creando usuario'
+    });
+
+  }
+
+}
+
 module.exports = {
   login,
   me,
   updateProfile,
   uploadProfilePhoto,
   getProfileById,
-  getLeaders
+  getLeaders,
+  createUserByAdmin
 };
