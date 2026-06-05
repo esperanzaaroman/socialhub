@@ -11,7 +11,8 @@ const {
   findAllLeaders,
   createUser,
   createAdmin,
-  createLeader
+  createLeader,
+  updatePassword
 } = require('../models/authModel');
 
 async function login(req, res){
@@ -365,6 +366,79 @@ async function createUserByAdmin(req, res) {
 
 }
 
+async function changePassword(req, res) {
+
+  try {
+
+    const {
+      currentPassword,
+      newPassword
+    } = req.body;
+
+    if (
+      !currentPassword ||
+      !newPassword
+    ) {
+      return res.status(400).json({
+        mensaje: 'Completa todos los campos'
+      });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({
+        mensaje: 'La nueva contraseña debe tener al menos 6 caracteres'
+      });
+    }
+
+    const usuario =
+      await findUserById(
+        req.usuario.id
+      );
+
+    const usuarioCompleto =
+      await findUserByEmail(
+        usuario.correo
+      );
+
+    const passwordCorrecta =
+      await bcrypt.compare(
+        currentPassword,
+        usuarioCompleto.contrasena
+      );
+
+    if (!passwordCorrecta) {
+      return res.status(401).json({
+        mensaje: 'La contraseña actual es incorrecta'
+      });
+    }
+
+    const passwordHash =
+      await bcrypt.hash(
+        newPassword,
+        10
+      );
+
+    await updatePassword(
+      req.usuario.id,
+      passwordHash
+    );
+
+    res.json({
+      mensaje: 'Contraseña actualizada correctamente'
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      mensaje: 'Error actualizando contraseña'
+    });
+
+  }
+
+}
+
 module.exports = {
   login,
   me,
@@ -372,5 +446,6 @@ module.exports = {
   uploadProfilePhoto,
   getProfileById,
   getLeaders,
-  createUserByAdmin
+  createUserByAdmin,
+  changePassword
 };

@@ -21,6 +21,18 @@ document.addEventListener('DOMContentLoaded', async function() {
   const puedeEditar =
     usuarioActual.id_usuario === usuario.id_usuario;
 
+  const securityCard =
+  document.getElementById('security-card');
+
+  if (securityCard) {
+
+  securityCard.style.display =
+    puedeEditar
+      ? 'block'
+      : 'none';
+
+}
+
   if (editBtn) {
     editBtn.style.display =
       puedeEditar ? 'inline-flex' : 'none';
@@ -37,6 +49,15 @@ document.addEventListener('DOMContentLoaded', async function() {
   const profileLinkedin = document.getElementById('profile-linkedin');
   const saveProfileBtn = document.getElementById('save-profile-btn');
   const profileMessage = document.getElementById('profile-message');
+  const changePasswordBtn =
+  document.getElementById(
+    'change-password-btn'
+  );
+
+const passwordMessage =
+  document.getElementById(
+    'password-message'
+  );
 
   let modoEdicion = false;
 
@@ -387,5 +408,141 @@ document.addEventListener('DOMContentLoaded', async function() {
       profileMessage.style.color = '#991b1b';
     }
   }
+
+  function mostrarMensajePassword(
+  mensaje,
+  tipo
+) {
+
+  if (!passwordMessage) {
+    return;
+  }
+
+  passwordMessage.textContent =
+    mensaje;
+
+  passwordMessage.style.display =
+    'block';
+
+  if (tipo === 'success') {
+
+    passwordMessage.style.background =
+      'var(--verde-light)';
+
+    passwordMessage.style.color =
+      'var(--verde-dark)';
+
+  }
+  else {
+
+    passwordMessage.style.background =
+      '#fee2e2';
+
+    passwordMessage.style.color =
+      '#991b1b';
+
+  }
+
+}
+
+if (changePasswordBtn) {
+
+  changePasswordBtn.addEventListener(
+    'click',
+    async function() {
+
+      const currentPassword =
+        document.getElementById(
+          'current-password'
+        )?.value;
+
+      const newPassword =
+        document.getElementById(
+          'new-password'
+        )?.value;
+
+      if (
+        !currentPassword ||
+        !newPassword
+      ) {
+
+        mostrarMensajePassword(
+          'Completa todos los campos',
+          'error'
+        );
+
+        return;
+
+      }
+
+      if (
+        newPassword.length < 6
+      ) {
+
+        mostrarMensajePassword(
+          'La nueva contraseña debe tener al menos 6 caracteres',
+          'error'
+        );
+
+        return;
+
+      }
+
+      const token =
+        localStorage.getItem(
+          'token'
+        );
+
+      const response =
+        await fetch(
+          'http://localhost:3000/api/auth/change-password',
+          {
+            method: 'PUT',
+            headers: {
+              'Content-Type':
+                'application/json',
+              Authorization:
+                `Bearer ${token}`
+            },
+            body: JSON.stringify({
+              currentPassword,
+              newPassword
+            })
+          }
+        );
+
+      const data =
+        await response.json();
+
+      if (response.ok) {
+
+        mostrarMensajePassword(
+          'Contraseña actualizada correctamente ✅',
+          'success'
+        );
+
+        document.getElementById(
+          'current-password'
+        ).value = '';
+
+        document.getElementById(
+          'new-password'
+        ).value = '';
+
+      }
+      else {
+
+        mostrarMensajePassword(
+          data.mensaje ||
+          'Error actualizando contraseña',
+          'error'
+        );
+
+      }
+
+    }
+  );
+
+}
 
 });

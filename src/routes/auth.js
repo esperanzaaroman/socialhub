@@ -9,7 +9,8 @@ const {
   uploadProfilePhoto,
   getProfileById,
   getLeaders,
-  createUserByAdmin
+  createUserByAdmin,
+  changePassword
 } = require('../controllers/authController');
 
 
@@ -57,6 +58,11 @@ router.post(
   verifyToken,
   verifyAdmin,
   createUserByAdmin
+);
+router.put(
+  '/change-password',
+  verifyToken,
+  changePassword
 );
 module.exports = router;
 

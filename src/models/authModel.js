@@ -228,6 +228,28 @@ async function createLeader(
   return result;
 }
 
+async function updatePassword(
+  id_usuario,
+  passwordHash
+) {
+
+  const [result] =
+    await pool.query(
+      `
+      UPDATE usuario
+      SET contrasena = ?
+      WHERE id_usuario = ?
+      `,
+      [
+        passwordHash,
+        id_usuario
+      ]
+    );
+
+  return result;
+
+}
+
 module.exports = {
   findUserByEmail,
   isAdmin,
@@ -239,6 +261,7 @@ module.exports = {
   findAllLeaders,
   createUser,
   createAdmin,
-  createLeader
+  createLeader,
+  updatePassword
 };
 
