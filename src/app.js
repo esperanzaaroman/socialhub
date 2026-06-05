@@ -14,6 +14,8 @@ const authRoutes = require('./routes/auth');
 
 const { notFoundHandler, errorHandler } = require('./middleware/errorHandler');
 const { sendSuccess } = require('./utils/apiResponse');
+const forumRoutes =
+  require('./routes/forum');
 
 const app = express();
 
@@ -39,7 +41,10 @@ app.use(express.static(path.join(__dirname, "../public")));
 app.use('/api/widgets', widgetRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/auth', authRoutes);
-
+app.use(
+  '/api/forum',
+  forumRoutes
+);
 
 app.get('/api/health', (req, res) => {
     sendSuccess(res, {
@@ -115,4 +120,4 @@ app.listen(PORT, () => {
 });
 
 module.exports = app;
-module.exports = app;
+

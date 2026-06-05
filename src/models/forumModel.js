@@ -1,57 +1,164 @@
-//SOMEONE CALL A DOCTOOOORRRRR GOTTA CASE OF LOVE BIPOLARRRRRRRRRR
-const pool = require('../config/db');
+const pool =
+  require('../config/db');
 
-async function getAllPosts() {
+async function getProjectsForUser(
+  id_usuario,
+  role
+) {
 
-  const [rows] = await pool.query(
-    `
-    SELECT
-      p.id_publi,
-      p.texto,
-      p.fecha_publicacion,
-      p.id_proyecto,
-      p.multimedia_publi,
-      u.id_usuario,
-      u.username,
-      u.foto_perfil
-    FROM publicacion_foro p
-    INNER JOIN usuario u
-      ON u.id_usuario = p.id_usuario
-    ORDER BY p.fecha_publicacion DESC
-    `
-  );
+  let query;
+  let params = [];
+
+  if (role === 'admin') {
+
+    query = `
+      SELECT
+        id_proyecto,
+        nombre
+      FROM proyecto
+      ORDER BY nombre
+    `;
+
+  }
+  else {
+
+    query = `
+      SELECT
+        p.id_proyecto,
+        p.nombre
+      FROM proyecto p
+      INNER JOIN lider_proyecto lp
+        ON lp.id_proyecto = p.id_proyecto
+      WHERE lp.id_lider = ?
+        AND lp.estado = 'activo'
+      ORDER BY p.nombre
+    `;
+
+    params = [id_usuario];
+
+  }
+
+  const [rows] =
+    await pool.query(
+      query,
+      params
+    );
 
   return rows;
+
+}
+
+
+
+async function getProjectsForUser(
+  id_usuario,
+  role
+) {
+
+  let query;
+  let params = [];
+
+  if (role === 'admin') {
+
+    query = `
+      SELECT
+        id_proyecto,
+        nombre
+      FROM proyecto
+      ORDER BY nombre
+    `;
+
+  }
+  else {
+
+    query = `
+      SELECT
+        p.id_proyecto,
+        p.nombre
+      FROM proyecto p
+      INNER JOIN lider_proyecto lp
+        ON lp.id_proyecto = p.id_proyecto
+      WHERE lp.id_lider = ?
+        AND lp.estado = 'activo'
+      ORDER BY p.nombre
+    `;
+
+    params = [id_usuario];
+
+  }
+
+  const [rows] =
+    await pool.query(
+      query,
+      params
+    );
+
+  return rows;
+
 }
 
 async function createPost(
   id_usuario,
   texto,
-  id_proyecto = null
+  id_proyecto
 ) {
 
-  const [result] = await pool.query(
-    `
-    INSERT INTO publicacion_foro (
-      id_usuario,
-      texto,
-      id_proyecto
-    )
-    VALUES (?, ?, ?)
-    `,
-    [
-      id_usuario,
-      texto,
-      id_proyecto
-    ]
-  );
+  const [result] =
+    await pool.query(
+      `
+      INSERT INTO publicacion_foro (
+        id_usuario,
+        texto,
+        id_proyecto
+      )
+      VALUES (?, ?, ?)
+      `,
+      [
+        id_usuario,
+        texto,
+        id_proyecto
+      ]
+    );
 
   return result.insertId;
+
 }
 
-module.exports = {
-  getAllPosts,
-  createPost
-};
+async function getAllPosts() {
 
-module.exports = {};
+  const [rows] =
+    await pool.query(
+      `
+      SELECT
+        pf.id_publi,
+        pf.texto,
+        pf.fecha_publicacion,
+        pf.id_proyecto,
+        pf.multimedia_publi,
+
+        u.id_usuario,
+        u.username,
+        u.foto_perfil,
+
+        p.nombre AS nombre_proyecto
+
+      FROM publicacion_foro pf
+
+      INNER JOIN usuario u
+        ON u.id_usuario = pf.id_usuario
+
+      INNER JOIN proyecto p
+        ON p.id_proyecto = pf.id_proyecto
+
+      ORDER BY pf.fecha_publicacion DESC
+      `
+    );
+
+  return rows;
+
+}
+module.exports = {
+  getProjectsForUser,
+  createPost,
+  getAllPosts
+};
