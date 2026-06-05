@@ -8,7 +8,11 @@ const {
   updateUsuarioProfile,
   updateLiderProfile,
   updateProfilePhoto,
-  findAllLeaders
+  findAllLeaders,
+  createUser,
+  createAdmin,
+  createLeader,
+  updatePassword
 } = require('../models/authModel');
 
 async function login(req, res){
@@ -284,11 +288,164 @@ async function getLeaders(req, res) {
 
 }
 
+
+async function createUserByAdmin(req, res) {
+
+  try {
+
+    const {
+      username,
+      correo,
+      contrasena,
+      role,
+      carrera
+    } = req.body;
+
+    if (!username || !correo || !contrasena || !role) {
+      return res.status(400).json({
+        mensaje: 'Faltan datos obligatorios'
+      });
+    }
+
+    if (role !== 'admin' && role !== 'lider') {
+      return res.status(400).json({
+        mensaje: 'Rol inválido'
+      });
+    }
+
+    if (role === 'lider' && !carrera) {
+      return res.status(400).json({
+        mensaje: 'La carrera es obligatoria para líderes'
+      });
+    }
+
+    const contrasenaHash =
+      await bcrypt.hash(contrasena, 10);
+
+    const id_usuario =
+      await createUser(
+        username,
+        correo,
+        contrasenaHash
+      );
+
+    if (role === 'admin') {
+      await createAdmin(id_usuario);
+    }
+
+    if (role === 'lider') {
+      await createLeader(
+        id_usuario,
+        carrera
+      );
+    }
+
+    res.status(201).json({
+      mensaje: 'Usuario creado correctamente',
+      id_usuario
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    if (
+      error.code === 'ER_DUP_ENTRY' ||
+      error.errno === 1062
+    ) {
+      return res.status(409).json({
+        mensaje: 'Ese correo ya está registrado'
+      });
+    }
+
+    res.status(500).json({
+      mensaje: 'Error creando usuario'
+    });
+
+  }
+
+}
+
+async function changePassword(req, res) {
+
+  try {
+
+    const {
+      currentPassword,
+      newPassword
+    } = req.body;
+
+    if (
+      !currentPassword ||
+      !newPassword
+    ) {
+      return res.status(400).json({
+        mensaje: 'Completa todos los campos'
+      });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({
+        mensaje: 'La nueva contraseña debe tener al menos 6 caracteres'
+      });
+    }
+
+    const usuario =
+      await findUserById(
+        req.usuario.id
+      );
+
+    const usuarioCompleto =
+      await findUserByEmail(
+        usuario.correo
+      );
+
+    const passwordCorrecta =
+      await bcrypt.compare(
+        currentPassword,
+        usuarioCompleto.contrasena
+      );
+
+    if (!passwordCorrecta) {
+      return res.status(401).json({
+        mensaje: 'La contraseña actual es incorrecta'
+      });
+    }
+
+    const passwordHash =
+      await bcrypt.hash(
+        newPassword,
+        10
+      );
+
+    await updatePassword(
+      req.usuario.id,
+      passwordHash
+    );
+
+    res.json({
+      mensaje: 'Contraseña actualizada correctamente'
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      mensaje: 'Error actualizando contraseña'
+    });
+
+  }
+
+}
+
 module.exports = {
   login,
   me,
   updateProfile,
   uploadProfilePhoto,
   getProfileById,
-  getLeaders
+  getLeaders,
+  createUserByAdmin,
+  changePassword
 };

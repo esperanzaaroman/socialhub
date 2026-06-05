@@ -8,12 +8,15 @@ const {
   updateProfile,
   uploadProfilePhoto,
   getProfileById,
-  getLeaders
+  getLeaders,
+  createUserByAdmin,
+  changePassword
 } = require('../controllers/authController');
 
 
 const {
-  verifyToken
+  verifyToken,
+  verifyAdmin
 } = require('../middleware/authMiddleware');
 
 const upload =
@@ -50,5 +53,16 @@ router.put(
   uploadProfilePhoto
 );
 
+router.post(
+  '/admin/create-user',
+  verifyToken,
+  verifyAdmin,
+  createUserByAdmin
+);
+router.put(
+  '/change-password',
+  verifyToken,
+  changePassword
+);
 module.exports = router;
 

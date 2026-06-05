@@ -77,8 +77,21 @@
         <p style="color:var(--gris-500);font-size:14px;">Supervisión general del programa de Servicio Social · Generado hoy</p>
       </div>
       <div style="display:flex;gap:10px;align-items:center;">
-        <div class="dash-period">📅 Agosto–Diciembre 2024</div>
         <button class="btn btn-primary btn-sm">⬇ Exportar reporte</button>
+
+        <button
+          id="btn-create-leader"
+          class="btn btn-primary btn-sm"
+        >
+          ➕ Registrar Líder
+        </button>
+
+        <button
+          id="btn-create-admin"
+          class="btn btn-secondary btn-sm"
+        >
+          🛡️ Registrar Admin
+        </button>
       </div>
     </div>
 
@@ -517,6 +530,99 @@
     </div>
 
   </main>
+</div>
+
+
+<div
+  id="create-user-modal"
+  style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.45);
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+  "
+>
+
+  <div
+    style="
+      background:white;
+      padding:24px;
+      border-radius:16px;
+      width:420px;
+      max-width:90%;
+    "
+  >
+
+    <h2
+      id="modal-title"
+      style="margin-bottom:16px;"
+    >
+      Crear usuario
+    </h2>
+
+    <input
+      id="new-username"
+      class="form-input"
+      placeholder="Nombre"
+      style="margin-bottom:10px;width:100%;"
+    >
+
+    <input
+      id="new-email"
+      class="form-input"
+      placeholder="Correo"
+      style="margin-bottom:10px;width:100%;"
+    >
+
+    <input
+      id="new-password"
+      class="form-input"
+      placeholder="Contraseña temporal"
+      style="margin-bottom:10px;width:100%;"
+    >
+
+    <input
+      id="new-carrera"
+      class="form-input"
+      placeholder="Carrera"
+      style="margin-bottom:16px;width:100%;"
+    >
+
+    <div
+      style="
+        display:flex;
+        gap:10px;
+        justify-content:flex-end;
+      "
+    >
+
+      <button
+        id="cancel-create-user"
+        class="btn"
+      >
+        Cancelar
+      </button>
+
+      <button
+        id="save-create-user"
+        class="btn btn-primary"
+      >
+        Guardar
+      </button>
+
+      <div
+        id="create-user-message"
+        style="display:none;margin-top:12px;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:600;"
+      >
+      </div>
+
+    </div>
+
+  </div>
+
 </div>
 
 
