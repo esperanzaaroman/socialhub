@@ -193,15 +193,6 @@ CREATE TABLE publicacion_foro (
 );
 
 
-CREATE TABLE like_foro (
-    id_like INT AUTO_INCREMENT PRIMARY KEY,
-    id_publi INT NOT NULL,
-    id_usuario INT NOT NULL,
-    fecha_like DATETIME DEFAULT CURRENT_TIMESTAMP,
-
-    FOREIGN KEY (id_publi) REFERENCES publicacion_foro(id_publi),
-    FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
-);
 
 
 CREATE TABLE comentario_foro (

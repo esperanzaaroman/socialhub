@@ -15,6 +15,9 @@ const {
   verifyAdmin
 } = require('../middleware/authMiddleware');
 
+const uploadForum =
+  require('../middleware/forumUploadMiddleware');
+
 router.get(
   '/projects',
   verifyToken,
@@ -23,6 +26,7 @@ router.get(
 router.post(
   '/posts',
   verifyToken,
+  uploadForum.single('multimedia_publi'),
   createForumPost
 );
 router.get(

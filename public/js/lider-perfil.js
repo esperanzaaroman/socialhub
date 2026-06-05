@@ -54,10 +54,62 @@ document.addEventListener('DOMContentLoaded', async function() {
     'change-password-btn'
   );
 
-const passwordMessage =
-  document.getElementById(
-    'password-message'
-  );
+  const passwordMessage =
+    document.getElementById(
+      'password-message'
+    );
+  const profilePostsContainer =
+  document.getElementById('profile-posts');
+
+
+if (profilePostsContainer) {
+
+  const responsePosts =
+    await fetch(
+      `http://localhost:3000/api/forum/posts?userId=${usuario.id_usuario}`
+    );
+
+  const posts =
+    await responsePosts.json();
+
+  profilePostsContainer.innerHTML = '';
+
+  if (posts.length === 0) {
+    profilePostsContainer.innerHTML = `
+      <p style="color:#64748b;">
+        Este usuario aún no ha realizado publicaciones.
+      </p>
+    `;
+  }
+  else {
+    posts.forEach(function(post) {
+      profilePostsContainer.innerHTML += `
+        <div class="profile-post">
+          <div style="font-weight:700;margin-bottom:6px;">
+            ${post.nombre_proyecto}
+          </div>
+
+          <div style="font-size:13px;color:var(--gris-600);line-height:1.6;">
+            ${post.texto}
+          </div>
+
+          ${
+            post.multimedia_publi
+              ? `
+                <img
+                  src="http://localhost:3000/${post.multimedia_publi}"
+                  alt="Imagen publicación"
+                  style="width:100%;max-height:260px;object-fit:cover;border-radius:12px;margin-top:10px;"
+                >
+              `
+              : ''
+          }
+        </div>
+      `;
+    });
+  }
+}
+
 
   let modoEdicion = false;
 

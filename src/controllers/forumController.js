@@ -48,11 +48,22 @@ async function createForumPost(req, res) {
       });
     }
 
+
+    let multimedia_publi = null;
+
+    if (req.file) {
+
+    multimedia_publi =
+        `uploads/foro/${req.file.filename}`;
+
+    }
+
     const id_publi =
       await createPost(
         req.usuario.id,
         texto,
-        id_proyecto
+        id_proyecto,
+        multimedia_publi
       );
 
     res.status(201).json({
@@ -80,7 +91,12 @@ async function getForumPosts(
   try {
 
         const posts =
-        await getAllPosts();
+        await getAllPosts({
+            projectId:
+            req.query.projectId,
+            userId:
+            req.query.userId
+        });
 
         const comentarios =
         await getCommentsByPost();
