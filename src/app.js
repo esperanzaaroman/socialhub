@@ -11,7 +11,7 @@ console.log(process.env.DB_NAME);
 const widgetRoutes = require('./routes/widgetRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const authRoutes = require('./routes/auth');
-
+const proyectoRoutes = require('./routes/proyectoRoutes');
 const { notFoundHandler, errorHandler } = require('./middleware/errorHandler');
 const { sendSuccess } = require('./utils/apiResponse');
 const forumRoutes =
@@ -27,7 +27,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname,"../public")));
 
 app.use('/api/widgets',widgetRoutes);
-
+app.use('/api/proyectos',proyectoRoutes);
 app.get('/api/health', (req, res) => {
     sendSuccess(res, {
         message: 'Servidor corriendo', 
@@ -68,7 +68,7 @@ app.get("/lider",async (req,res)=>{
     try{
         const sql = `SELECT
                 l.id_lider,
-                u.nombre,
+                u.username,
                 l.carrera,
                 l.estado
             FROM lider l

@@ -39,7 +39,11 @@ const WidgetModel = {
         );
         return parseWidgetRow(rows[0]);
     },
-
+    getByProyectoId: async (id_proyecto) => {
+        const query = `SELECT * FROM dashboard_widget WHERE id_proyecto = ?`;
+        const [rows] = await db.execute(query, [id_proyecto]);
+        return rows;
+    },
     create: async (widgetData) => {
         const query = `
             INSERT INTO ${TABLE}

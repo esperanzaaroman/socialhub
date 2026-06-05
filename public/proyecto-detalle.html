@@ -448,8 +448,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     <div class="hero-text-side">
       <div style="display:flex; gap:12px; margin-bottom:16px;">
-        <span class="tag tag-azul id = "proyecto-categoria"> Educación</span>
-        <span class="tag" id="proyecto-estado"style="background:rgba(16,185,129,0.25); color:#6ee7b7;">Activo</span>
+        <span class="tag tag-azul" id ="proyecto-categoria">cargando..</span>
+        <span id="proyecto-estado"class="tag" style="background:rgba(16,185,129,0.25); color:#6ee7b7;">cargando..</span>
       </div>
       <h1 id="proyecto-titulo" style="font-size:40px; font-weight:800; color:white; margin-bottom:12px;">
         Cargando..
@@ -483,9 +483,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     <!--VIDEO-->
   <div class="project-section">
-    <div class="video-responsive-container">
+    <div class="video-responsive-container" >
         <iframe 
-            src="https://www.youtube.com/embed/2kfWsadtLsA?si=jh6KCKupwTLrTtCz" 
+            id = "videoproject"
+            src="" 
             title="YouTube video player" 
             frameborder="0" 
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
@@ -528,13 +529,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     <div class="info-card">
       <div class="info-card-title">Información general</div>
-      <div class="info-row"><span  class="info-key">Estado</span><span id="proyecto-estado" class="tag tag-verde">✓ Activo</span></div>
-      <div class="info-row"><span  class="info-key">Categoría</span><span id="proyecto-categoria" class="info-val">Educación</span></div>
-      <div class="info-row"><span  class="info-key">ODS</span><span id="proyecto-ods" class="info-val">ODS 4</span></div>
-      <div class="info-row"><span  class="info-key">Periodo</span><span id="proyecto-periodo" class="info-val">Ago–Dic 2025</span></div>
-      <div class="info-row"><span  class="info-key">Zona</span><span id="proyecto-zona" class="info-val">Monterrey Centro</span></div>
-      <div class="info-row"><span  class="info-key">Inicio</span><span id="proyecto-inicio" class="info-val">14 ago 2025</span></div>
-      <div class="info-row"><span  class="info-key">Fin estimado</span><span id="proyecto-fin" class="info-val">12 dic 2025</span></div>
+      <div class="info-row"><span  class="info-key">Estado</span><span data-proyecto = "estado"  class="tag tag-verde">cargando..</span></div>
+      <div class="info-row"><span  class="info-key">Categoría</span><span data-proyecto="categoria" class="info-val">cargando..</span></div>
+      <div class="info-row"><span  class="info-key">ODS</span><span id="proyecto-ods" class="info-val">cargando..</span></div>
+      <div class="info-row"><span  class="info-key">Periodo</span><span data-proyecto="periodo"class="info-val">cargando..</span></div>
+      <div class="info-row"><span  class="info-key">Inicio</span><span id="proyecto-inicio" class="info-val">cargando..</span></div>
+      <div class="info-row"><span  class="info-key">Fin estimado</span><span id="proyecto-fin" class="info-val">cargando..</span></div>
     </div>
 
     <!-- LIDER -->
