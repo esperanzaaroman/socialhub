@@ -11,14 +11,14 @@ document.getElementById('form-proyecto').addEventListener('submit', async functi
         estado: document.getElementById('input-estado').value,
         periodo: document.getElementById('input-periodo').value,
         video: document.getElementById('input-video').value,
-        idlider: document.getElementById('input-lider').value
+        id_lider: document.getElementById('input-lider').value
         
     };
 
     try{
         const token = localStorage.getItem('token');
 
-        const respuesta = await fetch('http://localhost:300/api/proyectos',{
+        const respuesta = await fetch('http://localhost:3000/api/proyectos',{
             method: 'POST',
             headers: {'Content-Type':'application/json','Authorization': `Bearer ${token}`},
             body: JSON.stringify(datosProyecto)
