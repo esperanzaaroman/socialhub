@@ -157,8 +157,97 @@ async function getAllPosts() {
   return rows;
 
 }
+
+async function getCommentsByPost() {
+
+  const [rows] =
+    await pool.query(
+      `
+      SELECT
+        c.id_comentario,
+        c.id_publi,
+        c.texto,
+        c.fecha_publicacion,
+        u.id_usuario,
+        u.username,
+        u.foto_perfil
+      FROM comentario_foro c
+      INNER JOIN usuario u
+        ON u.id_usuario = c.id_usuario
+      ORDER BY c.fecha_publicacion ASC
+      `
+    );
+
+  return rows;
+
+}
+
+async function createComment(
+  id_usuario,
+  id_publi,
+  texto
+) {
+
+  const [result] =
+    await pool.query(
+      `
+      INSERT INTO comentario_foro (
+        id_usuario,
+        id_publi,
+        texto
+      )
+      VALUES (?, ?, ?)
+      `,
+      [
+        id_usuario,
+        id_publi,
+        texto
+      ]
+    );
+
+  return result.insertId;
+
+}
+
+async function deletePost(
+  id_publi
+) {
+
+  const [result] =
+    await pool.query(
+      `
+      DELETE FROM publicacion_foro
+      WHERE id_publi = ?
+      `,
+      [id_publi]
+    );
+
+  return result;
+
+}
+
+async function deleteComment(
+  id_comentario
+) {
+
+  const [result] =
+    await pool.query(
+      `
+      DELETE FROM comentario_foro
+      WHERE id_comentario = ?
+      `,
+      [id_comentario]
+    );
+
+  return result;
+
+}
 module.exports = {
   getProjectsForUser,
   createPost,
-  getAllPosts
+  getAllPosts,
+  getCommentsByPost,
+  createComment,
+  deletePost,
+  deleteComment
 };

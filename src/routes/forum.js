@@ -3,11 +3,16 @@ const router = express.Router();
 
 const {
   getAvailableProjects,
-  createForumPost
+  createForumPost,
+  getForumPosts,
+  createForumComment,
+  deleteForumPost,
+  deleteForumComment
 } = require('../controllers/forumController');
 
 const {
-  verifyToken
+  verifyToken,
+  verifyAdmin
 } = require('../middleware/authMiddleware');
 
 router.get(
@@ -20,6 +25,28 @@ router.post(
   verifyToken,
   createForumPost
 );
+router.get(
+  '/posts',
+  getForumPosts
+);
+router.post(
+  '/posts/:id/comments',
+  verifyToken,
+  createForumComment
+);
 
+router.delete(
+  '/posts/:id',
+  verifyToken,
+  verifyAdmin,
+  deleteForumPost
+);
+
+router.delete(
+  '/comments/:id',
+  verifyToken,
+  verifyAdmin,
+  deleteForumComment
+);
 
 module.exports = router;
