@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="proyecto-detalle.css">
 <script src="auth.js"></script>
 <script src="js/navbar.js"></script>
+<script src = "https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="js/proyecto-detalle.js"></script>
 
 <style>
@@ -512,8 +513,8 @@ document.addEventListener('DOMContentLoaded', () => {
     <div id="metrics-grid"class="metrics-grid">
         
     </div>  
-    <template id="widget-template">
-          <div class="metric-box">
+    <template id="widget-template-kpi">
+          <div class="metric-box card-kpi">
             <h3 class="widget-title">Nombre</h3>
             <div class="widget-content metric-val">
               <span class="widget-value">0000</span>
@@ -522,6 +523,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 <small class="widget-operation">SUM</small>
             </div>
           </div>
+<<<<<<< HEAD
+    </template>
+    <template id = "widget-template-graph">
+      <div class="metric-box card-graph">
+            <h3 class="widget-title">Nombre</h3>
+            <div class="widget-content metric-val">
+              <span class="widget-value">0000</span>
+            </div>
+            <div class="widget-footer">
+                <small class="widget-operation">SUM</small>
+            </div>
+          </div>
+    </template>
+=======
         </template>
 
             <!--poniendo las publicaciones del foro relacionadas a este proyecto (lo puse dentro de este div pero si no lo quieren aca lo sacamos)-->
@@ -587,9 +602,10 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           </div>
 
+>>>>>>> ab38caa987b154647a2404247a55235ec00b4dba
   </div>
 
-  <div>
+    <div>
 
     <div class="info-card">
       <div class="info-card-title">Información general</div>
