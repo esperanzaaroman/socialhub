@@ -45,6 +45,156 @@ async function cargarDetalleProyecto(){
                     const widgetsReales = widgets.data.widgets;
 
             renderWidgets(widgetsReales);
+
+            //agregando aca para los de los testimonios jiji
+            const usuario =
+            await obtenerUsuarioActual();
+
+            const rol =
+            usuario?.role || 'publico';
+
+            const addTestimonioBtn =
+            document.getElementById(
+                'add-testimonio-btn'
+            );
+
+            if (
+            rol === 'admin' ||
+            rol === 'lider'
+            ) {
+
+            addTestimonioBtn.style.display =
+                'inline-flex';
+
+            }
+
+
+            const testimoniosContainer =
+            document.getElementById(
+                'testimonios-list'
+            );
+
+            const responseTestimonios =
+            await fetch(
+                `http://localhost:3000/api/testimonios/proyecto/${idProyecto}`
+            );
+
+            const testimonios =
+            await responseTestimonios.json();
+
+            testimoniosContainer.innerHTML =
+            '';
+
+            if (testimonios.length === 0) {
+
+            testimoniosContainer.innerHTML =
+                `
+                <p style="color:#64748b;">
+                Aún no hay testimonios.
+                </p>
+                `;
+
+            }
+            else {
+
+            testimonios.forEach(
+                function(testimonio) {
+
+                testimoniosContainer.innerHTML += `
+                    <div
+                    style="
+                        background:white;
+                        border:1px solid #e2e8f0;
+                        border-radius:12px;
+                        padding:14px;
+                        margin-bottom:12px;
+                    "
+                    >
+                    <div
+                        style="
+                        color:#334155;
+                        line-height:1.6;
+                        "
+                    >
+                        ${testimonio.texto}
+                    </div>
+                    </div>
+                `;
+
+                }
+            );
+
+            }
+
+            //agregandp aca para relacionar lo del los posts relacionados al proyecto!
+            const projectPostsContainer =
+            document.getElementById('project-posts');
+
+            if (projectPostsContainer) {
+
+            const responsePosts =
+                await fetch(
+                `http://localhost:3000/api/forum/posts?projectId=${idProyecto}`
+                );
+
+            const posts =
+                await responsePosts.json();
+
+            projectPostsContainer.innerHTML = '';
+
+            if (posts.length === 0) {
+                projectPostsContainer.innerHTML = `
+                <p style="color:#64748b;">
+                    Este proyecto aún no tiene publicaciones en el foro.
+                </p>
+                `;
+            }
+            else {
+                posts.forEach(function(post) {
+                projectPostsContainer.innerHTML += `
+                    <div
+                    class="profile-post"
+                    style="
+                        background:white;
+                        border:1px solid #e2e8f0;
+                        border-radius:14px;
+                        padding:16px;
+                        margin-bottom:14px;
+                    "
+                    >
+                    <div style="font-weight:700;margin-bottom:6px;">
+                        ${post.username}
+                    </div>
+
+                    <div style="font-size:13px;color:#475569;line-height:1.6;">
+                        ${post.texto}
+                    </div>
+
+                    ${
+                        post.multimedia_publi
+                        ? `
+                            <img
+                            src="http://localhost:3000/${post.multimedia_publi}"
+                            alt="Imagen publicación"
+                            style="
+                                width:100%;
+                                max-height:280px;
+                                object-fit:cover;
+                                border-radius:12px;
+                                margin-top:10px;
+                            "
+                            >
+                        `
+                        : ''
+                    }
+                    </div>
+                `;
+                });
+            }
+            }
+            // aca se acaba
+
+
     }catch(error){
         console.error("Error al conectar con API",error);
     }

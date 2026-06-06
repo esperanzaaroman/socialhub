@@ -17,6 +17,9 @@ const { notFoundHandler, errorHandler } = require('./middleware/errorHandler');
 const { sendSuccess } = require('./utils/apiResponse');
 const forumRoutes =
   require('./routes/forum');
+  
+const testimonioRoutes =
+  require('./routes/testimonio');
 
 const app = express();
 
@@ -46,6 +49,11 @@ app.use('/api/catalogos',catalogoRoutes);
 app.use(
   '/api/forum',
   forumRoutes
+);
+
+app.use(
+  '/api/testimonios',
+  testimonioRoutes
 );
 
 app.get('/api/health', (req, res) => {
