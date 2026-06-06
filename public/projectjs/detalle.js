@@ -46,6 +46,86 @@ async function cargarDetalleProyecto(){
 
             renderWidgets(widgetsReales);
 
+            //agregando aca para los de los testimonios jiji
+            const usuario =
+            await obtenerUsuarioActual();
+
+            const rol =
+            usuario?.role || 'publico';
+
+            const addTestimonioBtn =
+            document.getElementById(
+                'add-testimonio-btn'
+            );
+
+            if (
+            rol === 'admin' ||
+            rol === 'lider'
+            ) {
+
+            addTestimonioBtn.style.display =
+                'inline-flex';
+
+            }
+
+
+            const testimoniosContainer =
+            document.getElementById(
+                'testimonios-list'
+            );
+
+            const responseTestimonios =
+            await fetch(
+                `http://localhost:3000/api/testimonios/proyecto/${idProyecto}`
+            );
+
+            const testimonios =
+            await responseTestimonios.json();
+
+            testimoniosContainer.innerHTML =
+            '';
+
+            if (testimonios.length === 0) {
+
+            testimoniosContainer.innerHTML =
+                `
+                <p style="color:#64748b;">
+                Aún no hay testimonios.
+                </p>
+                `;
+
+            }
+            else {
+
+            testimonios.forEach(
+                function(testimonio) {
+
+                testimoniosContainer.innerHTML += `
+                    <div
+                    style="
+                        background:white;
+                        border:1px solid #e2e8f0;
+                        border-radius:12px;
+                        padding:14px;
+                        margin-bottom:12px;
+                    "
+                    >
+                    <div
+                        style="
+                        color:#334155;
+                        line-height:1.6;
+                        "
+                    >
+                        ${testimonio.texto}
+                    </div>
+                    </div>
+                `;
+
+                }
+            );
+
+            }
+
             //agregandp aca para relacionar lo del los posts relacionados al proyecto!
             const projectPostsContainer =
             document.getElementById('project-posts');

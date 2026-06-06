@@ -192,9 +192,6 @@ CREATE TABLE publicacion_foro (
     FOREIGN KEY (id_proyecto) REFERENCES proyecto(id_proyecto)
 );
 
-
-
-
 CREATE TABLE comentario_foro (
     id_comentario INT AUTO_INCREMENT PRIMARY KEY,
     id_usuario INT NOT NULL,
@@ -206,3 +203,13 @@ CREATE TABLE comentario_foro (
     FOREIGN KEY (id_publi) REFERENCES publicacion_foro(id_publi)
 );
 
+CREATE TABLE testimonio (
+  id_testimonio INT AUTO_INCREMENT PRIMARY KEY,
+  id_proyecto INT NOT NULL,
+  texto TEXT NOT NULL,
+  fecha_hora DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+  FOREIGN KEY (id_proyecto)
+    REFERENCES proyecto(id_proyecto)
+    ON DELETE CASCADE
+);
