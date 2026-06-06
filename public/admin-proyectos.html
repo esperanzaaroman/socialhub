@@ -533,7 +533,7 @@
   <div class="modal-box" style="max-width:640px;">
     <div class="modal-head">
       <div class="modal-head-title">Nuevo Proyecto</div>
-      <button class="modal-close-btn" onclick="document.getElementById('modalNuevoProyecto').classList.remove('open')">✕</button>
+      <button type = "button"class="modal-close-btn" onclick="document.getElementById('modalNuevoProyecto').classList.remove('open')">✕</button>
     </div>
     <div class="modal-bdy" style="max-height:70vh;overflow-y:auto;">
 
@@ -553,13 +553,13 @@
       <div class="form-grid-2">
         <div>
           <label class="form-label-s">Categoría *</label>
-          <select class="form-select" id="categoria">
+          <select class="form-select select-catalogo" data-catalogo="categorias" id="categoria">
             Cargando..
           </select>
         </div>
         <div>
           <label class="form-label-s">ODS principal *</label>
-          <select class="form-select" id="ods">
+          <select class="form-select select-catalogo" data-catalogo="ods" id="ods">
             Cargando..
           </select>
         </div>
@@ -609,14 +609,14 @@
 
       <!-- Asignar líder -->
       <label class="form-label-s">Asignar líder</label>
-      <select class="form-inp-s" style="margin-bottom:0;" id = "input-lider">
+      <select class="form-inp-s select-catalogo" data-catalogo="lideres" style="margin-bottom:0;" id = "input-lider">
         <option value="">Sin asignar (asignar después)</option>
       </select>
       <p style="font-size:11px;color:var(--gris-400);margin-top:4px;margin-bottom:0;">Puedes asignar o cambiar el líder en cualquier momento desde el detalle del proyecto.</p>
 
     </div>
     <div class="modal-ft">
-      <button class="btn btn-sm" style="background:var(--gris-100);color:var(--gris-600);" onclick="document.getElementById('modalNuevoProyecto').classList.remove('open')">Cancelar</button>
+      <button type = "button" class = "btn btn-sm" style="background:var(--gris-100);color:var(--gris-600);" onclick="document.getElementById('modalNuevoProyecto').classList.remove('open')">Cancelar</button>
       <button type = "submit" class="btn btn-sm" style="background:var(--verde-dark);color:#fff;border-color:var(--verde-dark);" onclick="document.getElementById('modalNuevoProyecto').classList.remove('open')">✓ Crear proyecto</button>
     </div>
   </div>
@@ -695,57 +695,37 @@
   </div>
 </div>
 <script>
-  fetch("/categoria")
-  .then(res=>res.json())
-  .then(data=>{
-    console.log(data);
-    const select = document.getElementById("categoria");
+fetch("/api/catalogos/datos-formulario")
+  .then(res => res.json())
+  .then(respuesta => {
+    const { categorias, ods, lideres } = respuesta.data;
 
-    select.innerHTML="";
+    const todosLosSelects = document.querySelectorAll(".select-catalogo");
 
-    data.forEach(o =>{
-      select.innerHTML += 
-        ` <option value = ${o.id_categoria}>${o.nombre}</option>`;
+    todosLosSelects.forEach(select => {
+        const tipoCatalogo = select.dataset.catalogo; 
+
+        if (tipoCatalogo === "categorias") {
+            select.innerHTML = categorias.map(c => 
+                `<option value="${c.id_categoria}">${c.nombre}</option>`
+            ).join('');
+        } 
+        else if (tipoCatalogo === "ods") {
+            select.innerHTML = ods.map(o => 
+                `<option value="${o.id_ods}">${o.nombre}</option>`
+            ).join('');
+        } 
+        else if (tipoCatalogo === "lideres") {
+            select.innerHTML = lideres.map(l => 
+                `<option value="${l.id_lider}">${l.username}</option>`
+            ).join('');
+        }
     });
+
   })
-  fetch("/ods")
-  .then(res=>res.json())
-  .then(data=>{
-    console.log(data);
-    const select = document.getElementById("ods");
-
-    select.innerHTML="";
-
-    data.forEach(o => {
-
-      select.innerHTML +=
-        `<option value = "${o.id_ods}">${o.nombre}</option>`;
-    });
-    
-  })
-  .catch(err => {
-      console.log(err);
-    });
-  fetch("/lider")
-  .then(res=>res.json())
-  .then(data=>{
-    console.log(data);
-    const select = document.getElementById("input-lider");
-
-    select.innerHTML="";
-
-    data.forEach(o => {
-
-      select.innerHTML +=
-        `<option value = "${o.id_lider}">${o.username}</option>`;
-    });
-    
-  })
-  .catch(err => {
-      console.log(err);
-    });
-
+  .catch(err => console.error("Error al poblar los catálogos dinámicos:", err));
 </script>
+
 <script src="projectjs/crear.js"></script>
 <script>
 document.querySelectorAll('.modal-overlay').forEach(function(m) {

@@ -3,6 +3,7 @@ const db = require('../config/db');
 const TABLE = 'dashboard_widget';
 const VALID_OPERACIONES = ['SUM', 'AVG', 'COUNT', 'MAX', 'MIN'];
 
+
 const parseWidgetRow = (row) => {
     if (!row) return null;
     const parsed = { ...row };
@@ -17,8 +18,14 @@ const parseWidgetRow = (row) => {
 };
 
 const WidgetModel = {
+    isValidOperacion: (operacion) => VALID_OPERACIONES.includes(operacion),
     findAll: async ({ id_proyecto } = {}) => {
-        let query = `SELECT * FROM ${TABLE}`;
+        let query = `SELECT w.*,
+            p.nombre AS nombre_plantilla, 
+            v.tipo AS tipo_visualizacion 
+            FROM ${TABLE} w 
+            LEFT JOIN plantilla p ON w.id_plantilla = p.id_plantilla
+            LEFT JOIN visualizacion v ON p.id_visualizacion = v.id_visualizacion`;
         const params = [];
 
         if (id_proyecto !== undefined) {
@@ -29,6 +36,20 @@ const WidgetModel = {
         query += ' ORDER BY id_widget ASC';
 
         const [rows] = await db.execute(query, params);
+
+        for (let widget of rows){
+            if(widget.id_metrica && widget.operacion) {
+                const sqlCalculo = `
+                    SELECT ${widget.operacion}(COALESCE(valor_decimal,valor_entero)) AS resultado
+                    FROM valores_metricas
+                    WHERE id_metrica = ?
+                `;
+                const[resultadoCalculo] = await db.execute(sqlCalculo,[widget.id_metrica]);
+                widget.valor_calculado = resultadoCalculo[0].resultado || 0;
+            }else{
+                widget.valor_calculado = null;
+            }
+        }
         return rows.map(parseWidgetRow);
     },
 
