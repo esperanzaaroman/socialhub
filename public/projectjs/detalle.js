@@ -45,6 +45,76 @@ async function cargarDetalleProyecto(){
                     const widgetsReales = widgets.data.widgets;
 
             renderWidgets(widgetsReales);
+
+            //agregandp aca para relacionar lo del los posts relacionados al proyecto!
+            const projectPostsContainer =
+            document.getElementById('project-posts');
+
+            if (projectPostsContainer) {
+
+            const responsePosts =
+                await fetch(
+                `http://localhost:3000/api/forum/posts?projectId=${idProyecto}`
+                );
+
+            const posts =
+                await responsePosts.json();
+
+            projectPostsContainer.innerHTML = '';
+
+            if (posts.length === 0) {
+                projectPostsContainer.innerHTML = `
+                <p style="color:#64748b;">
+                    Este proyecto aún no tiene publicaciones en el foro.
+                </p>
+                `;
+            }
+            else {
+                posts.forEach(function(post) {
+                projectPostsContainer.innerHTML += `
+                    <div
+                    class="profile-post"
+                    style="
+                        background:white;
+                        border:1px solid #e2e8f0;
+                        border-radius:14px;
+                        padding:16px;
+                        margin-bottom:14px;
+                    "
+                    >
+                    <div style="font-weight:700;margin-bottom:6px;">
+                        ${post.username}
+                    </div>
+
+                    <div style="font-size:13px;color:#475569;line-height:1.6;">
+                        ${post.texto}
+                    </div>
+
+                    ${
+                        post.multimedia_publi
+                        ? `
+                            <img
+                            src="http://localhost:3000/${post.multimedia_publi}"
+                            alt="Imagen publicación"
+                            style="
+                                width:100%;
+                                max-height:280px;
+                                object-fit:cover;
+                                border-radius:12px;
+                                margin-top:10px;
+                            "
+                            >
+                        `
+                        : ''
+                    }
+                    </div>
+                `;
+                });
+            }
+            }
+            // aca se acaba
+
+
     }catch(error){
         console.error("Error al conectar con API",error);
     }
