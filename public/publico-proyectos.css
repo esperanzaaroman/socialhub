@@ -1,39 +1,83 @@
+/* ================================================================
+   PUBLICO-PROYECTOS.CSS — SISTEMA CAMPAÑA / IMPACTO SOCIAL
+   Tipografía : Big Shoulders Display (titulares) · Mulish (cuerpo)
+   Sigue el mismo sistema visual de publico-inicio.css
+   ================================================================ */
 
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Mulish:wght@300;400;500;600;700&display=swap');
+
+body         { font-family: 'Mulish', sans-serif; }
+h1,h2,h3,h4 { font-family: 'Big Shoulders Display', sans-serif; text-transform: uppercase; letter-spacing: .02em; }
+
+/* ================================================================
+   ENCABEZADO CATÁLOGO
+   Mismo lenguaje que el hero de inicio: dot-grid + acento naranja
+   ================================================================ */
 .encabezado-catalogo {
-  background: linear-gradient(135deg, #0F2579 0%, #1a3a8a 100%);
+  background-color: var(--azul-tec);
+  background-image:
+    radial-gradient(ellipse 55% 90% at 110% 50%, rgba(245,158,11,.1) 0%, transparent 60%),
+    radial-gradient(circle, rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size: 100% 100%, 26px 26px;
   color: white;
-  padding: 3.5rem 2.5rem 2.5rem;
+  padding: 4rem 2.5rem 3.5rem;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Acento vertical naranja izquierdo */
+.encabezado-catalogo::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 5px;
+  background: linear-gradient(to bottom, var(--naranja), rgba(245,158,11,0));
+  pointer-events: none;
 }
 
 .encabezado-catalogo h1 {
-  font-size: 2.8rem;
-  font-weight: 700;
-  margin-bottom: 0.6rem;
+  font-family: 'Big Shoulders Display', sans-serif;
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .025em;
+  line-height: .95;
   color: white;
+  margin-bottom: .75rem;
 }
 
 .encabezado-catalogo p {
-  font-size: 1.05rem;
-  opacity: 0.75;
-  max-width: 500px;
-  margin: 0 auto 2rem;
+  font-family: 'Mulish', sans-serif;
+  font-size: 1rem;
+  color: rgba(255,255,255,.58);
+  max-width: 480px;
+  margin: 0 auto 2.25rem;
+  line-height: 1.75;
+  font-weight: 300;
+}
+.colorcitoo{
+  color: #F59E0B;
 }
 
-/* ---- BARRA DE BÚSQUEDA Y FILTROS ---- */
+/* ================================================================
+   BARRA DE FILTROS
+   Flota sobre el encabezado, igual que en inicio las métricas
+   ================================================================ */
 .barra-filtros {
-  background-color: white;
-  border-radius: 16px;
-  padding: 1.25rem 1.5rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  background: white;
+  border-radius: 14px;
+  padding: 1.1rem 1.4rem;
+  box-shadow: 0 4px 24px rgba(15,37,121,.13);
   max-width: 900px;
-  margin: -1.5rem auto 0;
+  margin: -1.75rem auto 0;
   position: relative;
   z-index: 10;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: .7rem;
   align-items: center;
+  border: 1px solid #e8edf3;
 }
 
 /* Campo de búsqueda */
@@ -42,40 +86,35 @@
   min-width: 200px;
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  background-color: #f1f5f9;
-  border-radius: 10px;
-  padding: 0.6rem 1rem;
+  gap: .6rem;
+  background: #f3f5f8;
+  border-radius: 9px;
+  padding: .6rem 1rem;
 }
 
-.campo-busqueda svg {
-  color: #94a3b8;
-  flex-shrink: 0;
-}
+.campo-busqueda svg { color: #94a3b8; flex-shrink: 0; }
 
 .campo-busqueda input {
   border: none;
   background: none;
   outline: none;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.9rem;
+  font-family: 'Mulish', sans-serif;
+  font-size: .9rem;
   color: #0f172a;
   width: 100%;
   padding: 0;
 }
 
-.campo-busqueda input::placeholder {
-  color: #94a3b8;
-}
+.campo-busqueda input::placeholder { color: #94a3b8; }
 
 /* Selects de filtro */
 .filtro-select {
-  padding: 0.6rem 2rem 0.6rem 0.9rem;
+  padding: .6rem 2rem .6rem .9rem;
   border: 1.5px solid #e2e8f0;
-  border-radius: 10px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.88rem;
-  font-weight: 500;
+  border-radius: 9px;
+  font-family: 'Mulish', sans-serif;
+  font-size: .85rem;
+  font-weight: 600;
   color: #0f172a;
   background-color: white;
   cursor: pointer;
@@ -83,58 +122,68 @@
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 0.75rem center;
+  background-position: right .75rem center;
+  transition: border-color .2s;
 }
 
-.filtro-select:focus {
-  border-color: #6366f1;
-}
+.filtro-select:focus { border-color: var(--azul-tec); }
 
-/* Contador de resultados */
+/* ================================================================
+   CONTADOR DE RESULTADOS
+   ================================================================ */
 .contador-resultados {
   max-width: 1100px;
-  margin: 1.75rem auto 1rem;
+  margin: 2rem auto .75rem;
   padding: 0 2rem;
-  font-size: 0.88rem;
-  color: #64748b;
-  font-weight: 500;
+  font-family: 'Mulish', sans-serif;
+  font-size: .82rem;
+  font-weight: 700;
+  color: var(--gris-500);
+  text-transform: uppercase;
+  letter-spacing: .08em;
 }
 
-/* ---- CUADRÍCULA DE PROYECTOS ---- */
+/* ================================================================
+   CUADRÍCULA DE PROYECTOS
+   ================================================================ */
 .catalogo-contenido {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 0 2rem 4rem;
+  padding: 0 2rem 5rem;
 }
 
 .cuadricula-catalogo {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
 }
 
-/* ---- TARJETA DE PROYECTO (catálogo público) ---- */
+/* ================================================================
+   TARJETA DE PROYECTO
+   ================================================================ */
 .tarjeta-catalogo {
-  background-color: white;
-  border-radius: 20px;
+  background: white;
+  border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 2px 8px rgba(0,0,0,.05);
   display: flex;
   flex-direction: column;
   text-decoration: none;
   color: #0f172a;
-  transition: all 0.25s ease;
+  border: 1px solid #eaecf0;
+  transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
 }
 
 .tarjeta-catalogo:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.14);
+  transform: translateY(-7px);
+  box-shadow: 0 20px 48px rgba(15,37,121,.14);
+  border-color: transparent;
 }
 
-/* Banner superior de la tarjeta */
+/* Banner superior */
 .catalogo-banner {
   height: 110px;
-  padding: 1rem 1.25rem;
+  padding: .9rem 1rem;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -142,167 +191,158 @@
   overflow: hidden;
 }
 
-/* Letra grande decorativa de fondo */
+/* Letra decorativa condensada — Big Shoulders */
 .catalogo-letra-fondo {
   position: absolute;
-  right: 0.75rem;
-  bottom: -1rem;
-  font-size: 6rem;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.18);
+  right: 6px;
+  bottom: -18px;
+  font-family: 'Big Shoulders Display', sans-serif;
+  font-size: 7.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.14);
   line-height: 1;
   pointer-events: none;
+  user-select: none;
 }
 
-/* Chips de ODS */
-.chips-ods {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-}
+/* Chips ODS */
+.chips-ods { display: flex; flex-wrap: wrap; gap: .3rem; }
 
 .chip-ods {
-  background-color: rgba(255, 255, 255, 0.22);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255,255,255,.25);
   color: white;
-  padding: 0.18rem 0.55rem;
+  font-family: 'Mulish', sans-serif;
+  padding: .18rem .55rem;
   border-radius: 99px;
-  font-size: 0.68rem;
+  font-size: .65rem;
   font-weight: 700;
+  letter-spacing: .03em;
+  backdrop-filter: blur(4px);
 }
 
 /* Badge de estado */
 .badge-catalogo {
-  padding: 0.25rem 0.65rem;
+  font-family: 'Mulish', sans-serif;
+  padding: .18rem .55rem;
   border-radius: 99px;
-  font-size: 0.68rem;
+  font-size: .68rem;
   font-weight: 700;
-  background-color: rgba(255, 255, 255, 0.92);
+  background: rgba(255,255,255,.92);
   white-space: nowrap;
+  position: absolute;
+  top: .9rem; right: .9rem;
 }
 
-/* ---- CUERPO DE LA TARJETA ---- */
+/* ================================================================
+   CUERPO DE LA TARJETA
+   ================================================================ */
 .catalogo-cuerpo {
-  padding: 1.25rem;
+  padding: 1.2rem 1.3rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: .65rem;
   flex: 1;
 }
 
 .catalogo-titulo {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #0f172a;
+  font-family: 'Big Shoulders Display', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  color: var(--azul-tec);
+  line-height: 1;
 }
 
 .catalogo-desc {
-  font-size: 0.85rem;
-  color: #64748b;
-  line-height: 1.55;
+  font-family: 'Mulish', sans-serif;
+  font-size: .85rem;
+  color: var(--gris-500);
+  line-height: 1.6;
 }
 
-/* Estadísticas rápidas */
+/* Stats */
 .catalogo-stats {
   display: flex;
-  gap: 0.75rem;
-  font-size: 0.8rem;
-  color: #64748b;
+  gap: .75rem;
+  font-family: 'Mulish', sans-serif;
+  font-size: .8rem;
+  color: var(--gris-500);
+  padding-top: .5rem;
+  border-top: 1px solid #f0f3f7;
 }
 
 .catalogo-stat {
   display: flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: .3rem;
 }
 
-.catalogo-stat svg {
-  flex-shrink: 0;
-}
+.catalogo-stat svg { flex-shrink: 0; }
 
-/* Barra de progreso */
-.catalogo-progreso-label {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.75rem;
-  color: #94a3b8;
-  margin-bottom: 0.3rem;
-}
-
-.catalogo-progreso-label span:last-child {
-  font-weight: 700;
-  color: #334155;
-}
-
-.catalogo-barra-fondo {
-  height: 6px;
-  background-color: #e2e8f0;
-  border-radius: 99px;
-  overflow: hidden;
-}
-
-.catalogo-barra-relleno {
-  height: 100%;
-  border-radius: 99px;
-}
-
-/* Botón de ver proyecto */
+/* Botón ver proyecto */
 .catalogo-btn {
   display: block;
   text-align: center;
-  padding: 0.65rem;
-  border-radius: 10px;
-  font-size: 0.88rem;
+  padding: .65rem;
+  border-radius: 9px;
+  font-family: 'Mulish', sans-serif;
+  font-size: .82rem;
   font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
   color: white;
   text-decoration: none;
   margin-top: auto;
-  transition: opacity 0.2s ease;
+  transition: opacity .2s ease, transform .2s ease;
 }
 
 .catalogo-btn:hover {
-  opacity: 0.88;
+  opacity: .88;
+  transform: translateY(-1px);
 }
 
-/* ---- ESTADO VACÍO ---- */
+/* ================================================================
+   ESTADO VACÍO
+   ================================================================ */
 .estado-vacio {
   text-align: center;
   padding: 4rem 1rem;
-  color: #64748b;
+  color: var(--gris-500);
   display: none;
 }
 
 .estado-vacio svg {
   margin-bottom: 1rem;
-  opacity: 0.3;
+  opacity: .25;
 }
 
 .estado-vacio h3 {
-  font-size: 1.2rem;
-  color: #334155;
-  margin-bottom: 0.5rem;
+  font-family: 'Big Shoulders Display', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--azul-tec);
+  margin-bottom: .5rem;
+  letter-spacing: .03em;
 }
 
-/* ---- RESPONSIVE ---- */
+.estado-vacio p {
+  font-family: 'Mulish', sans-serif;
+  font-size: .9rem;
+}
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
 @media (max-width: 700px) {
   .barra-filtros {
     flex-direction: column;
     margin: -1rem 1rem 0;
   }
-
-  .campo-busqueda {
-    width: 100%;
-  }
-
-  .filtro-select {
-    width: 100%;
-  }
-
-  .cuadricula-catalogo {
-    grid-template-columns: 1fr;
-  }
-
-  .encabezado-catalogo h1 {
-    font-size: 2rem;
-  }
+  .campo-busqueda,
+  .filtro-select       { width: 100%; }
+  .cuadricula-catalogo { grid-template-columns: 1fr; }
+  .encabezado-catalogo { padding: 3rem 1.5rem 2.5rem; }
 }

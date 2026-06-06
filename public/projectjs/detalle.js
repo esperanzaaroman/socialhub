@@ -125,6 +125,68 @@ async function cargarDetalleProyecto(){
             );
 
             }
+            //agregando aca pa el boton de los testimonio sjiji
+
+            const testimonioForm =
+            document.getElementById('testimonio-form');
+
+            const testimonioText =
+            document.getElementById('testimonio-text');
+
+            const saveTestimonioBtn =
+            document.getElementById('save-testimonio-btn');
+
+            if (addTestimonioBtn && testimonioForm) {
+            addTestimonioBtn.addEventListener('click', function() {
+                testimonioForm.style.display = 'block';
+            });
+            }
+
+            if (saveTestimonioBtn) {
+            saveTestimonioBtn.addEventListener('click', async function() {
+
+                const texto =
+                testimonioText.value.trim();
+
+                if (!texto) {
+                alert('Escribe un testimonio');
+                return;
+                }
+
+                const token =
+                localStorage.getItem('token');
+
+                const response =
+                await fetch(
+                    'http://localhost:3000/api/testimonios',
+                    {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        id_proyecto: idProyecto,
+                        texto
+                    })
+                    }
+                );
+
+                const data =
+                await response.json();
+
+                if (response.ok) {
+                alert('Testimonio agregado correctamente ✅');
+                window.location.reload();
+                }
+                else {
+                alert(data.mensaje || 'Error agregando testimonio');
+                }
+
+            });
+            }
+
+
 
             //agregandp aca para relacionar lo del los posts relacionados al proyecto!
             const projectPostsContainer =
