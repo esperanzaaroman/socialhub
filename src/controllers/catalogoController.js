@@ -6,10 +6,11 @@ const getFormCatalogos = asyncHandler(async (req, res) => {
     const categorias = await CatalogoModel.getCategorias();
     const ods = await CatalogoModel.getOds();
     const lideres = await CatalogoModel.getLideresActivos();
+    const poblaciones = await CatalogoModel.getPoblaciones();
 
     sendSuccess(res, {
         message: 'Catálogos para formularios obtenidos con éxito',
-        data: { categorias, ods, lideres }
+        data: { categorias, ods, lideres, poblaciones }
     });
 });
 

@@ -11,6 +11,7 @@ document.getElementById('form-proyecto').addEventListener('submit', async functi
         estado: document.getElementById('input-estado').value,
         periodo: document.getElementById('input-periodo').value,
         video: document.getElementById('input-video').value,
+        poblacion: document.getElementById('input-poblacion').value,
         id_lider: document.getElementById('input-lider').value
         
     };

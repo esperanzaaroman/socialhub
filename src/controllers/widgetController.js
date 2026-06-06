@@ -44,7 +44,7 @@ const validateUpdateBody = (body) => {
         'pos_y',
         'ancho',
         'alto',
-        'id_config'
+        'ui_config'
     ];
 
     const hasUpdate = allowedKeys.some((key) => body[key] !== undefined);
@@ -123,7 +123,25 @@ const updateWidget = asyncHandler(async (req, res) => {
         data: { widget }
     });
 });
+const guardarLayoutDashboard = asyncHandler(async(req,res)=>{
+    const{widgets} = req.body;
 
+    if (!widgets || !Array.isArray(widgets)) {
+        return res.status(400).json({ message: "Se esperaba un array de widgets" });
+    }
+    const promesasActualizacion = widgets.map(w => WidgetModel.update(w.id_widget,{
+            pos_x: w.pos_x,
+            pos_y: w.pos_y,
+            ancho: w.ancho,
+            alto: w.alto
+        })
+    );
+    await Promise.all(promesasActualizacion);
+
+    return res.json({
+        status: "success",
+        message: "¡Layout del Dashboard actualizado correctamente!" });
+});
 const deleteWidget = asyncHandler(async (req, res) => {
     const id = parsePositiveInt(req.params.id, 'id');
 
@@ -138,10 +156,12 @@ const deleteWidget = asyncHandler(async (req, res) => {
     });
 });
 
+
 module.exports = {
     getWidgets,
     getWidgetById,
     createWidget,
     updateWidget,
-    deleteWidget
+    deleteWidget,
+    guardarLayoutDashboard
 };

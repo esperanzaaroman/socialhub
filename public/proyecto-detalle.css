@@ -40,18 +40,66 @@
   padding-bottom: 12px;
   border-bottom: 2px solid var(--gris-200);
 }
-
+.grid-stack {
+    padding: 20px; 
+    width: 100%;
+    box-sizing: border-box;
+}
 /* Metrica grid */
-.metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+.grid-stack-item-content { 
+  display: flex;
+  flex-direction: column;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden;
+}
 
-.metric-box {
+.widget-card {
   background: var(--blanco);
   border: 1px solid var(--gris-200);
   border-radius: var(--radius);
   padding: 20px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  width: 100% !important;
+  height: 100% !important;
+  box-sizing: border-box;
+  margin: 20;
   text-align: center;
+  min-height: 70px;
+}
+.widget-card .widget-body {
+    flex-grow: 1;        
+    width: 100%;
+    position: relative; 
+    min-height: 0;       
+}
+.widget-chart {
+    position: absolute;  
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+}
+.card-graph {
+
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
+.card-graph .widget-body {
+    flex-grow: 1;
+    width: 100%;
+    position: relative; 
+    min-height: 0;      
+}
+.widget-chart {
+    width: 100% !important;
+    height: 100% !important;
+}
 .metric-emoji { font-size: 28px; margin-bottom: 8px; }
 .metric-val {
   font-family: 'Sora', sans-serif;

@@ -20,6 +20,10 @@ const CatalogoModel = {
         `;
         const [rows] = await db.execute(sql);
         return rows;
+    },
+    getPoblaciones: async () =>{
+        const [rows] = await db.execute("SELECT id_poblacion, nombre FROM poblacion_objetivo");
+        return rows;
     }
 };
 

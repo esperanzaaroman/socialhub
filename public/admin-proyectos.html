@@ -61,13 +61,10 @@
     <!-- HEADER -->
     <div class="page-head">
       <div>
-        <div class="page-head-title">🗂️ Todos los Proyectos</div>
-        <div class="page-head-sub">Supervisión global · 38 proyectos registrados en el sistema</div>
+        <div class="page-head-title" id >🗂️ Todos los Proyectos</div>
+        <div class="page-head-sub"></div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <button class="btn btn-sm" style="background:var(--gris-100);color:var(--gris-600);" onclick="document.getElementById('modalFiltros').classList.add('open')">⚙ Filtros avanzados</button>
-        <button class="btn btn-primary btn-sm" onclick="document.getElementById('modalExport').classList.add('open')">⬇ Exportar</button>
-        <button class="btn btn-sm" style="background:var(--morado);color:#fff;border-color:var(--morado);" onclick="document.getElementById('modalNuevoLider').classList.add('open')">+ Nuevo líder</button>
         <button class="btn btn-sm" style="background:var(--verde-dark);color:#fff;border-color:var(--verde-dark);" onclick="document.getElementById('modalNuevoProyecto').classList.add('open')">+ Nuevo proyecto</button>
       </div>
     </div>
@@ -75,33 +72,26 @@
 
 
     <!-- KPI ROW -->
-    <div class="kpi-row" style="grid-template-columns:repeat(4,1fr);">
+    <div class="kpi-row" style="grid-template-columns:repeat(3,1fr);">
       <div class="kpi-mini">
         <span class="kpi-mini-icon">📂</span>
         <div>
-          <div class="kpi-mini-val">38</div>
+          <div class="kpi-mini-val num-project">cargando..</div>
           <div class="kpi-mini-lab">Total proyectos</div>
         </div>
       </div>
       <div class="kpi-mini">
         <span class="kpi-mini-icon" style="color:var(--verde)">✅</span>
         <div>
-          <div class="kpi-mini-val" style="color:var(--verde)">24</div>
+          <div class="kpi-mini-val num-project-act" style="color:var(--verde)">24</div>
           <div class="kpi-mini-lab">Activos</div>
         </div>
       </div>
       <div class="kpi-mini">
         <span class="kpi-mini-icon" style="color:var(--naranja)">⏸</span>
         <div>
-          <div class="kpi-mini-val" style="color:var(--naranja)">5</div>
-          <div class="kpi-mini-lab">Pausados</div>
-        </div>
-      </div>
-      <div class="kpi-mini">
-        <span class="kpi-mini-icon" style="color:var(--azul)">🏁</span>
-        <div>
-          <div class="kpi-mini-val" style="color:var(--azul)">7</div>
-          <div class="kpi-mini-lab">Completados</div>
+          <div class="kpi-mini-val num-InAct" style="color:var(--naranja)">5</div>
+          <div class="kpi-mini-lab">Inactivos</div>
         </div>
       </div>
     </div>
@@ -134,16 +124,13 @@
         <option>Verano 2024</option>
         <option>Ago–Dic 2024</option>
       </select>
-      <div class="toolbar-sep"></div>
-      <a href="#" class="export-btn">📊 CSV</a>
-      <a href="#" class="export-btn">📄 PDF</a>
     </div>
 
     <!-- TABLE -->
     <div class="table-wrap">
       <div class="table-header">
         <div class="table-header-title">Listado de proyectos</div>
-        <span class="results-count">Mostrando 1–10 de 38 resultados</span>
+        <span class="results-count">Mostrando 1–10 de <span class="num-project"> cargando</span> resultados</span>
       </div>
 
       <div style="overflow-x:auto;">
@@ -154,21 +141,47 @@
               <th>Estado</th>
               <th>Líder</th>
               <th>Periodo</th>
-              <th>Beneficiarios</th>
-              <th>Horas</th>
-              <th>Avance</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody id = "tabla-proyectos">
             
           </tbody>
+          <template id = "template-fila-proyecto">
+            <tr>
+              <td>
+                  <div class="proj-name-cell">
+                      <div class="proj-icon-badge">📚</div>
+                      <div>
+                          <div class="proj-cell-name" data-proyecto="nombre"></div>
+                          <div class="proj-cell-ods">
+                              ODS <span data-proyecto="ods"></span> · <span data-proyecto="categoria"></span>
+                          </div>
+                      </div>
+                  </div>
+              </td>
+              <td>
+                  <span class="status-badge" data-proyecto="estado"></span>
+              </td>
+              <td>
+                  <div class="lider-cell">
+                      <a href="lider-perfil.html" data-proyecto="lider"></a>
+                  </div>
+              </td>
+              <td data-proyecto="periodo"></td>
+              <td>
+                  <div class="action-btns">
+                      <a href="proyecto-detalle.html" class="action-btn ab-view btn-ver-detalle">👁 Ver</a>
+                  </div>
+              </td>
+            </tr>
+          </template>
         </table>
       </div>
 
       <!-- PAGINATION -->
       <div class="pagination">
-        <div class="pag-info">Mostrando 1–8 de 38 proyectos</div>
+        <div class="pag-info">Mostrando 1–8 de <span class="num-project"></span> proyectos</div>
         <div class="pag-btns">
           <button class="pag-btn">← Anterior</button>
           <button class="pag-btn active">1</button>
@@ -337,10 +350,8 @@
         <div>
           <label class="form-label-s">Estado inicial *</label>
           <select class="form-inp-s"id="input-estado">
-            <option value="pendiente">Pendiente</option>
-            <option value="en_proceso">En proceso</option>
             <option value="activo">Activo</option>
-            <option value="completado">Completado</option>
+            <option value="completado">Inactivo</option>
           </select>
         </div>
       </div>
@@ -362,6 +373,15 @@
         <div>
           <label class="form-label-s">URL de video (YouTube)</label>
           <input type="url" class="form-inp-s" placeholder="https://youtube.com/watch?v=..." maxlength="100" id = "input-video">
+        </div>
+      
+
+      
+        <div>
+          <label class="form-label-s">Población Objetivo</label>
+          <select class="form-inp-s select-catalogo" data-catalogo="poblaciones"id="input-poblacion">
+            cargando..
+          </select>
         </div>
       </div>
 
@@ -456,7 +476,7 @@
 fetch("/api/catalogos/datos-formulario")
   .then(res => res.json())
   .then(respuesta => {
-    const { categorias, ods, lideres } = respuesta.data;
+    const { categorias, ods, lideres, poblaciones } = respuesta.data;
 
     const todosLosSelects = document.querySelectorAll(".select-catalogo");
 
@@ -478,12 +498,17 @@ fetch("/api/catalogos/datos-formulario")
                 `<option value="${l.id_lider}">${l.username}</option>`
             ).join('');
         }
+        else if(tipoCatalogo==="poblaciones"){
+          select.innerHTML=poblaciones.map(p =>
+            `<option value = "${p.id_poblacion}">${p.nombre}</option>`
+          ).join('');
+        }
     });
 
   })
   .catch(err => console.error("Error al poblar los catálogos dinámicos:", err));
 </script>
-
+<script src="projectjs/projects.js"></script>
 <script src="projectjs/crear.js"></script>
 <script>
 document.querySelectorAll('.modal-overlay').forEach(function(m) {

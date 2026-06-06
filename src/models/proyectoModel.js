@@ -12,17 +12,19 @@ const ProyectoModel = {
             const queryLi = 'INSERT INTO lider_proyecto (id_lider,id_proyecto) VALUES (?,?)';
             const queryReg = 'INSERT INTO registro_proyectos (id_proyecto,id_admin) VALUES (?,?)';
             const queryOds = 'INSERT INTO proyecto_ods (id_proyecto,id_ods) VALUES (?,?)';
+            const queryPob = 'INSERT INTO poblacion_proyecto (id_poblacion,id_proyecto) VALUES (?,?)';
             const values = [data.titulo,data.descorta,data.desclarga,data.idcategoria,data.finicio,data.ffin,data.periodo,data.video,data.estado];
             const[result] = await connection.execute(query,values);
 
             const valuesLi = [data.id_lider,result.insertId];
             const valuesReg = [result.insertId,data.id_admin];
             const valuesOds = [result.insertId,data.ods];
+            const valuesPob = [data.poblacion,result.insertId];
 
             await connection.execute(queryReg,valuesReg);
             await connection.execute(queryLi,valuesLi);
             await connection.execute(queryOds,valuesOds);
-            
+            await connection.execute(queryPob,valuesPob);
             await connection.commit();
             return result.insertId;
             
@@ -34,6 +36,11 @@ const ProyectoModel = {
         }
         
 
+    },
+    getAll: async()=>{
+        const query = `SELECT * FROM vista_proyecto_completo`;
+        const[rows] = await db.execute(query);
+        return rows;
     },
     getById: async (id) => {
         const query = `SELECT * FROM vista_proyecto_completo WHERE id_proyecto = ?`;

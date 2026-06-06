@@ -1,5 +1,11 @@
 const ProyectoModel = require('../models/proyectoModel');
+const asyncHandler = require('../middleware/asyncHandler');
 
+const obtenerTodosLosProyectos = asyncHandler(async(req,res) => {
+    const proyectos = await ProyectoModel.getAll();
+
+    res.json(proyectos);
+})
 
 const createProyecto = async (req,res) => {
     try{
@@ -36,4 +42,4 @@ const getProyectoById = async (req,res) => {
         res.status(500).json({error:'Error del Servidor'});
     }
 };
-module.exports = {createProyecto,getProyectoById};
+module.exports = {createProyecto,getProyectoById,obtenerTodosLosProyectos};

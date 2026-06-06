@@ -88,7 +88,6 @@ const WidgetModel = {
         const [result] = await db.execute(query, values);
         return WidgetModel.findById(result.insertId);
     },
-
     update: async (id, widgetData) => {
         const fields = [];
         const values = [];
@@ -103,15 +102,15 @@ const WidgetModel = {
             'pos_y',
             'ancho',
             'alto',
-            'id_config'
+            'ui_config'
         ];
 
         for (const key of allowed) {
             if (widgetData[key] !== undefined) {
                 fields.push(`${key} = ?`);
                 values.push(
-                    key === 'id_config'
-                        ? JSON.stringify(widgetData.id_config)
+                    key === 'ui_config'
+                        ? JSON.stringify(widgetData.ui_config)
                         : widgetData[key]
                 );
             }

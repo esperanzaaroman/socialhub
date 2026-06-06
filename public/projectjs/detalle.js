@@ -1,5 +1,38 @@
 import { renderWidgets } from "./widget.js";
+const gridStack = GridStack.init({
+    column: 12,
+    cellHeight: 80,
+    animate: true,
+    float: false,
+    resizable: {handles: 'se'},
 
+    margin: 50
+});
+
+gridStack.on('change', async function(event, items) {
+    const actualizaciones = items.map(item => {
+        return {
+            id_widget: item.el.getAttribute('data-id-widget'),
+            pos_x: item.x,
+            pos_y: item.y,
+            ancho: item.w,
+            alto: item.h
+        };
+    });
+
+    console.log("Nuevas posiciones listas para guardar:", actualizaciones);
+
+    try {
+        await fetch('http://localhost:3000/api/widgets/layout', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ widgets: actualizaciones })
+        });
+    } catch (err) {
+        console.error("No se pudo salvar el layout:", err);
+    }
+});  
+  
 async function cargarDetalleProyecto(){
     console.log("Entré a cargarDetalleProyecto");
     const params = new URLSearchParams(window.location.search);

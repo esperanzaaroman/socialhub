@@ -7,5 +7,5 @@ router.get('/:id', widgetController.getWidgetById);
 router.post('/', widgetController.createWidget);
 router.patch('/:id', widgetController.updateWidget);
 router.delete('/:id', widgetController.deleteWidget);
-
+router.put('/layout',widgetController.guardarLayoutDashboard);
 module.exports = router;

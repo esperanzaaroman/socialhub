@@ -6,5 +6,5 @@ const { verifyToken } = require('../middleware/authMiddleware');
 console.log(typeof verifyToken);
 router.post('/',verifyToken,proyectoController.createProyecto);
 router.get('/:id',proyectoController.getProyectoById);
-
+router.get('/',proyectoController.obtenerTodosLosProyectos);
 module.exports = router;
