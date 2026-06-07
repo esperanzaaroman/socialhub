@@ -36,16 +36,8 @@ const validateCreateBody = (body) => {
 
 const validateUpdateBody = (body) => {
     const allowedKeys = [
-        'id_proyecto',
-        'id_metrica',
-        'id_plantilla',
-        'operacion',
-        'nombre_widget',
-        'pos_x',
-        'pos_y',
-        'ancho',
-        'alto',
-        'ui_config'
+        'id_proyecto', 'id_metrica', 'id_plantilla', 'operacion',
+        'nombre_widget', 'pos_x', 'pos_y', 'ancho', 'alto', 'ui_config'
     ];
 
     const hasUpdate = allowedKeys.some((key) => body[key] !== undefined);
@@ -67,6 +59,9 @@ const validateUpdateBody = (body) => {
     }
 };
 
+// ─── GET /api/widgets?id_proyecto=X ──────────────────────────────────────────
+// Ahora devuelve valor_calculado e historial en cada widget.
+// El frontend puede usar estos datos directamente para KPIs y gráficas.
 const getWidgets = asyncHandler(async (req, res) => {
     const filters = {};
 
@@ -74,6 +69,7 @@ const getWidgets = asyncHandler(async (req, res) => {
         filters.id_proyecto = parsePositiveInt(req.query.id_proyecto, 'id_proyecto');
     }
 
+    // findAll ya trae valor_calculado e historial enriquecidos
     const widgets = await WidgetModel.findAll(filters);
 
     sendSuccess(res, {
@@ -82,6 +78,7 @@ const getWidgets = asyncHandler(async (req, res) => {
     });
 });
 
+// ─── GET /api/widgets/:id ─────────────────────────────────────────────────────
 const getWidgetById = asyncHandler(async (req, res) => {
     const id = parsePositiveInt(req.params.id, 'id');
     const widget = await WidgetModel.findById(id);
@@ -96,45 +93,50 @@ const getWidgetById = asyncHandler(async (req, res) => {
     });
 });
 
-
-
 const createWidgetDinamico = async (req, res) => {
     const connection = await db.getConnection();
-    await connection.beginTransaction();
 
     try {
-        const { id_proyecto, nombre_widget, id_plantilla, operacion, ui_config, infoMetrica, valores } = req.body;
+        await connection.beginTransaction();
+
+        const {
+            id_proyecto, nombre_widget, id_plantilla,
+            operacion, ui_config, infoMetrica, valores
+        } = req.body;
 
         if (!infoMetrica) {
+            connection.release();
             return res.status(400).json({ error: "Falta la información de la métrica (infoMetrica)." });
         }
 
-        let idMetricaFinal = null;
-
+        let idMetricaFinal;
 
         if (infoMetrica.tipo === 'nueva') {
-            const queryNuevaMetrica = `INSERT INTO metricas_proyecto (nombre, unidad, es_general) VALUES (?, ?, 0)`;
-            const [resultadoMetrica] = await connection.execute(queryNuevaMetrica, [
-                infoMetrica.nombre,
-                infoMetrica.unidad || 'Unidades'
-            ]);
-            
+            const [resultadoMetrica] = await connection.execute(
+                `INSERT INTO metricas_proyecto (nombre, unidad, es_general) VALUES (?, ?, 0)`,
+                [infoMetrica.nombre, infoMetrica.unidad || 'Unidades']
+            );
             idMetricaFinal = resultadoMetrica.insertId;
+
         } else {
             idMetricaFinal = parseInt(infoMetrica.id_metrica, 10);
-            
             if (isNaN(idMetricaFinal)) {
-                return res.status(400).json({ error: "El ID de la métrica existente es inválido o no se recibió." });
+                connection.release();
+                return res.status(400).json({ error: "El ID de la métrica existente es inválido." });
             }
         }
 
+        const esBeneficiarios = (idMetricaFinal === 4);
 
-        if (valores && valores.length > 0) {
-            const queryValores = `INSERT INTO valores_metricas (id_metrica, valor_decimal, fecha) VALUES (?, ?, ?)`;
-            
+        if (!esBeneficiarios && valores && valores.length > 0) {
+            const queryValores = `
+                INSERT INTO valores_metricas (id_metrica, valor_decimal, fecha)
+                VALUES (?, ?, ?)
+            `;
             for (const item of valores) {
-                const fechaFormateada = new Date(item.fecha).toISOString().slice(0, 19).replace('T', ' ');
-                
+                const fechaFormateada = new Date(item.fecha)
+                    .toISOString().slice(0, 19).replace('T', ' ');
+
                 await connection.execute(queryValores, [
                     idMetricaFinal,
                     item.valor,
@@ -143,7 +145,6 @@ const createWidgetDinamico = async (req, res) => {
             }
         }
 
-      
         const widgetPayload = {
             id_proyecto: parseInt(id_proyecto, 10),
             id_metrica: idMetricaFinal,
@@ -152,28 +153,27 @@ const createWidgetDinamico = async (req, res) => {
             nombre_widget: nombre_widget,
             ui_config: typeof ui_config === 'object' ? JSON.stringify(ui_config) : ui_config
         };
-        
-        const nuevoWidget = await WidgetModel.create(widgetPayload);
+
+        const nuevoWidget = await WidgetModel.create(widgetPayload, connection);
 
         await connection.commit();
 
         return res.status(201).json({
             status: "success",
-            message: "¡Widget y métricas procesadas exitosamente en la base de datos!",
+            message: "¡Widget y métricas procesadas exitosamente!",
             data: nuevoWidget
         });
 
     } catch (error) {
         await connection.rollback();
-        console.error("❌ Error crítico en la carga dinámica del backend:", error);
+        console.error("Error crítico en la carga dinámica del backend:", error);
         return res.status(500).json({ error: "Fallo al procesar el flujo dinámico del widget." });
     } finally {
         connection.release();
     }
 };
 
-
-
+// ─── PUT /api/widgets/:id ─────────────────────────────────────────────────────
 const updateWidget = asyncHandler(async (req, res) => {
     const id = parsePositiveInt(req.params.id, 'id');
     validateUpdateBody(req.body);
@@ -190,25 +190,33 @@ const updateWidget = asyncHandler(async (req, res) => {
         data: { widget }
     });
 });
-const guardarLayoutDashboard = asyncHandler(async(req,res)=>{
-    const{widgets} = req.body;
+
+// ─── PUT /api/widgets/layout ──────────────────────────────────────────────────
+const guardarLayoutDashboard = asyncHandler(async (req, res) => {
+    const { widgets } = req.body;
 
     if (!widgets || !Array.isArray(widgets)) {
         return res.status(400).json({ message: "Se esperaba un array de widgets" });
     }
-    const promesasActualizacion = widgets.map(w => WidgetModel.update(w.id_widget,{
-            pos_x: w.pos_x,
-            pos_y: w.pos_y,
-            ancho: w.ancho,
-            alto: w.alto
-        })
+
+    await Promise.all(
+        widgets.map(w =>
+            WidgetModel.update(w.id_widget, {
+                pos_x: w.pos_x,
+                pos_y: w.pos_y,
+                ancho: w.ancho,
+                alto: w.alto
+            })
+        )
     );
-    await Promise.all(promesasActualizacion);
 
     return res.json({
         status: "success",
-        message: "¡Layout del Dashboard actualizado correctamente!" });
+        message: "¡Layout del Dashboard actualizado correctamente!"
+    });
 });
+
+// ─── DELETE /api/widgets/:id ──────────────────────────────────────────────────
 const deleteWidget = asyncHandler(async (req, res) => {
     const id = parsePositiveInt(req.params.id, 'id');
 
@@ -222,7 +230,6 @@ const deleteWidget = asyncHandler(async (req, res) => {
         data: { id_widget: id }
     });
 });
-
 
 module.exports = {
     getWidgets,

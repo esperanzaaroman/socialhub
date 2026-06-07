@@ -27,6 +27,21 @@ const createProyecto = async (req,res) => {
 
     }
 };   
+// ─── GET /api/proyectos/:id/beneficiarios/count ───────────────────────────────
+
+const getBeneficiariosCount = asyncHandler(async (req, res) => {
+    const id_proyecto = parsePositiveInt(req.params.id, 'id_proyecto');
+
+    const [rows] = await db.execute(
+        `SELECT COUNT(*) AS total FROM beneficiarios WHERE id_proyecto = ?`,
+        [id_proyecto]
+    );
+
+    sendSuccess(res, {
+        message: 'Total de beneficiarios obtenido',
+        data: { total: rows[0].total, id_proyecto }
+    });
+});
 
 const getProyectoById = async (req,res) => {
     try{
@@ -66,4 +81,4 @@ const getProyectoById = async (req,res) => {
         res.status(500).json({error:'Error del Servidor'});
     }
 };
-module.exports = {createProyecto,getProyectoById,obtenerTodosLosProyectos};
+module.exports = {createProyecto,getProyectoById,obtenerTodosLosProyectos,getBeneficiariosCount};

@@ -498,7 +498,7 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
       <div style="display:flex;gap:8px;">
         <a  class="btn btn-outline btn-sm" id ='btn-agregar-widget'>Editar proyecto</a>
-        <a href="#" class="btn btn-verde btn-sm" onclick="getElementById('modal-widget').style.display='block'">Agregar Widget</a>
+        <a class="btn btn-verde btn-sm" onclick="getElementById('modal-widget').style.display='block'">Agregar Widget</a>
       </div>
     </div>
 
@@ -507,14 +507,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     <template id="widget-template-kpi">
         <div class="grid-stack-item">
+          <button class="btn-eliminar-widget" data-id="${widget.id_widget}"; color:red; background:none; border:none; font-size:18px; cursor:pointer;">&times;</button>
             <div class="grid-stack-item-content">
                 <div class="widget-card card-kpi">
                     <div class="widget-header">
                         <h4 class="widget-title">Métrica</h4>
-                        <span style= "visibility: hidden;"class ="widget-operation">SUM</span>
+                        <span class="widget-operation" style="font-size:11px; color:#94a3b8; font-weight:500;"></span>
                     </div>
                     <div class="widget-body">
                         <span class="widget-value">0</span>
+                        <span class="widget-unit" style="font-size:12px; color:#94a3b8; margin-left:4px;"></span>
                     </div>
                 </div>
             </div>
@@ -523,6 +525,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     <template id="widget-template-graph">
         <div class="grid-stack-item">
+          <button class="btn-eliminar-widget" data-id="${widget.id_widget}"; color:red; background:none; border:none; font-size:18px; cursor:pointer;">&times;</button>
+            <div class="grid-stack-item-content">
             <div class="grid-stack-item-content">
                 <div class="widget-card card-graph">
                     <div class="widget-header">
@@ -634,72 +638,98 @@ document.addEventListener('DOMContentLoaded', () => {
   </div>
   <!--MODAL WIDGET-->
   <div id="modal-widget" class="modal" style="display: none;">
-  <form id="form-crear-widget">
-    <h3>Configurar Tarjeta KPI</h3>
-    <div>
-      <label for="widget-nombre">Título del Widget:</label>
-      <input type="text" id="widget-nombre" required placeholder="Ej: Progreso de Alumnos">
-    </div>
+    <form id="form-crear-widget">
+      <h3 id="modal-titulo-cambiante">Configurar Tarjeta KPI</h3>
 
-    <div class="mb-3">
-      <label class="d-block fw-bold">Origen de la Métrica:</label>
-      
-      <input type="radio" id="metrica-tipo-general" name="metrica-origen" value="general" checked>
-      <label for="metrica-tipo-general" class="me-2">Métricas Generales (Fijas)</label>
-      
-      <input type="radio" id="metrica-tipo-existente" name="metrica-origen" value="existente">
-      <label for="metrica-tipo-existente" class="me-2">Métricas del Proyecto</label>
-      
-      <input type="radio" id="metrica-tipo-nueva" name="metrica-origen" value="nueva">
-      <label for="metrica-tipo-nueva">Crear una nueva</label>
-    </div>
+      <div>
+        <label for="widget-nombre">Título del Widget:</label>
+        <input type="text" id="widget-nombre" required placeholder="Ej: Progreso de Alumnos">
+      </div>
 
-    <div id="wrapper-metrica-seleccion">
-      <label for="widget-metrica" id="label-combo-metrica">Selecciona la Métrica General:</label>
-      <select id="widget-metrica" class="form-select">
+      <div class="mt-3">
+        <label for="widget-plantilla">Tipo de Visualización:</label>
+        <select id="widget-plantilla">
+          <option value="1">Tarjeta KPI (Solo Número)</option>
+          <option value="2">Gráfica Dinámica</option>
         </select>
-    </div>
+      </div>
 
-    <div id="wrapper-metrica-nueva" style="display: none;">
-      <label for="nueva-metrica-nombre">Nombre de la Nueva Métrica:</label>
-      <input type="text" id="nueva-metrica-nombre" placeholder="Ej: Arboles_Plantados">
-      
-      <label for="nueva-metrica-unidad">Unidad de Medida:</label>
-      <input type="text" id="nueva-metrica-unidad" placeholder="Ej: Kg, Piezas">
-    </div>
+      <div id="wrapper-tipo-grafica" class="mt-3" style="display: none;">
+        <label for="widget-tipo-grafica">Tipo de Gráfica:</label>
+        <select id="widget-tipo-grafica">
+          <option value="bar">Barras Verticales</option>
+          <option value="line">Línea de Tendencia</option>
+          <option value="pie">Gráfica de Pastel (Pie)</option>
+        </select>
+      </div>
 
-    <div class="mt-3">
-      <label for="metrica-entrada-tipo">Método de captura de datos:</label>
-      <select id="metrica-entrada-tipo">
-        <option value="manual">Escribir un valor único ahora mismo</option>
-        <option value="csv">Cargar historial desde archivo CSV</option>
-      </select>
-    </div>
+      <div class="mb-3 mt-3">
+        <label class="d-block fw-bold">Origen de la Métrica:</label>
+        
+        <input type="radio" id="metrica-tipo-general" name="metrica-origen" value="general" checked>
+        <label for="metrica-tipo-general" class="me-2">Métricas Generales (Fijas)</label>
+        
+        <input type="radio" id="metrica-tipo-existente" name="metrica-origen" value="existente">
+        <label for="metrica-tipo-existente" class="me-2">Métricas del Proyecto</label>
+        
+        <input type="radio" id="metrica-tipo-nueva" name="metrica-origen" value="nueva">
+        <label for="metrica-tipo-nueva">Crear una nueva</label>
+      </div>
 
-    <div id="wrapper-entrada-manual">
-      <label for="widget-valor-inicial">Valor actual a registrar:</label>
-      <input type="number" id="widget-valor-inicial" placeholder="Ej: 80" step="any">
-    </div>
+      <div id="wrapper-metrica-seleccion">
+        <label for="widget-metrica" id="label-combo-metrica">Selecciona la Métrica General:</label>
+        <select id="widget-metrica" class="form-select">
+        </select>
+      </div>
 
-    <div id="wrapper-entrada-csv" style="display: none;">
-      <label for="widget-archivo-csv">Selecciona el archivo .csv:</label>
-      <input type="file" id="widget-archivo-csv" accept=".csv">
-      <small class="text-muted d-block">Nota: Una columna debe llamarse exactamente como el nombre de la métrica.</small>
-    </div>
+      <div id="wrapper-metrica-nueva" style="display: none;">
+        <label for="nueva-metrica-nombre">Nombre de la Nueva Métrica:</label>
+        <input type="text" id="nueva-metrica-nombre" placeholder="Ej: Arboles_Plantados">
+        
+        <label for="nueva-metrica-unidad">Unidad de Medida:</label>
+        <input type="text" id="nueva-metrica-unidad" placeholder="Ej: Kg, Piezas">
+      </div>
 
-    <div class="mt-3">
-      <label for="widget-color">Color de la Tarjeta:</label>
-      <input type="color" id="widget-color" value="#6366f1">
-    </div>
+      <div id = "wrapper-operacion" class="mt-3">
+        <label for="widget-operacion">Operación matemática base:</label>
+        <select id="widget-operacion" required>
+          <option value="SUM">SUMAR todos los valores obtenidos</option>
+          <option value="AVG">PROMEDIO de los valores</option>
+          <option value="COUNT">CONTAR el número de registros</option>
+          <option value="MAX">Obtener el valor MÁXIMO</option>
+        </select>
+      </div>
 
-    <input type="hidden" id="widget-plantilla" value="1"> <div class="mt-4">
-      <button type="submit">Guardar y Renderizar</button>
-      <button type="button" onclick="document.getElementById('modal-widget').style.display='none'">Cancelar</button>
-    </div>
+      <div class="mt-3">
+        <label for="metrica-entrada-tipo">Método de captura de datos:</label>
+        <select id="metrica-entrada-tipo">
+          <option value="manual">Escribir un valor único ahora mismo</option>
+          <option value="csv">Cargar historial desde archivo CSV</option>
+        </select>
+      </div>
 
-  </form>
+      <div id="wrapper-entrada-manual">
+        <label for="widget-valor-inicial">Valor actual a registrar:</label>
+        <input type="number" id="widget-valor-inicial" placeholder="Ej: 80" step="any">
+      </div>
 
-</div> 
+      <div id="wrapper-entrada-csv" style="display: none;">
+        <label for="widget-archivo-csv">Selecciona el archivo .csv:</label>
+        <input type="file" id="widget-archivo-csv" accept=".csv">
+        <small class="text-muted d-block">Nota: Una columna debe llamarse exactamente como la unidad de la metrica.</small>
+      </div>
+
+      <div class="mt-3">
+        <label for="widget-color">Color de la Tarjeta:</label>
+        <input type="color" id="widget-color" value="#6366f1">
+      </div>
+
+      <div class="mt-4">
+        <button type="submit">Guardar y Renderizar</button>
+        <button type="button" onclick="document.getElementById('modal-widget').style.display='none'">Cancelar</button>
+      </div>
+    </form>
+  </div>
 
 
 </div>

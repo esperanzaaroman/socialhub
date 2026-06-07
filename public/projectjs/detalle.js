@@ -17,10 +17,14 @@ function configurarInterfazPorRol(puedeEditar){
         gridStack.enableResize(true);
         if (botonAgregar) botonAgregar.style.display = 'inline-flex';
         gridStack.opts.resizable = { handles: 'se' };
+
+        document.querySelectorAll('.btn-eliminar-widget').forEach(btn => btn.style.display = 'inline-block');
     } else {
         gridStack.enableMove(false);
         gridStack.enableResize(false);
         if (botonAgregar) botonAgregar.style.display = 'none';
+        
+        document.querySelectorAll('.btn-eliminar-widget').forEach(btn => btn.style.display = 'none');
         
         document.querySelectorAll('.grid-stack-item').forEach(el => {
             el.style.cursor = 'default';
@@ -97,8 +101,8 @@ async function cargarDetalleProyecto(){
 
             const iframeVideo = document.getElementById('videoproject');
     
-            if (proyecto.video_url) {
-                iframeVideo.src = obtenerUrlEmbed(proyecto.video_url);
+            if (proyectoData.video_url) {
+                iframeVideo.src = obtenerUrlEmbed(proyectoData.video_url);
             } else {
                 iframeVideo.closest('.video-responsive-container').style.display = 'none';
             }
@@ -331,7 +335,7 @@ function renderWidgets(widgets){
 
     widgets.forEach(widget => {
         const configUi = widget.ui_config || {};
-        const esKpi = (widget.tipo_visualizacion === 'kpi' || widget.id_plantilla === 1);
+        const esKpi = (widget.id_visualizacion === 1 || widget.id_plantilla === 1);
         
         const nuevoWidgetHTML = esKpi ? crearNodoKpi(widget) : crearNodoGrafica(widget);
 
@@ -346,22 +350,103 @@ function renderWidgets(widgets){
         });
         if (!esKpi) {
             const canvas = nuevoWidgetHTML.querySelector('.widget-chart');
+            const unidad = canvas.dataset.unidad ||'';
+            const nombreMetrica = canvas.dataset.nombre || widget.nombre_widget;
+            const historial = widget.historial || [];
             
+            const labelsReales = historial.length > 0 
+                ? historial.map(item => {
+                    const f = new Date(item.fecha);
+                    return isNaN(f.getTime()) ? item.fecha : `${f.getDate()}/${f.getMonth() + 1}`;
+                })
+                : ['Sin datos'];
+
+            const valoresReales = historial.length > 0
+                ? historial.map(item => parseFloat(item.valor_decimal) || 0)
+                : [parseFloat(widget.valor_calculado) || 0];
+
             const miGrafica = new Chart(canvas, {
                 type: configUi.tipo_grafica || 'bar',
                 data: {
-                    labels: widget.datos_grafica?.labels || ['Ene', 'Feb', 'Mar'],
+                    labels: labelsReales,
                     datasets: [{
-                        label: widget.nombre_widget,
-                        data: widget.datos_grafica?.valores || [widget.valor_calculado, 10, 5],
-                        backgroundColor: configUi.color || '#6366f1'
+                        label: nombreMetrica,
+                        data: valoresReales,
+                        backgroundColor: configUi.color || '#6366f1',
+                        borderColor: configUi.color || '#6366f1',
+                        borderWidth: 2,
+                        fill: configUi.tipo_grafica === 'line' ? false : true
                     }]
                 },
-                options: { responsive: true, maintainAspectRatio: false }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Fecha',
+                                color: '#94a3b8',
+                                font: { size: 11 }
+                            },
+                            ticks: { color: '#94a3b8', font: { size: 10 } }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: !!unidad,   // solo muestra si hay unidad
+                                text: unidad,
+                                color: '#94a3b8',
+                                font: { size: 11 }
+                            },
+                            ticks: { color: '#94a3b8', font: { size: 10 } }
+                        }
+                    }
+                }
             });
 
             nuevoWidgetHTML._chartInstance = miGrafica;
         }
+    });
+    document.querySelectorAll('.btn-eliminar-widget').forEach(boton => {
+        boton.addEventListener('click', async (e) => {
+            const botonActual = e.currentTarget;
+            const elementoWidget = e.currentTarget.closest('.grid-stack-item');
+            const idWidget = elementoWidget ? elementoWidget.getAttribute('data-id-widget') : null;
+            if (!idWidget) return;
+
+            if (!confirm("¿De verdad quieres quitar este widget del dashboard?")) {
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem('token');
+                const respuesta = await fetch(`http://localhost:3000/api/widgets/${idWidget}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const resultado = await respuesta.json();
+
+                if (respuesta.ok) {
+                    alert("Widget eliminado correctamente");
+                
+                    gridStack.removeWidget(elementoWidget);
+                    window.location.reload();
+                } else {
+                    alert(resultado.mensaje || "No se pudo eliminar el widget del servidor.");
+                }
+
+            } catch (err) {
+                console.error("Error al eliminar el widget:", err);
+                alert("Hubo un error de conexión con el servidor.");
+            }
+        });
     });
 }
 gridStack.on('resizestop', function(event, el) {
@@ -425,6 +510,11 @@ async function cargarMetricasFiltradas(tipo, idProyecto = null) {
 
 document.addEventListener("DOMContentLoaded", () => {
     cargarDetalleProyecto();
+
+    const selectPlantilla = document.getElementById('widget-plantilla');
+    const wrapTipoGrafica = document.getElementById('wrapper-tipo-grafica');
+    const modalTitulo = document.getElementById('modal-titulo-cambiante');
+
     const radioGeneral = document.getElementById('metrica-tipo-general');
     const radioExistente = document.getElementById('metrica-tipo-existente');
     const radioNueva = document.getElementById('metrica-tipo-nueva');
@@ -439,6 +529,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const params = new URLSearchParams(window.location.search);
     const idProyectoActual = params.get('id');
+
+    if (selectPlantilla && wrapTipoGrafica) {
+        selectPlantilla.addEventListener('change', (e) => {
+            if (e.target.value === "2") { 
+                wrapTipoGrafica.style.display = "block";
+                document.getElementById('wrapper-operacion').style.display =  "none"
+
+                if (modalTitulo) modalTitulo.innerText = "Configurar Gráfica Dinámica";
+                
+                const selectTipoGrafica = document.getElementById('widget-tipo-grafica');
+                if (selectTipoGrafica) selectTipoGrafica.setAttribute('required', 'true');
+            } else { 
+
+                wrapTipoGrafica.style.display = "none";
+                document.getElementById('wrapper-operacion').style.display =  "block"
+                if (modalTitulo) modalTitulo.innerText = "Configurar Tarjeta KPI";
+                
+                const selectTipoGrafica = document.getElementById('widget-tipo-grafica');
+                if (selectTipoGrafica) selectTipoGrafica.removeAttribute('required');
+            }
+        });
+    }
 
     if (radioGeneral && radioExistente && radioNueva) {
         
@@ -527,29 +639,44 @@ if (formWidget) {
                 alert("Por favor selecciona una métrica válida del listado.");
                 return;
             }
+            const textoOption = selectM.options[selectM.selectedIndex].text;
             infoMetrica = {
                 tipo: 'existente',
                 id_metrica: parseInt(selectM.value),
-                nombre: selectM.options[selectM.selectedIndex].text.split('(')[0].trim() 
+                nombre: textoOption.split('(')[0].trim(),
+                unidad: textoOption.match(/\((.+)\)/)?.[1]?.trim() || ''
             };
         }
 
+        const idPlantilla = parseInt(document.getElementById('widget-plantilla').value, 10);
         const tipoEntrada = document.getElementById('metrica-entrada-tipo').value;
-        const configUi = { color: document.getElementById('widget-color').value };
+        const operacionSeleccionada = document.getElementById('widget-operacion').value;
+
+        const configUi = { 
+            color: document.getElementById('widget-color').value 
+        };
+
+        if (idPlantilla === 2) {
+            configUi.tipo_grafica = document.getElementById('widget-tipo-grafica').value;
+        }
 
         const payloadBase = {
             id_proyecto: idProyectoActual,
             nombre_widget: document.getElementById('widget-nombre').value.trim(),
-            id_plantilla: 1, 
-            operacion: 'SUM',
+            id_plantilla: idPlantilla, 
+            operacion: operacionSeleccionada, 
             ui_config: configUi,
             infoMetrica: infoMetrica,
             tipoEntrada: tipoEntrada
         };
 
         if (tipoEntrada === 'manual') {
+            const fechaMySQL = new Date().toISOString().slice(0, 19).replace('T', ' ');
             payloadBase.valores = [
-                { valor: parseFloat(document.getElementById('widget-valor-inicial').value), fecha: new Date() }
+                { 
+                    valor: parseFloat(document.getElementById('widget-valor-inicial').value),
+                    fecha: fechaMySQL
+                }
             ];
             await enviarWidgetAlBackend(payloadBase);
         } 
@@ -567,23 +694,45 @@ if (formWidget) {
                 skipEmptyLines: true,
                 complete: async function(results) {
                     const filas = results.data;
-                    const nombreColumnaBuscada = infoMetrica.nombre; 
+                    const columnaCSV = infoMetrica.unidad || infoMetrica.nombre;
                     
-                    if (filas.length > 0 && !(nombreColumnaBuscada in filas[0])) {
-                        alert(`Error: No se encontró ninguna columna llamada "${nombreColumnaBuscada}" en tu archivo CSV.`);
+                    if (filas.length > 0 && !(columnaCSV in filas[0])) {
+                        alert(`Error: No se encontró ninguna columna llamada "${columnaCSV}" en tu CSV.\n\nColumnas disponibles: ${Object.keys(filas[0]).join(', ')}`);
                         return;
                     }
 
                     const valoresProcesados = [];
 
                     filas.forEach(fila => {
-                        const valorNumerico = parseFloat(fila[nombreColumnaBuscada]);
-                        const fechaFila = fila['fecha'] || fila['Fecha'] || fila['date'] || fila['Date'] || new Date();
+                        const valorNumerico = parseFloat(fila[columnaCSV]);
+                        
+                        const fechaOriginal = fila['fecha'] || fila['Fecha'] || fila['date'] || fila['Date'];
+                        let fechaFinal = new Date();
+
+                        if (fechaOriginal) {
+                            const str = String(fechaOriginal).trim();
+                            let parsed;
+
+                            const matchDMY = str.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+                            if (matchDMY) {
+                                parsed = new Date(`${matchDMY[3]}-${matchDMY[2].padStart(2,'0')}-${matchDMY[1].padStart(2,'0')}T00:00:00`);
+                            } else {
+                                parsed = new Date(str.includes('T') ? str : `${str}T00:00:00`);
+                            }
+
+                            if (!isNaN(parsed.getTime())) {
+                                fechaFinal = parsed;
+                            } else {
+                                console.warn(`Fecha no reconocida en fila: "${str}" — se usará la fecha actual`);
+                            }
+                        }
+
+                        const fechaFormateadaMySQL = fechaFinal.toISOString().slice(0, 19).replace('T', ' ');
 
                         if (!isNaN(valorNumerico)) {
                             valoresProcesados.push({
                                 valor: valorNumerico,
-                                fecha: fechaFila
+                                fecha: fechaFormateadaMySQL
                             });
                         }
                     });
