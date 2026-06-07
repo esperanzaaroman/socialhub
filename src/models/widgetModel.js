@@ -7,11 +7,11 @@ const VALID_OPERACIONES = ['SUM', 'AVG', 'COUNT', 'MAX', 'MIN'];
 const parseWidgetRow = (row) => {
     if (!row) return null;
     const parsed = { ...row };
-    if (typeof parsed.id_config === 'string') {
+    if (typeof parsed.ui_config === 'string') {
         try {
-            parsed.id_config = JSON.parse(parsed.id_config);
+            parsed.ui_config = JSON.parse(parsed.ui_config);
         } catch {
-            parsed.id_config = {};
+            parsed.ui_config = {};
         }
     }
     return parsed;
@@ -68,7 +68,7 @@ const WidgetModel = {
     create: async (widgetData) => {
         const query = `
             INSERT INTO ${TABLE}
-            (id_proyecto, id_metrica, id_plantilla, operacion, nombre_widget, pos_x, pos_y, ancho, alto, id_config)
+            (id_proyecto, id_metrica, id_plantilla, operacion, nombre_widget, pos_x, pos_y, ancho, alto, ui_config)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
@@ -82,7 +82,7 @@ const WidgetModel = {
             widgetData.pos_y ?? 0,
             widgetData.ancho ?? 4,
             widgetData.alto ?? 3,
-            JSON.stringify(widgetData.id_config ?? {})
+            typeof widgetData.ui_config === 'object' ? JSON.stringify(widgetData.ui_config) : (widgetData.ui_config ?? '{}')
         ];
 
         const [result] = await db.execute(query, values);

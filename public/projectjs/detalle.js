@@ -1,4 +1,4 @@
-import { renderWidgets } from "./widget.js";
+import { crearNodoGrafica, crearNodoKpi } from "./widget.js";
 const gridStack = GridStack.init({
     column: 12,
     cellHeight: 80,
@@ -9,6 +9,24 @@ const gridStack = GridStack.init({
     margin: 50
 });
 
+function configurarInterfazPorRol(puedeEditar){
+   const botonAgregar = document.getElementById('btn-agregar-widget');
+
+    if (puedeEditar) {
+        gridStack.enableMove(true);
+        gridStack.enableResize(true);
+        if (botonAgregar) botonAgregar.style.display = 'inline-flex';
+        gridStack.opts.resizable = { handles: 'se' };
+    } else {
+        gridStack.enableMove(false);
+        gridStack.enableResize(false);
+        if (botonAgregar) botonAgregar.style.display = 'none';
+        
+        document.querySelectorAll('.grid-stack-item').forEach(el => {
+            el.style.cursor = 'default';
+        });
+    }
+}
 gridStack.on('change', async function(event, items) {
     const actualizaciones = items.map(item => {
         return {
@@ -39,12 +57,21 @@ async function cargarDetalleProyecto(){
     const idProyecto = params.get('id');
     console.log(idProyecto);
     try {
-        const respuestaProj = await fetch(`http://localhost:3000/api/proyectos/${idProyecto}`);
-        const proyecto = await respuestaProj.json();
+        const token = localStorage.getItem('token');
+        const respuestaProj = await fetch(`http://localhost:3000/api/proyectos/${idProyecto}`,{
+            headers: {
+                'Authorization': `Bearer ${token}` 
+            }
+        });
+        const respuestaJson = await respuestaProj.json();
+        const proyecto = await respuestaJson.data;
         console.log("Proyecto recibido:", proyecto);
         console.log(proyecto);
-
-        Object.entries(proyecto).forEach(([clave, valor]) => {
+        const proyectoData = proyecto.proyecto;
+        console.log(proyectoData.categoria);
+        configurarInterfazPorRol(proyecto.puedoEditar)
+        
+        Object.entries(proyectoData).forEach(([clave, valor]) => {
 
             document
                 .querySelectorAll(`[data-proyecto="${clave}"]`)
@@ -53,16 +80,16 @@ async function cargarDetalleProyecto(){
                 });
 
         });
-            document.getElementById('proyecto-titulo').innerText = proyecto.nombre;
-            document.getElementById('proyecto-resumen').innerText = proyecto.descripcion_corta;
-            document.getElementById('proyecto-categoria').innerText = proyecto.categoria;
-            document.getElementById('proyecto-ods').innerText = proyecto.ods; 
-            document.getElementById('proyecto-estado').innerText = proyecto.estado;
+            document.getElementById('proyecto-titulo').innerText = proyectoData.nombre;
+            document.getElementById('proyecto-resumen').innerText = proyectoData.descripcion_corta;
+            document.getElementById('proyecto-categoria').innerText = proyectoData.categoria;
+            document.getElementById('proyecto-ods').innerText = proyectoData.ods; 
+            document.getElementById('proyecto-estado').innerText = proyectoData.estado;
 
-            const fechaInicioCortas = new Date(proyecto.fecha_inicio).toLocaleDateString();
+            const fechaInicioCortas = new Date(proyectoData.fecha_inicio).toLocaleDateString();
             document.getElementById('proyecto-inicio').innerText =fechaInicioCortas;
 
-            const fechaFinCortas = new Date(proyecto.fecha_fin).toLocaleDateString();
+            const fechaFinCortas = new Date(proyectoData.fecha_fin).toLocaleDateString();
             document.getElementById('proyecto-fin').innerText = fechaFinCortas;
 
             const respuestaWidgets = await fetch(`http://localhost:3000/api/widgets?id_proyecto=${idProyecto}`);
@@ -75,7 +102,7 @@ async function cargarDetalleProyecto(){
             } else {
                 iframeVideo.closest('.video-responsive-container').style.display = 'none';
             }
-                    const widgetsReales = widgets.data.widgets;
+            const widgetsReales = widgets.data.widgets;
 
             renderWidgets(widgetsReales);
 
@@ -85,6 +112,9 @@ async function cargarDetalleProyecto(){
 
             const rol =
             usuario?.role || 'publico';
+
+
+            
 
             const addTestimonioBtn =
             document.getElementById(
@@ -296,6 +326,49 @@ async function cargarDetalleProyecto(){
 
 
 }
+function renderWidgets(widgets){
+    gridStack.removeAll();
+
+    widgets.forEach(widget => {
+        const configUi = widget.ui_config || {};
+        const esKpi = (widget.tipo_visualizacion === 'kpi' || widget.id_plantilla === 1);
+        
+        const nuevoWidgetHTML = esKpi ? crearNodoKpi(widget) : crearNodoGrafica(widget);
+
+        gridStack.makeWidget(nuevoWidgetHTML);
+        gridStack.update(nuevoWidgetHTML, {
+            x: widget.pos_x || 0,
+            y: widget.pos_y || 0,
+            w: widget.ancho || (esKpi ? 4 : 6),
+            h: widget.alto || (esKpi ? 2 : 4),
+            minW: esKpi ? 2 : 4,
+            minH: esKpi ? 2 : 2
+        });
+        if (!esKpi) {
+            const canvas = nuevoWidgetHTML.querySelector('.widget-chart');
+            
+            const miGrafica = new Chart(canvas, {
+                type: configUi.tipo_grafica || 'bar',
+                data: {
+                    labels: widget.datos_grafica?.labels || ['Ene', 'Feb', 'Mar'],
+                    datasets: [{
+                        label: widget.nombre_widget,
+                        data: widget.datos_grafica?.valores || [widget.valor_calculado, 10, 5],
+                        backgroundColor: configUi.color || '#6366f1'
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            nuevoWidgetHTML._chartInstance = miGrafica;
+        }
+    });
+}
+gridStack.on('resizestop', function(event, el) {
+    if (el._chartInstance) {
+        setTimeout(() => { el._chartInstance.resize(); }, 100);
+    }
+});
 function obtenerUrlEmbed(urlCompartida) {
     if (!urlCompartida) return '';
 
@@ -314,8 +387,233 @@ function obtenerUrlEmbed(urlCompartida) {
         videoId = urlCompartida;
     }
 
-    // Devolvemos la URL perfecta que el iframe sí va a aceptar
     return `https://www.youtube.com/embed/${videoId}`;
 }
 
-window.onload = cargarDetalleProyecto;
+async function cargarMetricasFiltradas(tipo, idProyecto = null) {
+    const selectMetrica = document.getElementById('widget-metrica');
+    if (!selectMetrica) return;
+
+    try {
+        const token = localStorage.getItem('token');
+        let url = 'http://localhost:3000/api/metricas/generales'; 
+        
+        if (tipo === 'proyecto') {
+            url = `http://localhost:3000/api/proyectos/${idProyecto}/metricas-utilizadas`;
+        }
+
+        const respuesta = await fetch(url, { headers: { 'Authorization': `Bearer ${token}` } });
+        const datos = await respuesta.json();
+        
+        selectMetrica.innerHTML = '';
+        if (datos.length === 0) {
+            selectMetrica.innerHTML = '<option value="">No se encontraron métricas</option>';
+            return;
+        }
+
+        datos.forEach(m => {
+            const option = document.createElement('option');
+            option.value = m.id_metrica;
+            option.text = `${m.nombre} (${m.unidad})`;
+            selectMetrica.appendChild(option);
+        });
+    } catch (err) {
+        console.error(" Error al cargar las métricas dinámicas:", err);
+    }
+}
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    cargarDetalleProyecto();
+    const radioGeneral = document.getElementById('metrica-tipo-general');
+    const radioExistente = document.getElementById('metrica-tipo-existente');
+    const radioNueva = document.getElementById('metrica-tipo-nueva');
+
+    const wrapSeleccion = document.getElementById('wrapper-metrica-seleccion');
+    const wrapNueva = document.getElementById('wrapper-metrica-nueva');
+    const labelCombo = document.getElementById('label-combo-metrica');
+
+    const selectEntrada = document.getElementById('metrica-entrada-tipo');
+    const wrapManual = document.getElementById('wrapper-entrada-manual');
+    const wrapCSV = document.getElementById('wrapper-entrada-csv');
+
+    const params = new URLSearchParams(window.location.search);
+    const idProyectoActual = params.get('id');
+
+    if (radioGeneral && radioExistente && radioNueva) {
+        
+        radioGeneral.addEventListener('change', () => {
+            if (radioGeneral.checked) {
+                wrapSeleccion.style.display = "block";
+                wrapNueva.style.display = "none";
+                labelCombo.innerText = "Selecciona la Métrica General:";
+                
+                document.getElementById('nueva-metrica-nombre').removeAttribute('required');
+                cargarMetricasFiltradas('generales');
+            }
+        });
+
+        radioExistente.addEventListener('change', () => {
+            if (radioExistente.checked) {
+                wrapSeleccion.style.display = "block";
+                wrapNueva.style.display = "none";
+                labelCombo.innerText = "Selecciona una Métrica usada en este proyecto:";
+                
+                document.getElementById('nueva-metrica-nombre').removeAttribute('required');
+                cargarMetricasFiltradas('proyecto', idProyectoActual);
+            }
+        });
+
+        radioNueva.addEventListener('change', () => {
+            if (radioNueva.checked) {
+                wrapSeleccion.style.display = "none";
+                wrapNueva.style.display = "block";
+                
+                document.getElementById('nueva-metrica-nombre').setAttribute('required', 'true');
+            }
+        });
+    }
+
+    if (selectEntrada && wrapManual && wrapCSV) {
+        selectEntrada.addEventListener('change', (e) => {
+            if (e.target.value === "manual") {
+                wrapManual.style.display = "block";
+                wrapCSV.style.display = "none";
+                
+                document.getElementById('widget-valor-inicial').setAttribute('required', 'true');
+                document.getElementById('widget-archivo-csv').removeAttribute('required');
+            } else if (e.target.value === "csv") {
+                wrapManual.style.display = "none";
+                wrapCSV.style.display = "block";
+                
+                document.getElementById('widget-valor-inicial').removeAttribute('required');
+                document.getElementById('widget-archivo-csv').setAttribute('required', 'true');
+            }
+        });
+    }
+
+    if (radioGeneral && radioGeneral.checked) {
+        cargarMetricasFiltradas('generales');
+    }
+});
+
+
+const formWidget = document.getElementById('form-crear-widget');
+
+if (formWidget) {
+    formWidget.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const params = new URLSearchParams(window.location.search);
+        const idProyectoActual = parseInt(params.get('id'));
+
+        if (!idProyectoActual) {
+            alert("Error: No se encontró el ID del proyecto.");
+            return;
+        }
+
+        const esNuevaMetrica = document.getElementById('metrica-tipo-nueva').checked;
+        let infoMetrica = {};
+
+        if (esNuevaMetrica) {
+            infoMetrica = {
+                tipo: 'nueva',
+                nombre: document.getElementById('nueva-metrica-nombre').value.trim(),
+                unidad: document.getElementById('nueva-metrica-unidad').value.trim() || 'Unidades'
+            };
+        } else {
+            const selectM = document.getElementById('widget-metrica');
+            if (!selectM || !selectM.value) {
+                alert("Por favor selecciona una métrica válida del listado.");
+                return;
+            }
+            infoMetrica = {
+                tipo: 'existente',
+                id_metrica: parseInt(selectM.value),
+                nombre: selectM.options[selectM.selectedIndex].text.split('(')[0].trim() 
+            };
+        }
+
+        const tipoEntrada = document.getElementById('metrica-entrada-tipo').value;
+        const configUi = { color: document.getElementById('widget-color').value };
+
+        const payloadBase = {
+            id_proyecto: idProyectoActual,
+            nombre_widget: document.getElementById('widget-nombre').value.trim(),
+            id_plantilla: 1, 
+            operacion: 'SUM',
+            ui_config: configUi,
+            infoMetrica: infoMetrica,
+            tipoEntrada: tipoEntrada
+        };
+
+        if (tipoEntrada === 'manual') {
+            payloadBase.valores = [
+                { valor: parseFloat(document.getElementById('widget-valor-inicial').value), fecha: new Date() }
+            ];
+            await enviarWidgetAlBackend(payloadBase);
+        } 
+        else {
+            const inputCSV = document.getElementById('widget-archivo-csv');
+            if (!inputCSV.files || inputCSV.files.length === 0) {
+                alert("Por favor selecciona un archivo CSV.");
+                return;
+            }
+
+            const archivo = inputCSV.files[0];
+
+            Papa.parse(archivo, {
+                header: true, 
+                skipEmptyLines: true,
+                complete: async function(results) {
+                    const filas = results.data;
+                    const nombreColumnaBuscada = infoMetrica.nombre; 
+                    
+                    if (filas.length > 0 && !(nombreColumnaBuscada in filas[0])) {
+                        alert(`Error: No se encontró ninguna columna llamada "${nombreColumnaBuscada}" en tu archivo CSV.`);
+                        return;
+                    }
+
+                    const valoresProcesados = [];
+
+                    filas.forEach(fila => {
+                        const valorNumerico = parseFloat(fila[nombreColumnaBuscada]);
+                        const fechaFila = fila['fecha'] || fila['Fecha'] || fila['date'] || fila['Date'] || new Date();
+
+                        if (!isNaN(valorNumerico)) {
+                            valoresProcesados.push({
+                                valor: valorNumerico,
+                                fecha: fechaFila
+                            });
+                        }
+                    });
+
+                    payloadBase.valores = valoresProcesados;
+                    await enviarWidgetAlBackend(payloadBase);
+                }
+            });
+        }
+    });
+}
+
+async function enviarWidgetAlBackend(payload) {
+    try {
+        const token = localStorage.getItem('token');
+        const respuesta = await fetch('http://localhost:3000/api/widgets', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (!respuesta.ok) throw new Error("Error al guardar en el servidor");
+
+        alert("Widget y métricas procesadas exitosamente.");
+        window.location.reload();
+    } catch (err) {
+        console.error(err);
+        alert("Ocurrió un error en el servidor al guardar el widget.");
+    }
+}

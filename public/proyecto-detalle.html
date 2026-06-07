@@ -12,7 +12,7 @@
 <script src="https://cdn.jsdelivr.net/npm/gridstack/dist/gridstack-all.js"></script>
 <script src = "https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="js/proyecto-detalle.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <style>
 
 :root {
@@ -497,8 +497,8 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="action-bar-sub">Puedes editar y actualizar métricas</div>
       </div>
       <div style="display:flex;gap:8px;">
-        <a href="#" class="btn btn-outline btn-sm">Editar proyecto</a>
-        <a href="#" class="btn btn-verde btn-sm">Subir métricas</a>
+        <a  class="btn btn-outline btn-sm" id ='btn-agregar-widget'>Editar proyecto</a>
+        <a href="#" class="btn btn-verde btn-sm" onclick="getElementById('modal-widget').style.display='block'">Agregar Widget</a>
       </div>
     </div>
 
@@ -511,7 +511,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="widget-card card-kpi">
                     <div class="widget-header">
                         <h4 class="widget-title">Métrica</h4>
-                        <span class="widget-operation">SUM</span>
+                        <span style= "visibility: hidden;"class ="widget-operation">SUM</span>
                     </div>
                     <div class="widget-body">
                         <span class="widget-value">0</span>
@@ -537,71 +537,71 @@ document.addEventListener('DOMContentLoaded', () => {
     </template>
 
             <!--poniendo las publicaciones del foro relacionadas a este proyecto (lo puse dentro de este div pero si no lo quieren aca lo sacamos)-->
-          <div class="info-card-title" style="margin-top:24px;">
-            <div class="project-section-title">
-              💬 Publicaciones del proyecto
-            </div>
+    <div class="info-card-title" style="margin-top:24px;">
+      <div class="project-section-title">
+        💬 Publicaciones del proyecto
+      </div>
 
-            <div id="project-posts">
-              Cargando publicaciones...
-            </div>
-          </div>
+      <div id="project-posts">
+        Cargando publicaciones...
+      </div>
+    </div>
 
 
 
-          <!--this is los testimonios pq faltaban chavos-->
-          <div class="card" style="margin-top:24px;">
-            <div class="card-body">
+    <!--this is los testimonios pq faltaban chavos-->
+    <div class="card" style="margin-top:24px;">
+      <div class="card-body">
 
-              <div
-                style="
-                  display:flex;
-                  justify-content:space-between;
-                  align-items:center;
-                  margin-bottom:16px;
-                "
-              >
-                <h3 class="project-section-title" style="margin:0;">
-                  💬 Testimonios
-                </h3>
+        <div
+          style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:16px;
+          "
+        >
+          <h3 class="project-section-title" style="margin:0;">
+            💬 Testimonios
+          </h3>
 
-                <button
-                  id="add-testimonio-btn"
-                  class="btn btn-primary btn-sm"
-                  style="display:none;"
-                >
-                  ➕ Agregar testimonio
-                </button>
-              </div>
+          <button
+            id="add-testimonio-btn"
+            class="btn btn-primary btn-sm"
+            style="display:none;"
+          >
+            ➕ Agregar testimonio
+          </button>
+        </div>
 
-              <div id="testimonios-list"></div>
+        <div id="testimonios-list"></div>
 
-              <div
-                id="testimonio-form"
-                style="display:none;margin-top:16px;"
-              >
-                <textarea
-                  id="testimonio-text"
-                  class="form-input"
-                  placeholder="Escribe el testimonio..."
-                  style="width:100%;min-height:100px;"
-                ></textarea>
+        <div
+          id="testimonio-form"
+          style="display:none;margin-top:16px;"
+        >
+          <textarea
+            id="testimonio-text"
+            class="form-input"
+            placeholder="Escribe el testimonio..."
+            style="width:100%;min-height:100px;"
+          ></textarea>
 
-                <button
-                  id="save-testimonio-btn"
-                  class="btn btn-primary btn-sm"
-                  style="margin-top:10px;"
-                >
-                  Guardar testimonio
-                </button>
-              </div>
+          <button
+            id="save-testimonio-btn"
+            class="btn btn-primary btn-sm"
+            style="margin-top:10px;"
+          >
+            Guardar testimonio
+          </button>
+        </div>
 
-            </div>
-          </div>
+      </div>
+    </div>
 
   </div>
 
-    <div>
+  <div>
 
     <div class="info-card">
       <div class="info-card-title">Información general</div>
@@ -632,6 +632,76 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   </div>
+  <!--MODAL WIDGET-->
+  <div id="modal-widget" class="modal" style="display: none;">
+  <form id="form-crear-widget">
+    <h3>Configurar Tarjeta KPI</h3>
+    <div>
+      <label for="widget-nombre">Título del Widget:</label>
+      <input type="text" id="widget-nombre" required placeholder="Ej: Progreso de Alumnos">
+    </div>
+
+    <div class="mb-3">
+      <label class="d-block fw-bold">Origen de la Métrica:</label>
+      
+      <input type="radio" id="metrica-tipo-general" name="metrica-origen" value="general" checked>
+      <label for="metrica-tipo-general" class="me-2">Métricas Generales (Fijas)</label>
+      
+      <input type="radio" id="metrica-tipo-existente" name="metrica-origen" value="existente">
+      <label for="metrica-tipo-existente" class="me-2">Métricas del Proyecto</label>
+      
+      <input type="radio" id="metrica-tipo-nueva" name="metrica-origen" value="nueva">
+      <label for="metrica-tipo-nueva">Crear una nueva</label>
+    </div>
+
+    <div id="wrapper-metrica-seleccion">
+      <label for="widget-metrica" id="label-combo-metrica">Selecciona la Métrica General:</label>
+      <select id="widget-metrica" class="form-select">
+        </select>
+    </div>
+
+    <div id="wrapper-metrica-nueva" style="display: none;">
+      <label for="nueva-metrica-nombre">Nombre de la Nueva Métrica:</label>
+      <input type="text" id="nueva-metrica-nombre" placeholder="Ej: Arboles_Plantados">
+      
+      <label for="nueva-metrica-unidad">Unidad de Medida:</label>
+      <input type="text" id="nueva-metrica-unidad" placeholder="Ej: Kg, Piezas">
+    </div>
+
+    <div class="mt-3">
+      <label for="metrica-entrada-tipo">Método de captura de datos:</label>
+      <select id="metrica-entrada-tipo">
+        <option value="manual">Escribir un valor único ahora mismo</option>
+        <option value="csv">Cargar historial desde archivo CSV</option>
+      </select>
+    </div>
+
+    <div id="wrapper-entrada-manual">
+      <label for="widget-valor-inicial">Valor actual a registrar:</label>
+      <input type="number" id="widget-valor-inicial" placeholder="Ej: 80" step="any">
+    </div>
+
+    <div id="wrapper-entrada-csv" style="display: none;">
+      <label for="widget-archivo-csv">Selecciona el archivo .csv:</label>
+      <input type="file" id="widget-archivo-csv" accept=".csv">
+      <small class="text-muted d-block">Nota: Una columna debe llamarse exactamente como el nombre de la métrica.</small>
+    </div>
+
+    <div class="mt-3">
+      <label for="widget-color">Color de la Tarjeta:</label>
+      <input type="color" id="widget-color" value="#6366f1">
+    </div>
+
+    <input type="hidden" id="widget-plantilla" value="1"> <div class="mt-4">
+      <button type="submit">Guardar y Renderizar</button>
+      <button type="button" onclick="document.getElementById('modal-widget').style.display='none'">Cancelar</button>
+    </div>
+
+  </form>
+
+</div> 
+
+
 </div>
 
 <!-- FOOTER -->
@@ -692,6 +762,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <button onclick="resetStyles()" class="btn-reset">Restablecer valores</button>
   </div>
 </div>
+<script type = "module" src = "projectjs/widget.js"></script>
 <script type="module" src="projectjs/detalle.js"></script>
 </body>
 </html>

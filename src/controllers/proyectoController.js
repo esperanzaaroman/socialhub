@@ -1,5 +1,6 @@
 const ProyectoModel = require('../models/proyectoModel');
 const asyncHandler = require('../middleware/asyncHandler');
+const db = require('../config/db');
 
 const obtenerTodosLosProyectos = asyncHandler(async(req,res) => {
     const proyectos = await ProyectoModel.getAll();
@@ -30,13 +31,36 @@ const createProyecto = async (req,res) => {
 const getProyectoById = async (req,res) => {
     try{
         const id = req.params.id;
+
+        let puedoEditar = false;
+
+        if (req.usuario) {
+            const idUsuario = req.usuario.id; 
+            const rolUsuario = req.usuario.role; 
+
+            if (rolUsuario === 'admin') {
+                puedoEditar = true;
+            } else if (rolUsuario === 'lider') {
+                const [esAsignado] = await db.execute(
+                    `SELECT 1 FROM lider_proyecto WHERE id_proyecto = ? AND id_lider = ?`,
+                    [idProyecto, idUsuario]
+                );
+                puedoEditar = esAsignado.length > 0;
+            }
+        }
         const proyecto = await ProyectoModel.getById(id);
         if (!proyecto){
 
             return res.status(404).json({error:'Proyecto no encontrado'});
 
         }
-        res.json(proyecto);
+        res.json({
+            status: "success",
+            data: {
+                proyecto,
+                puedoEditar
+            }
+        });
     }catch(error){
         console.error(error);
         res.status(500).json({error:'Error del Servidor'});

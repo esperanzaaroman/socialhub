@@ -12,6 +12,7 @@ const catalogoRoutes = require('./routes/catalogoRoutes');
 const widgetRoutes = require('./routes/widgetRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const authRoutes = require('./routes/auth');
+const metricaRoutes = require('./routes/metricaRoutes');
 const proyectoRoutes = require('./routes/proyectoRoutes');
 const { notFoundHandler, errorHandler } = require('./middleware/errorHandler');
 const { sendSuccess } = require('./utils/apiResponse');
@@ -42,6 +43,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api/auth', authRoutes);           
 app.use(express.static(path.join(__dirname, "../public")));
 
+app.use('/api',metricaRoutes);
 app.use('/api/widgets', widgetRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/auth', authRoutes);

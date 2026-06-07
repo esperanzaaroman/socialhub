@@ -2,6 +2,7 @@ const WidgetModel = require('../models/widgetModel');
 const AppError = require('../utils/AppError');
 const { sendSuccess } = require('../utils/apiResponse');
 const asyncHandler = require('../middleware/asyncHandler');
+const db = require('../config/db');
 
 const parsePositiveInt = (value, fieldName) => {
     const parsed = Number.parseInt(value, 10);
@@ -95,17 +96,83 @@ const getWidgetById = asyncHandler(async (req, res) => {
     });
 });
 
-const createWidget = asyncHandler(async (req, res) => {
-    validateCreateBody(req.body);
 
-    const widget = await WidgetModel.create(req.body);
 
-    sendSuccess(res, {
-        statusCode: 201,
-        message: 'Widget creado con éxito',
-        data: { widget }
-    });
-});
+const createWidgetDinamico = async (req, res) => {
+    const connection = await db.getConnection();
+    await connection.beginTransaction();
+
+    try {
+        const { id_proyecto, nombre_widget, id_plantilla, operacion, ui_config, infoMetrica, valores } = req.body;
+
+        if (!infoMetrica) {
+            return res.status(400).json({ error: "Falta la información de la métrica (infoMetrica)." });
+        }
+
+        let idMetricaFinal = null;
+
+
+        if (infoMetrica.tipo === 'nueva') {
+            const queryNuevaMetrica = `INSERT INTO metricas_proyecto (nombre, unidad, es_general) VALUES (?, ?, 0)`;
+            const [resultadoMetrica] = await connection.execute(queryNuevaMetrica, [
+                infoMetrica.nombre,
+                infoMetrica.unidad || 'Unidades'
+            ]);
+            
+            idMetricaFinal = resultadoMetrica.insertId;
+        } else {
+            idMetricaFinal = parseInt(infoMetrica.id_metrica, 10);
+            
+            if (isNaN(idMetricaFinal)) {
+                return res.status(400).json({ error: "El ID de la métrica existente es inválido o no se recibió." });
+            }
+        }
+
+
+        if (valores && valores.length > 0) {
+            const queryValores = `INSERT INTO valores_metricas (id_metrica, valor_decimal, fecha) VALUES (?, ?, ?)`;
+            
+            for (const item of valores) {
+                const fechaFormateada = new Date(item.fecha).toISOString().slice(0, 19).replace('T', ' ');
+                
+                await connection.execute(queryValores, [
+                    idMetricaFinal,
+                    item.valor,
+                    fechaFormateada
+                ]);
+            }
+        }
+
+      
+        const widgetPayload = {
+            id_proyecto: parseInt(id_proyecto, 10),
+            id_metrica: idMetricaFinal,
+            id_plantilla: parseInt(id_plantilla, 10) || 1,
+            operacion: operacion || 'SUM',
+            nombre_widget: nombre_widget,
+            ui_config: typeof ui_config === 'object' ? JSON.stringify(ui_config) : ui_config
+        };
+        
+        const nuevoWidget = await WidgetModel.create(widgetPayload);
+
+        await connection.commit();
+
+        return res.status(201).json({
+            status: "success",
+            message: "¡Widget y métricas procesadas exitosamente en la base de datos!",
+            data: nuevoWidget
+        });
+
+    } catch (error) {
+        await connection.rollback();
+        console.error("❌ Error crítico en la carga dinámica del backend:", error);
+        return res.status(500).json({ error: "Fallo al procesar el flujo dinámico del widget." });
+    } finally {
+        connection.release();
+    }
+};
+
+
 
 const updateWidget = asyncHandler(async (req, res) => {
     const id = parsePositiveInt(req.params.id, 'id');
@@ -160,7 +227,7 @@ const deleteWidget = asyncHandler(async (req, res) => {
 module.exports = {
     getWidgets,
     getWidgetById,
-    createWidget,
+    createWidgetDinamico,
     updateWidget,
     deleteWidget,
     guardarLayoutDashboard
