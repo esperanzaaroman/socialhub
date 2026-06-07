@@ -41,7 +41,7 @@ gridStack.on('change', async function(event, items) {
     console.log("Nuevas posiciones listas para guardar:", actualizaciones);
 
     try {
-        await fetch('http://localhost:3000/api/widgets/layout', {
+        await fetch('/api/widgets/layout', {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ widgets: actualizaciones })
@@ -58,7 +58,7 @@ async function cargarDetalleProyecto(){
     console.log(idProyecto);
     try {
         const token = localStorage.getItem('token');
-        const respuestaProj = await fetch(`http://localhost:3000/api/proyectos/${idProyecto}`,{
+        const respuestaProj = await fetch(`/api/proyectos/${idProyecto}`,{
             headers: {
                 'Authorization': `Bearer ${token}` 
             }
@@ -92,7 +92,65 @@ async function cargarDetalleProyecto(){
             const fechaFinCortas = new Date(proyectoData.fecha_fin).toLocaleDateString();
             document.getElementById('proyecto-fin').innerText = fechaFinCortas;
 
-            const respuestaWidgets = await fetch(`http://localhost:3000/api/widgets?id_proyecto=${idProyecto}`);
+            // ── LÍDER DEL PROYECTO ────────────────────────────────
+            const liderNombreEl  = document.getElementById('lider-nombre');
+            const liderCarreraEl = document.getElementById('lider-carrera');
+            const liderAvatarEl  = document.getElementById('lider-avatar');
+            const liderLinkEl    = document.getElementById('lider-perfil-link');
+
+            if (liderNombreEl)  liderNombreEl.textContent  = proyectoData.lider   || 'Sin líder asignado';
+            if (liderCarreraEl) liderCarreraEl.textContent = proyectoData.carrera_lider || 'Carrera no registrada';
+            if (liderAvatarEl)  liderAvatarEl.textContent  = proyectoData.lider ? proyectoData.lider.charAt(0).toUpperCase() : '?';
+            if (liderLinkEl && proyectoData.id_lider) {
+                liderLinkEl.href = `lider-perfil.html?id=${proyectoData.id_lider}`;
+            }
+            // ─────────────────────────────────────────────────────
+
+            // ── BOTÓN EDITAR PROYECTO ─────────────────────────────
+            const btnEditar = document.getElementById('btn-agregar-widget');
+            if (btnEditar) {
+                btnEditar.addEventListener('click', function () {
+                    const editNombre      = document.getElementById('edit-nombre');
+                    const editDescripcion = document.getElementById('edit-descripcion');
+                    const editEstado      = document.getElementById('edit-estado');
+                    if (editNombre)      editNombre.value      = proyectoData.nombre || '';
+                    if (editDescripcion) editDescripcion.value = proyectoData.descripcion_corta || '';
+                    if (editEstado)      editEstado.value      = proyectoData.estado || 'activo';
+                    document.getElementById('modal-editar-proyecto').style.display = 'flex';
+                });
+            }
+
+            const saveEditBtn = document.getElementById('save-edit-proyecto');
+            if (saveEditBtn) {
+                saveEditBtn.addEventListener('click', async function () {
+                    const nombre          = document.getElementById('edit-nombre')?.value.trim();
+                    const descripcion_corta = document.getElementById('edit-descripcion')?.value.trim();
+                    const estado          = document.getElementById('edit-estado')?.value;
+                    const msgEl           = document.getElementById('edit-proyecto-message');
+
+                    if (!nombre || !descripcion_corta) {
+                        if (msgEl) { msgEl.textContent = 'Completa todos los campos'; msgEl.style.display = 'block'; msgEl.style.background = '#fee2e2'; msgEl.style.color = '#991b1b'; }
+                        return;
+                    }
+
+                    const token = localStorage.getItem('token');
+                    const resp  = await fetch(`/api/proyectos/${idProyecto}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+                        body: JSON.stringify({ nombre, descripcion_corta, estado })
+                    });
+                    const data = await resp.json();
+                    if (resp.ok) {
+                        alert('Proyecto actualizado correctamente ✅');
+                        window.location.reload();
+                    } else {
+                        if (msgEl) { msgEl.textContent = data.error || 'Error al guardar'; msgEl.style.display = 'block'; msgEl.style.background = '#fee2e2'; msgEl.style.color = '#991b1b'; }
+                    }
+                });
+            }
+            // ─────────────────────────────────────────────────────
+
+            const respuestaWidgets = await fetch(`/api/widgets?id_proyecto=${idProyecto}`);
             const widgets = await respuestaWidgets.json();
 
             const iframeVideo = document.getElementById('videoproject');
@@ -139,7 +197,7 @@ async function cargarDetalleProyecto(){
 
             const responseTestimonios =
             await fetch(
-                `http://localhost:3000/api/testimonios/proyecto/${idProyecto}`
+                `/api/testimonios/proyecto/${idProyecto}`
             );
 
             const testimonios =
@@ -221,7 +279,7 @@ async function cargarDetalleProyecto(){
 
                 const response =
                 await fetch(
-                    'http://localhost:3000/api/testimonios',
+                    '/api/testimonios',
                     {
                     method: 'POST',
                     headers: {
@@ -259,7 +317,7 @@ async function cargarDetalleProyecto(){
 
             const responsePosts =
                 await fetch(
-                `http://localhost:3000/api/forum/posts?projectId=${idProyecto}`
+                `/api/forum/posts?projectId=${idProyecto}`
                 );
 
             const posts =
@@ -299,7 +357,7 @@ async function cargarDetalleProyecto(){
                         post.multimedia_publi
                         ? `
                             <img
-                            src="http://localhost:3000/${post.multimedia_publi}"
+                            src="/${post.multimedia_publi}"
                             alt="Imagen publicación"
                             style="
                                 width:100%;
@@ -396,10 +454,10 @@ async function cargarMetricasFiltradas(tipo, idProyecto = null) {
 
     try {
         const token = localStorage.getItem('token');
-        let url = 'http://localhost:3000/api/metricas/generales'; 
+        let url = '/api/metricas/generales'; 
         
         if (tipo === 'proyecto') {
-            url = `http://localhost:3000/api/proyectos/${idProyecto}/metricas-utilizadas`;
+            url = `/api/proyectos/${idProyecto}/metricas-utilizadas`;
         }
 
         const respuesta = await fetch(url, { headers: { 'Authorization': `Bearer ${token}` } });
@@ -599,7 +657,7 @@ if (formWidget) {
 async function enviarWidgetAlBackend(payload) {
     try {
         const token = localStorage.getItem('token');
-        const respuesta = await fetch('http://localhost:3000/api/widgets', {
+        const respuesta = await fetch('/api/widgets', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

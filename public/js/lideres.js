@@ -13,7 +13,7 @@ document.addEventListener(
 
     const response =
       await fetch(
-        'http://localhost:3000/api/auth/leaders'
+        '/api/auth/leaders'
       );
 
     const lideres =
@@ -46,6 +46,10 @@ document.addEventListener(
                   : '?'
               );
 
+        const paleta = ['#5CA09E','#9B5BA5','#D7685B','#7AB8DD','#E89042','#6366f1'];
+        const color  = paleta[lideres.indexOf(lider) % paleta.length];
+        const letra  = lider.username ? lider.username.charAt(0).toUpperCase() : '?';
+
         grid.innerHTML += `
           <a
             class="lider-card"
@@ -54,28 +58,16 @@ document.addEventListener(
 
             <div
               class="lider-banner"
-              style="
-                background:
-                linear-gradient(
-                  135deg,
-                  #5CA09E,
-                  #3d7a78
-                );
-              "
-            ></div>
+              style="background:linear-gradient(135deg, ${color}, ${color}cc);"
+            >
+              <div class="lider-letra-fondo">${letra}</div>
+            </div>
 
             <div class="lider-body">
 
               <div
                 class="lider-avatar"
-                style="
-                  background:
-                  linear-gradient(
-                    135deg,
-                    #1e40af,
-                    #3b82f6
-                  );
-                "
+                style="background:linear-gradient(135deg, ${color}, ${color}cc);"
               >
                 ${avatar}
               </div>

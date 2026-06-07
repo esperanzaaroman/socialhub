@@ -8,5 +8,6 @@ const { conectarUsuarioOpcional } = require('../middleware/authOpcional');
 console.log(typeof verifyToken);
 router.post('/',verifyToken,proyectoController.createProyecto);
 router.get('/:id',conectarUsuarioOpcional,proyectoController.getProyectoById);
+router.put('/:id',verifyToken,proyectoController.updateProyecto);
 router.get('/',proyectoController.obtenerTodosLosProyectos);
 module.exports = router;

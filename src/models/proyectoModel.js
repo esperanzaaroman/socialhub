@@ -46,8 +46,15 @@ const ProyectoModel = {
         const query = `SELECT * FROM vista_proyecto_completo WHERE id_proyecto = ?`;
         const[rows] = await db.execute(query,[id]);
         return rows[0];
-    }
+    },
 
+    update: async (id, data) => {
+        const { nombre, descripcion_corta, estado } = data;
+        await db.execute(
+            `UPDATE proyecto SET nombre = ?, descripcion_corta = ?, estado = ? WHERE id_proyecto = ?`,
+            [nombre, descripcion_corta, estado, id]
+        );
+    }
 
 }
 

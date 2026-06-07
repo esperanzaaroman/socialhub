@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
   if (idPerfil) {
     const response = await fetch(
-      `http://localhost:3000/api/auth/profile/${idPerfil}`
+      `/api/auth/profile/${idPerfil}`
     );
     usuario = await response.json();
   }
@@ -66,7 +66,7 @@ if (profilePostsContainer) {
 
   const responsePosts =
     await fetch(
-      `http://localhost:3000/api/forum/posts?userId=${usuario.id_usuario}`
+      `/api/forum/posts?userId=${usuario.id_usuario}`
     );
 
   const posts =
@@ -97,7 +97,7 @@ if (profilePostsContainer) {
             post.multimedia_publi
               ? `
                 <img
-                  src="http://localhost:3000/${post.multimedia_publi}"
+                  src="/${post.multimedia_publi}"
                   alt="Imagen publicación"
                   style="width:100%;max-height:260px;object-fit:cover;border-radius:12px;margin-top:10px;"
                 >
@@ -125,7 +125,7 @@ if (profilePostsContainer) {
     if (usuario.foto_perfil) {
       avatar.innerHTML = `
         <img
-          src="http://localhost:3000/${usuario.foto_perfil}"
+          src="/${usuario.foto_perfil}"
           alt="Foto de perfil"
           style="width:100%;height:100%;object-fit:cover;border-radius:50%;"
         >
@@ -220,12 +220,20 @@ if (profilePostsContainer) {
               placeholder="Juan Pérez Guerrero"
               value="${usuario.username || ''}"
             >
+            <div style="display:flex;gap:8px;margin-top:8px;">
+              <button id="save-hero-btn" class="btn btn-primary btn-sm">💾 Guardar cambios</button>
+              <button id="cancel-hero-btn" class="btn btn-outline-white btn-sm" style="background:transparent;border:1px solid rgba(255,255,255,.4);color:white;">✕ Cancelar</button>
+            </div>
           </div>
         `;
-      }
 
-      if (saveProfileBtn) {
-        saveProfileBtn.style.display = 'inline-flex';
+        document.getElementById('save-hero-btn')?.addEventListener('click', function () {
+          if (saveProfileBtn) saveProfileBtn.click();
+        });
+
+        document.getElementById('cancel-hero-btn')?.addEventListener('click', function () {
+          window.location.reload();
+        });
       }
 
       if (profileCorreo) {
@@ -347,7 +355,7 @@ if (profilePostsContainer) {
       const token = localStorage.getItem('token');
 
       const response = await fetch(
-        'http://localhost:3000/api/auth/profile',
+        '/api/auth/profile',
         {
           method: 'PUT',
           headers: {
@@ -407,7 +415,7 @@ if (profilePostsContainer) {
       const token = localStorage.getItem('token');
 
       const response = await fetch(
-        'http://localhost:3000/api/auth/profile-photo',
+        '/api/auth/profile-photo',
         {
           method: 'PUT',
           headers: {
@@ -428,7 +436,7 @@ if (profilePostsContainer) {
         if (avatar) {
           avatar.innerHTML = `
             <img
-              src="http://localhost:3000/${data.foto_perfil}?t=${Date.now()}"
+              src="/${data.foto_perfil}?t=${Date.now()}"
               alt="Foto de perfil"
               style="width:100%;height:100%;object-fit:cover;border-radius:50%;"
             >
@@ -547,7 +555,7 @@ if (changePasswordBtn) {
 
       const response =
         await fetch(
-          'http://localhost:3000/api/auth/change-password',
+          '/api/auth/change-password',
           {
             method: 'PUT',
             headers: {

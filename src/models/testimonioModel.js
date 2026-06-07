@@ -47,7 +47,21 @@ async function getTestimoniosByProject(
 
 }
 
+async function getAllTestimonios(limit = 6) {
+  const [rows] = await pool.query(
+    `SELECT t.id_testimonio, t.texto, t.fecha_hora,
+            p.nombre AS nombre_proyecto, p.id_proyecto
+     FROM testimonio t
+     JOIN proyecto p ON t.id_proyecto = p.id_proyecto
+     ORDER BY t.fecha_hora DESC
+     LIMIT ?`,
+    [limit]
+  );
+  return rows;
+}
+
 module.exports = {
   createTestimonio,
-  getTestimoniosByProject
+  getTestimoniosByProject,
+  getAllTestimonios
 };

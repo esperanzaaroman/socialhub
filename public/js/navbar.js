@@ -3,7 +3,7 @@ function crearAvatarNavbar(usuario) {
   if (usuario.foto_perfil) {
     return `
       <img
-        src="http://localhost:3000/${usuario.foto_perfil}"
+        src="/${usuario.foto_perfil}"
         alt="Foto de perfil"
         style="
           width:100%;
@@ -55,7 +55,7 @@ async function cargarNavbar(paginaActiva) {
 
     navRight.innerHTML = `
       <span class="navbar-badge">Administrador</span>
-      <a href="lider-perfil.html" class="navbar-avatar" style="background:var(--morado);">
+      <a href="admin-perfil.html" class="navbar-avatar" style="background:var(--morado);">
         ${avatarContenido}
       </a>
     `;

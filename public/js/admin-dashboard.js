@@ -192,7 +192,7 @@ if (roleToCreate === 'lider' && !carrera) {
 
       const response =
         await fetch(
-          'http://localhost:3000/api/auth/admin/create-user',
+          '/api/auth/admin/create-user',
           {
             method: 'POST',
             headers: {

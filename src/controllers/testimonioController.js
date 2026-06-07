@@ -1,6 +1,7 @@
 const {
   createTestimonio,
-  getTestimoniosByProject
+  getTestimoniosByProject,
+  getAllTestimonios
 } = require(
   '../models/testimonioModel'
 );
@@ -81,7 +82,18 @@ async function getProjectTestimonios(
 
 }
 
+async function getTestimonios(req, res) {
+  try {
+    const testimonios = await getAllTestimonios();
+    res.json(testimonios);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: 'Error obteniendo testimonios' });
+  }
+}
+
 module.exports = {
   createProjectTestimonio,
-  getProjectTestimonios
+  getProjectTestimonios,
+  getTestimonios
 };

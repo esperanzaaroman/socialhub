@@ -51,7 +51,7 @@ CREATE TABLE proyecto (
     fecha_fin DATE,
     periodo ENUM('regular', 'Intensivo Invierno', 'Intensivo verano'),
     video_url VARCHAR(150),
-    estado ENUM('pendiente', 'en_proceso', 'activo', 'completado') DEFAULT 'pendiente',
+    estado ENUM('activo', 'inactivo') DEFAULT 'inactivo',
     correo VARCHAR(100),
     FOREIGN KEY (id_categoria) REFERENCES categoria(id_categoria) ON DELETE SET NULL
 );
@@ -127,7 +127,9 @@ CREATE TABLE archivos_csv (
 CREATE TABLE metricas_proyecto (
     id_metrica INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
-    clave VARCHAR(50)
+    clave VARCHAR(50),
+    unidad VARCHAR(50) DEFAULT 'Unidades',
+    es_general TINYINT(1) DEFAULT 0
 );
 
 CREATE TABLE valores_metricas (

@@ -13,27 +13,22 @@ document.addEventListener(
 
     await cargarNavbar('publico-proyectos');
 
-    if (
-      rol === 'admin' ||
-      rol === 'lider'
-    ) {
+    if (rol === 'admin' || rol === 'lider') {
 
-      if (actionBar) {
+      if (actionBar) actionBar.style.display = 'flex';
 
-        actionBar.style.display =
-          'flex';
+      const label = document.getElementById('action-bar-label');
+      const sub   = document.getElementById('action-bar-sub');
 
+      if (rol === 'admin') {
+        if (label) label.textContent = 'Vista de administrador';
+        if (sub)   sub.textContent   = 'Puedes editar y supervisar este proyecto';
       }
+      // lider: mantiene el texto por defecto del HTML
 
-    }
-    else {
+    } else {
 
-      if (actionBar) {
-
-        actionBar.style.display =
-          'none';
-
-      }
+      if (actionBar) actionBar.style.display = 'none';
 
     }
 
