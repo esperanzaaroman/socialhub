@@ -9,6 +9,7 @@ const { getBeneficiariosCount } = require('../controllers/proyectoController');
 console.log(typeof verifyToken);
 router.post('/',verifyToken,proyectoController.createProyecto);
 router.get('/:id',conectarUsuarioOpcional,proyectoController.getProyectoById);
+router.put('/:id',verifyToken,proyectoController.updateProyecto);
 router.get('/',proyectoController.obtenerTodosLosProyectos);
 router.get('/:id/beneficiarios/count', getBeneficiariosCount);
 module.exports = router;

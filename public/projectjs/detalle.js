@@ -72,7 +72,7 @@ gridStack.on('change', async function(event, items) {
         alto:  item.h
     }));
     try {
-        await fetch('http://localhost:3000/api/widgets/layout', {
+        await fetch('/api/widgets/layout', {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ widgets: actualizaciones })
@@ -667,7 +667,7 @@ function inicializarFormCrear() {
 async function enviarWidgetAlBackend(payload) {
     try {
         const token = localStorage.getItem('token');
-        const respuesta = await fetch('http://localhost:3000/api/widgets', {
+        const respuesta = await fetch('/api/widgets', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
             body: JSON.stringify(payload)

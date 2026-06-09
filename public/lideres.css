@@ -1,149 +1,209 @@
+/* ================================================================
+   LIDERES.CSS — SISTEMA CAMPAÑA / IMPACTO SOCIAL
+   Tipografía : Big Shoulders Display (titulares) · Mulish (cuerpo)
+   Sigue el mismo sistema visual de publico-inicio.css
+   ================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Mulish:wght@300;400;500;600;700&display=swap');
+
+body         { font-family: 'Mulish', sans-serif; }
+h1,h2,h3,h4 { font-family: 'Big Shoulders Display', sans-serif; text-transform: uppercase; letter-spacing: .02em; }
+
+/* ================================================================
+   HERO
+   ================================================================ */
 .lideres-hero {
-    background: linear-gradient(135deg, #0F2579 0%, #1a3a8a 50%, #312e81 100%);
-    color: white;
-    padding: 3.5rem 2.5rem 2.5rem;
-    text-align: center;
+  background-color: var(--azul-tec);
+  background-image:
+    radial-gradient(ellipse 55% 90% at 110% 50%, rgba(245,158,11,.1) 0%, transparent 60%),
+    radial-gradient(circle, rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size: 100% 100%, 26px 26px;
+  color: white;
+  padding: 4rem 2.5rem 3.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
 }
+
+.lideres-hero::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 5px;
+  background: linear-gradient(to bottom, var(--naranja), rgba(245,158,11,0));
+  pointer-events: none;
+}
+
 .lideres-hero h1 {
-    font-family: 'Sora', sans-serif;
-    font-size: 2.6rem;
-    font-weight: 800;
-    color: #E89042;
-    margin-bottom: 0.6rem;
+  font-family: 'Big Shoulders Display', sans-serif;
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .025em;
+  line-height: .95;
+  color: white;
+  margin-bottom: .75rem;
 }
+
+.acento { color: var(--naranja); }
+
 .lideres-hero p {
-    font-size: 1.05rem;
-    color: rgba(255,255,255,0.75);
-    max-width: 520px;
-    margin: 0 auto;
+  font-family: 'Mulish', sans-serif;
+  font-size: 1rem;
+  color: rgba(255,255,255,.58);
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.75;
+  font-weight: 300;
 }
 
+/* ================================================================
+   CONTENIDO
+   ================================================================ */
 .lideres-contenido {
-    max-width: 1100px;
-    margin: 3rem auto;
-    padding: 0 2rem 4rem;
+  max-width: 1100px;
+  margin: 3rem auto;
+  padding: 0 2rem 5rem;
 }
 
+/* ================================================================
+   GRID DE TARJETAS
+   ================================================================ */
 .lideres-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
 }
 
+/* ================================================================
+   TARJETA DE LÍDER
+   ================================================================ */
 .lider-card {
-    background: white;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-    text-decoration: none;
-    color: #0f172a;
-    display: flex;
-    flex-direction: column;
+  background: white;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,.05);
+  border: 1px solid #eaecf0;
+  transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+  text-decoration: none;
+  color: #0f172a;
+  display: flex;
+  flex-direction: column;
 }
+
 .lider-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 14px 40px rgba(0,0,0,0.13);
+  transform: translateY(-7px);
+  box-shadow: 0 20px 48px rgba(15,37,121,.14);
+  border-color: transparent;
 }
 
+/* Banner superior */
 .lider-banner {
-    height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
 }
 
+/* Letra decorativa condensada */
+.lider-letra-fondo {
+  position: absolute;
+  right: 8px;
+  bottom: -16px;
+  font-family: 'Big Shoulders Display', sans-serif;
+  font-size: 6.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.14);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Avatar circular */
 .lider-avatar {
-    width: 72px;
-    height: 72px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Sora', sans-serif;
-    font-size: 1.8rem;
-    font-weight: 800;
-    color: white;
-    margin-top: 44px;
-    border: 4px solid white;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
-    flex-shrink: 0;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Big Shoulders Display', sans-serif;
+  font-size: 2rem;
+  font-weight: 900;
+  color: white;
+  margin-top: -36px;
+  margin-bottom: 1rem;
+  border: 4px solid white;
+  box-shadow: 0 4px 14px rgba(0,0,0,.15);
+  flex-shrink: 0;
+  text-transform: uppercase;
+  overflow: hidden;
 }
 
+/* ================================================================
+   CUERPO DE LA TARJETA
+   ================================================================ */
 .lider-body {
-    padding: 2.5rem 1.5rem 1.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    flex: 1;
+  padding: 3rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1;
 }
 
 .lider-nombre {
-    font-family: 'Sora', sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
-    color: #0f172a;
-    margin-bottom: 0.25rem;
+  font-family: 'Big Shoulders Display', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  color: var(--azul-tec);
+  margin-bottom: .2rem;
+  line-height: 1;
 }
 
 .lider-carrera {
-    font-size: 0.8rem;
-    color: #64748b;
-    margin-bottom: 0.85rem;
+  font-family: 'Mulish', sans-serif;
+  font-size: .8rem;
+  color: #64748b;
+  margin-bottom: .85rem;
+  font-weight: 500;
 }
 
 .lider-proyecto {
-    font-size: 0.82rem;
-    font-weight: 600;
-    color: white;
-    padding: 0.3rem 0.85rem;
-    border-radius: 99px;
-    margin-bottom: 1rem;
-    display: inline-block;
+  font-family: 'Mulish', sans-serif;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: white;
+  background: var(--naranja);
+  padding: .25rem .9rem;
+  border-radius: 99px;
+  margin-bottom: 1rem;
+  display: inline-block;
 }
 
-.lider-stats {
-    display: flex;
-    gap: 1.5rem;
-    justify-content: center;
-    padding-top: 1rem;
-    border-top: 1px solid #e2e8f0;
-    width: 100%;
-}
-
-.lider-stat {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.15rem;
-}
-
-.lider-stat-val {
-    font-family: 'Sora', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #0f172a;
-}
-
-.lider-stat-lab {
-    font-size: 0.7rem;
-    color: #94a3b8;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-}
-
+/* ================================================================
+   FOOTER
+   ================================================================ */
 footer {
-    background-color: #0f172a;
-    color: rgba(255,255,255,0.6);
-    text-align: center;
-    padding: 2rem;
-    font-size: 0.85rem;
+  background-color: #0f172a;
+  color: rgba(255,255,255,.6);
+  text-align: center;
+  padding: 2rem;
+  font-size: .85rem;
 }
 footer strong { color: white; }
 
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
 @media (max-width: 600px) {
-    .lideres-hero h1 { font-size: 1.9rem; }
-    .lideres-grid { grid-template-columns: 1fr; }
+  .lideres-hero h1 { font-size: 2.2rem; }
+  .lideres-grid    { grid-template-columns: 1fr; }
 }

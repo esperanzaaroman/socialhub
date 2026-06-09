@@ -6,7 +6,8 @@ const router =
 
 const {
   createProjectTestimonio,
-  getProjectTestimonios
+  getProjectTestimonios,
+  getTestimonios
 } = require(
   '../controllers/testimonioController'
 );
@@ -16,6 +17,8 @@ const {
 } = require(
   '../middleware/authMiddleware'
 );
+
+router.get('/', getTestimonios);
 
 router.get(
   '/proyecto/:idProyecto',

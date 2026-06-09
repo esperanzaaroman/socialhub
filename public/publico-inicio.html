@@ -88,8 +88,7 @@
             <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
           </svg>
         </div>
-<!-- AQUIIIIIIIIIIIIIIIII AGREGAR BASE DE DATOS -->
-        <div class="metrica-numero">25</div>
+        <div class="metrica-numero" id="metrica-proyectos">–</div>
         <div class="metrica-label">Proyectos Activos</div>
       </div>
 
@@ -101,8 +100,7 @@
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
           </svg>
         </div>
-<!-- AQUIIIIIIIIIIIIIIIII AGREGAR BASE DE DATOS -->
-        <div class="metrica-numero">2,580+</div>
+        <div class="metrica-numero" id="metrica-beneficiarios">–</div>
         <div class="metrica-label">Beneficiarios</div>
       </div>
 
@@ -116,8 +114,7 @@
             <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
           </svg>
         </div>
-<!-- AQUIIIIIIIIIIIIIIIII AGREGAR BASE DE DATOS -->
-        <div class="metrica-numero">235+</div>
+        <div class="metrica-numero" id="metrica-lideres">–</div>
         <div class="metrica-label">Líderes sociales</div>
       </div>
 
@@ -130,8 +127,7 @@
             <polyline points="12 6 12 12 16 14"/>
           </svg>
         </div>
-<!-- AQUIIIIIIIIIIIIIIIII AGREGAR BASE DE DATOS -->
-        <div class="metrica-numero">10,720+</div>
+        <div class="metrica-numero" id="metrica-horas">–</div>
         <div class="metrica-label">Horas de Servicio</div>
       </div>
     </div>
@@ -172,80 +168,8 @@
       <p>Conoce los proyectos solidarios más relevantes del campus este semestre</p>
     </div>
 
-    <div class="cuadricula-destacados">
-
-<!-- AQUIIIIIIIIIIIIIIIII AGREGAR BASE DE DATOS -->
-      <!-- Proyecto 1: Crisálida -->
-      <a class="tarjeta-destacado" href="publico-proyectos.html">
-        <div class="destacado-banner" style="background-color: #5CA09E;">
-          <div class="ods-chips">
-            <span class="ods-chip">ODS 4</span>
-            <span class="ods-chip">ODS 10</span>
-          </div>
-          <span class="badge-estado" style="color: #15803d;">● Activo</span>
-          <div class="destacado-letra">C</div>
-        </div>
-        <div class="destacado-cuerpo">
-          <div class="destacado-titulo">Crisálida</div>
-          <div class="destacado-desc">
-            Apoyo educativo para estudiantes de escuelas técnicas, midiendo
-            el aprendizaje al inicio y al final del programa.
-          </div>
-          <div class="destacado-stats">
-            <div><span>245</span> beneficiarios</div>
-            <div><span>1,840</span> horas</div>
-          </div>
-        </div>
-      </a>
-
-<!-- AQUIIIIIIIIIIIIIIIII AGREGAR BASE DE DATOS -->
-      <!-- Proyecto 2: Salud Comunitaria -->
-      <a class="tarjeta-destacado" href="publico-proyectos.html">
-        <div class="destacado-banner" style="background-color: #9B5BA5;">
-          <div class="ods-chips">
-            <span class="ods-chip">ODS 3</span>
-            <span class="ods-chip">ODS 1</span>
-          </div>
-          <span class="badge-estado" style="color: #15803d;">● Activo</span>
-          <div class="destacado-letra">S</div>
-        </div>
-        <div class="destacado-cuerpo">
-          <div class="destacado-titulo">Salud Comunitaria</div>
-          <div class="destacado-desc">
-            Iniciativa de salud comunitaria con chequeos médicos gratuitos
-            y talleres de bienestar en colonias vulnerables.
-          </div>
-          <div class="destacado-stats">
-            <div><span>520</span> beneficiarios</div>
-            <div><span>2,300</span> horas</div>
-          </div>
-        </div>
-      </a>
-<!-- AQUIIIIIIIIIIIIIIIII AGREGAR BASE DE DATOS -->
-      <!-- Proyecto 3: EcoVerde Campus -->
-      <a class="tarjeta-destacado" href="publico-proyectos.html">
-        <div class="destacado-banner" style="background-color: #D7685B;">
-          <div class="ods-chips">
-            <span class="ods-chip">ODS 13</span>
-            <span class="ods-chip">ODS 11</span>
-            <span class="ods-chip">ODS 12</span>
-          </div>
-          <span class="badge-estado" style="color: #15803d;">● Activo</span>
-          <div class="destacado-letra">E</div>
-        </div>
-        <div class="destacado-cuerpo">
-          <div class="destacado-titulo">EcoVerde Campus</div>
-          <div class="destacado-desc">
-            Proyecto de sostenibilidad enfocado en reducción de residuos,
-            jardines urbanos y educación ambiental en el campus.
-          </div>
-          <div class="destacado-stats">
-            <div><span>1,200</span> beneficiarios</div>
-            <div><span>3,200</span> horas</div>
-          </div>
-        </div>
-      </a>
-
+    <div class="cuadricula-destacados" id="cuadriculaDestacados">
+      <!-- Se cargan dinámicamente desde /api/proyectos -->
     </div>
 
     <!-- botón ver todos -->
@@ -265,68 +189,8 @@
         <p>Lo que dicen quienes han vivido el cambio de cerca</p>
       </div>
 
-      <div class="cuadricula-testimonios-pub">
-
-        <div class="tarjeta-testimonio-pub">
-          <div class="comillas-pub">"</div>
-          <p class="testimonio-texto-pub">
-            El programa no solo mejoró mis calificaciones, me demostró que
-            puedo lograr cualquier cosa con el apoyo correcto.
-          </p>
-          <div class="testimonio-pie-pub">
-            <div class="avatar-pub" style="background-color: #5CA09E;">MG</div>
-            <div>
-              <div class="testimonio-nombre-pub">María González</div>
-              <div class="testimonio-proyecto-pub">Beneficiaria – Crisálida</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="tarjeta-testimonio-pub">
-          <div class="comillas-pub">"</div>
-          <p class="testimonio-texto-pub">
-            El impacto medible en el rendimiento de nuestros alumnos ha sido
-            notable. Este programa está transformando vidas reales.
-          </p>
-          <div class="testimonio-pie-pub">
-            <div class="avatar-pub" style="background-color: #E89042;">CR</div>
-            <div>
-              <div class="testimonio-nombre-pub">Prof. Carlos Ruiz</div>
-              <div class="testimonio-proyecto-pub">Director de escuela – Crisálida</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="tarjeta-testimonio-pub">
-          <div class="comillas-pub">"</div>
-          <p class="testimonio-texto-pub">
-            Estos jóvenes traen tanta alegría. Aprendí a hacer videollamadas
-            y ahora puedo ver a mis nietos aunque estén lejos.
-          </p>
-          <div class="testimonio-pie-pub">
-            <div class="avatar-pub" style="background-color: #9B5BA5;">DM</div>
-            <div>
-              <div class="testimonio-nombre-pub">Don Manuel</div>
-              <div class="testimonio-proyecto-pub">Adulto mayor – Manos que Ayudan</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="tarjeta-testimonio-pub">
-          <div class="comillas-pub">"</div>
-          <p class="testimonio-texto-pub">
-            EcoVerde ha cambiado cómo nuestros alumnos piensan sobre la
-            sostenibilidad en su vida diaria. Es un modelo a seguir.
-          </p>
-          <div class="testimonio-pie-pub">
-            <div class="avatar-pub" style="background-color: #D7685B;">LV</div>
-            <div>
-              <div class="testimonio-nombre-pub">Dra. Laura Vega</div>
-              <div class="testimonio-proyecto-pub">Asesora – EcoVerde Campus</div>
-            </div>
-          </div>
-        </div>
-
+      <div class="cuadricula-testimonios-pub" id="cuadriculaTestimonios">
+        <!-- Se cargan dinámicamente desde /api/testimonios -->
       </div>
     </div>
   </section>
@@ -356,73 +220,134 @@
   </footer>
 
 
+  <!-- ===== DATOS DINÁMICOS ===== -->
+  <script>
+  (function () {
+    var paleta = ['#5CA09E', '#9B5BA5', '#D7685B', '#7AB8DD', '#E89042'];
+
+    function norm(s) {
+      return (s || '').toLowerCase()
+        .normalize('NFD').replace(/[̀-ͯ]/g, '');
+    }
+
+    /* ── Proyectos destacados ─────────────────────────────── */
+    function renderDestacados(activos) {
+      var cont = document.getElementById('cuadriculaDestacados');
+      if (!cont) return;
+      if (activos.length === 0) {
+        cont.innerHTML = '<p style="color:#94a3b8;text-align:center;padding:2rem;">No hay proyectos activos por el momento.</p>';
+        return;
+      }
+      cont.innerHTML = activos.slice(0, 3).map(function (p, i) {
+        var color = paleta[i % paleta.length];
+        var chips = (p.ods ? p.ods.split(', ').filter(Boolean) : [])
+          .slice(0, 3).map(function (l) { return '<span class="ods-chip">' + l + '</span>'; }).join('');
+        var letra = p.nombre.charAt(0).toUpperCase();
+        return '<a class="tarjeta-destacado" href="proyecto-detalle.html?id=' + p.id_proyecto + '">' +
+          '<div class="destacado-banner" style="background-color:' + color + ';">' +
+            '<div class="ods-chips">' + chips + '</div>' +
+            '<span class="badge-estado" style="color:#15803d;">● Activo</span>' +
+            '<div class="destacado-letra">' + letra + '</div>' +
+          '</div>' +
+          '<div class="destacado-cuerpo">' +
+            '<div class="destacado-titulo">' + p.nombre + '</div>' +
+            '<div class="destacado-desc">' + (p.descripcion_corta || '') + '</div>' +
+          '</div>' +
+        '</a>';
+      }).join('');
+    }
+
+    /* ── Testimonios ─────────────────────────────────────── */
+    var paletaTest = ['#5CA09E', '#9B5BA5', '#D7685B', '#E89042', '#7AB8DD', '#6366f1'];
+
+    fetch('/api/testimonios')
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        var cont = document.getElementById('cuadriculaTestimonios');
+        if (!cont || data.length === 0) return;
+        cont.innerHTML = data.map(function (t, i) {
+          var color  = paletaTest[i % paletaTest.length];
+          var letra  = t.nombre_proyecto.charAt(0).toUpperCase();
+          return '<div class="tarjeta-testimonio-pub">' +
+            '<div class="comillas-pub">"</div>' +
+            '<p class="testimonio-texto-pub">' + t.texto + '</p>' +
+            '<div class="testimonio-pie-pub">' +
+              '<div class="avatar-pub" style="background-color:' + color + ';">' + letra + '</div>' +
+              '<div>' +
+                '<div class="testimonio-nombre-pub">' + t.nombre_proyecto + '</div>' +
+                '<div class="testimonio-proyecto-pub">Testimonio del proyecto</div>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
+        }).join('');
+      })
+      .catch(function () {});
+
+    /* ── Fetch proyectos: contador activos + destacados ───── */
+    fetch('/api/proyectos')
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        var activos = data.filter(function (p) { return p.estado === 'activo'; });
+        var elProy = document.getElementById('metrica-proyectos');
+        if (elProy) elProy.textContent = activos.length;
+        renderDestacados(activos);
+      })
+      .catch(function () { /* mantiene el guión por defecto */ });
+
+    /* ── Fetch métricas generales: beneficiarios, líderes, horas ── */
+    fetch('/api/metricas/generales')
+      .then(function (r) { return r.json(); })
+      .then(function (metricas) {
+        metricas.forEach(function (m) {
+          var nombre = norm(m.nombre);
+          var valor  = Number(m.valor_total);
+          var txt    = valor.toLocaleString('es-MX') + '+';
+          if (nombre.includes('beneficiario')) {
+            document.getElementById('metrica-beneficiarios').textContent = txt;
+          } else if (nombre.includes('lider')) {
+            document.getElementById('metrica-lideres').textContent = txt;
+          } else if (nombre.includes('hora')) {
+            document.getElementById('metrica-horas').textContent = txt;
+          }
+        });
+      })
+      .catch(function () { /* mantiene el guión por defecto */ });
+  })();
+  </script>
+
   <!-- ===== GRÁFICAS ===== -->
   <script>
     var colorCuadricula = 'rgba(100, 116, 139, 0.12)';
+    var paletaGrafica = ['#5CA09E','#9B5BA5','#E89042','#D7685B','#7AB8DD','#6366f1'];
 
-    // ---- Gráfica de ODS (barras horizontales) ----
-    var ctxODS = document.getElementById('graficaODS');
-    new Chart(ctxODS, {
+    function normG(s) {
+      return (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    }
+
+    /* ── Inicializar gráficas vacías ────────────────────────── */
+    var graficaODS = new Chart(document.getElementById('graficaODS'), {
       type: 'bar',
-      data: {
-        labels: [
-          'Salud y bienestar',
-          'Educación de calidad',
-          'Reducción desigualdades',
-          'Sin pobreza',
-          'Industria e innovación',
-          'Hambre cero',
-          'Agua limpia',
-          'Ciudades sostenibles',
-          'Consumo responsable',
-          'Acción por el clima'
-        ],
-        datasets: [{
-          label: 'Proyectos',
-          data: [4, 4, 3, 2, 2, 2, 2, 2, 2, 2],
-          backgroundColor: [
-            '#5CA09E', '#9B5BA5', '#E89042', '#D7685B', '#7AB8DD',
-            '#5CA09E', '#9B5BA5', '#E89042', '#D7685B', '#7AB8DD'
-          ],
-          borderRadius: 6
-        }]
-      },
+      data: { labels: [], datasets: [{ label: 'Proyectos', data: [], backgroundColor: [], borderRadius: 6 }] },
       options: {
-        indexAxis: 'y',   
+        indexAxis: 'y',
         responsive: true,
         maintainAspectRatio: false,
         plugins: { legend: { display: false } },
         scales: {
-          x: {
-            grid: { color: colorCuadricula },
-            ticks: { color: '#64748b', stepSize: 1 }
-          },
-          y: {
-            grid: { display: false },
-            ticks: { color: '#64748b', font: { size: 11 } }
-          }
+          x: { grid: { color: colorCuadricula }, ticks: { color: '#64748b', stepSize: 1 } },
+          y: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 11 } } }
         }
       }
     });
 
-    // ---- Gráfica de crecimiento de beneficiarios (línea) ----
-    var ctxBenef = document.getElementById('graficaBeneficiarios');
-    new Chart(ctxBenef, {
+    var graficaBenef = new Chart(document.getElementById('graficaBeneficiarios'), {
       type: 'line',
-      data: {
-        labels: ['Ago', 'Sep', 'Oct', 'Nov', 'Dic', 'Ene', 'Feb', 'Mar'],
-        datasets: [{
-          label: 'Beneficiarios',
-          data: [320, 620, 900, 1200, 1580, 1900, 2300, 2580],
-          borderColor: '#5CA09E',
-          backgroundColor: 'rgba(92, 160, 158, 0.1)',
-          borderWidth: 3,
-          pointRadius: 5,
-          pointBackgroundColor: '#5CA09E',
-          tension: 0.35,
-          fill: true
-        }]
-      },
+      data: { labels: [], datasets: [{
+        label: 'Beneficiarios', data: [],
+        borderColor: '#5CA09E', backgroundColor: 'rgba(92,160,158,0.1)',
+        borderWidth: 3, pointRadius: 5, pointBackgroundColor: '#5CA09E',
+        tension: 0.35, fill: true
+      }]},
       options: {
         responsive: true,
         maintainAspectRatio: false,
@@ -433,6 +358,43 @@
         }
       }
     });
+
+    /* ── Gráfica ODS: contar desde /api/proyectos ───────────── */
+    fetch('/api/proyectos')
+      .then(function(r) { return r.json(); })
+      .then(function(proyectos) {
+        var conteo = {};
+        proyectos.forEach(function(p) {
+          if (p.ods) {
+            p.ods.split(', ').filter(Boolean).forEach(function(ods) {
+              conteo[ods] = (conteo[ods] || 0) + 1;
+            });
+          }
+        });
+        var sorted = Object.entries(conteo).sort(function(a, b) { return b[1] - a[1]; });
+        graficaODS.data.labels                          = sorted.map(function(e) { return e[0]; });
+        graficaODS.data.datasets[0].data               = sorted.map(function(e) { return e[1]; });
+        graficaODS.data.datasets[0].backgroundColor    = sorted.map(function(_, i) { return paletaGrafica[i % paletaGrafica.length]; });
+        graficaODS.update();
+      })
+      .catch(function() {});
+
+    /* ── Gráfica beneficiarios: buscar ID y pedir historial ─── */
+    fetch('/api/metricas/generales')
+      .then(function(r) { return r.json(); })
+      .then(function(metricas) {
+        var m = metricas.find(function(m) { return normG(m.nombre).includes('beneficiario'); });
+        if (!m) return;
+        return fetch('/api/metricas/' + m.id_metrica + '/historial');
+      })
+      .then(function(r) { return r && r.json(); })
+      .then(function(data) {
+        if (!data || !data.length) return;
+        graficaBenef.data.labels                    = data.map(function(d) { return d.mes; });
+        graficaBenef.data.datasets[0].data          = data.map(function(d) { return d.acumulado; });
+        graficaBenef.update();
+      })
+      .catch(function() {});
   </script>
 
 </body>

@@ -493,8 +493,8 @@ document.addEventListener('DOMContentLoaded', () => {
     <div class="action-bar" id="action-bar" style="display:none;">
 
       <div>
-        <div class="action-bar-label">Este es tu proyecto</div>
-        <div class="action-bar-sub">Puedes editar y actualizar métricas</div>
+        <div class="action-bar-label" id="action-bar-label">Este es tu proyecto</div>
+        <div class="action-bar-sub" id="action-bar-sub">Puedes editar y actualizar métricas</div>
       </div>
       <div style="display:flex;gap:8px;">
         <a  class="btn btn-outline btn-sm" id ='btn-agregar-widget'>Editar proyecto</a>
@@ -630,20 +630,49 @@ document.addEventListener('DOMContentLoaded', () => {
     <div class="lider-card">
       <div class="info-card-title">Líder del proyecto</div>
       <div class="lider-header">
-        <div class="avatar avatar-md" style="background:linear-gradient(135deg,#1e40af,#3b82f6);">A</div>
+        <div id="lider-avatar" class="avatar avatar-md" style="background:linear-gradient(135deg,#1e40af,#3b82f6);">?</div>
         <div>
-          <div class="lider-info-name">Ana Martínez García</div>
-          <div class="lider-info-role">Lic. Ciencias de la Educación · 7mo semestre</div>
+          <div class="lider-info-name" id="lider-nombre">Cargando...</div>
+          <div class="lider-info-role" id="lider-carrera">Cargando...</div>
         </div>
       </div>
-      <div style="font-size:13px;color:var(--gris-500);margin-bottom:14px;line-height:1.6;">
-        Especialista en didáctica y desarrollo curricular. Tiene experiencia previa con poblaciones vulnerables.
-      </div>
-      <a href="lider-perfil.html" class="btn btn-outline" style="width:100%;justify-content:center;">Ver perfil completo →</a>
+      <a id="lider-perfil-link" href="lider-perfil.html" class="btn btn-outline" style="width:100%;justify-content:center;">Ver perfil completo →</a>
     </div>
 
 
   </div>
+  <!-- MODAL EDITAR PROYECTO -->
+  <div id="modal-editar-proyecto" class="modal" style="display:none;">
+    <form id="form-editar-proyecto" onsubmit="return false;">
+      <h3 style="font-family:'Sora',sans-serif;font-size:18px;font-weight:700;margin-bottom:20px;">✏️ Editar proyecto</h3>
+
+      <div style="margin-bottom:14px;">
+        <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--gris-700);">Título del proyecto</label>
+        <input type="text" id="edit-nombre" class="form-input" style="width:100%;" placeholder="Nombre del proyecto">
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--gris-700);">Descripción corta</label>
+        <textarea id="edit-descripcion" class="form-input" style="width:100%;min-height:80px;resize:vertical;" placeholder="Resumen breve del proyecto"></textarea>
+      </div>
+
+      <div style="margin-bottom:20px;">
+        <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--gris-700);">Estado</label>
+        <select id="edit-estado" class="form-input" style="width:100%;">
+          <option value="activo">Activo</option>
+          <option value="inactivo">Inactivo</option>
+        </select>
+      </div>
+
+      <div id="edit-proyecto-message" style="display:none;padding:10px 12px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:14px;"></div>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end;">
+        <button type="button" id="save-edit-proyecto" class="btn btn-primary btn-sm">💾 Guardar cambios</button>
+        <button type="button" onclick="document.getElementById('modal-editar-proyecto').style.display='none'" class="btn btn-outline btn-sm">Cancelar</button>
+      </div>
+    </form>
+  </div>
+
   <!--MODAL WIDGET-->
   <div class="modal-overlay" id="modal-widget">
   <div class="modal-box" style="max-width:560px;">

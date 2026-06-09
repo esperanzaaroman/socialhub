@@ -3,13 +3,24 @@ const db = require('../config/db');
 
 const getMetricasGenerales = async (req, res) => {
     try {
-        const query = `SELECT id_metrica, nombre, unidad, es_general 
-                       FROM metricas_proyecto 
-                       WHERE es_general = 1 
+        const query = `SELECT id_metrica, nombre, unidad, es_general
+                       FROM metricas_proyecto
+                       WHERE es_general = 1
                        ORDER BY nombre ASC`;
-                       
+
         const [rows] = await db.execute(query);
-        
+
+        // Para cada métrica, calcular el valor total acumulado
+        for (const metrica of rows) {
+            const [resultado] = await db.execute(
+                `SELECT SUM(COALESCE(valor_decimal, valor_entero)) AS total
+                 FROM valores_metricas
+                 WHERE id_metrica = ?`,
+                [metrica.id_metrica]
+            );
+            metrica.valor_total = resultado[0].total ?? 0;
+        }
+
         return res.status(200).json(rows);
     } catch (error) {
         console.error("❌ Error en getMetricasGenerales:", error);
@@ -43,7 +54,35 @@ const getMetricasPorProyecto = async (req, res) => {
     }
 };
 
+const getHistorialMetrica = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const [rows] = await db.execute(
+            `SELECT DATE_FORMAT(fecha, '%b') AS mes,
+                    SUM(COALESCE(valor_decimal, valor_entero)) AS valor
+             FROM valores_metricas
+             WHERE id_metrica = ?
+             GROUP BY YEAR(fecha), MONTH(fecha), DATE_FORMAT(fecha, '%b')
+             ORDER BY MIN(fecha) ASC`,
+            [id]
+        );
+
+        /* Convertimos los valores individuales en suma acumulada */
+        let acumulado = 0;
+        const historial = rows.map(function (r) {
+            acumulado += Number(r.valor);
+            return { mes: r.mes, acumulado: acumulado };
+        });
+
+        return res.status(200).json(historial);
+    } catch (error) {
+        console.error('❌ Error en getHistorialMetrica:', error);
+        return res.status(500).json({ error: 'Error interno al obtener historial.' });
+    }
+};
+
 module.exports = {
     getMetricasGenerales,
-    getMetricasPorProyecto
+    getMetricasPorProyecto,
+    getHistorialMetrica
 };
