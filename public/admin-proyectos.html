@@ -104,11 +104,11 @@
       </div>
       <select class="filter-pill">
         <option>Todos los estados</option>
-        <option>Activo</option>
-        <option>Pausado</option>
-        <option>Completado</option>
+        <option>activo</option>
+        <option>inactivo</option>
+
       </select>
-      <select class="filter-pill">
+      <select class="filter-pill select-catalogo" data-catalogo="categorias">
         <option>Todas las categorías</option>
         <option>Educación</option>
         <option>Salud</option>
@@ -117,12 +117,12 @@
         <option>Arte y Cultura</option>
         <option>Comunidad</option>
       </select>
-      <select class="filter-pill">
+      <select class="select-catalogo filter-pill" data-catalogo="periodo">
         <option>Todos los periodos</option>
-        <option>Invierno 2024</option>
-        <option>Feb–Jun 2024</option>
-        <option>Verano 2024</option>
-        <option>Ago–Dic 2024</option>
+        <option>Intensivo Invierno</option>
+        <option>Feb-Jun</option>
+        <option>Intensivo Verano</option>
+        <option>Ago-Dic</option>
       </select>
     </div>
 
@@ -196,107 +196,8 @@
   </main>
 </div>
 
-<!-- MODAL FILTROS AVANZADOS -->
-<div class="modal-overlay" id="modalFiltros">
-  <div class="modal-box">
-    <div class="modal-head">
-      <div class="modal-head-title">⚙ Filtros Avanzados</div>
-      <button class="modal-close-btn" onclick="document.getElementById('modalFiltros').classList.remove('open')">✕</button>
-    </div>
-    <div class="modal-bdy">
-      <div class="form-grid-2">
-        <div>
-          <label class="form-label-s">Estado</label>
-          <select class="form-inp-s">
-            <option>Todos</option>
-            <option>Activo</option>
-            <option>Pausado</option>
-            <option>Completado</option>
-          </select>
-        </div>
-        <div>
-          <label class="form-label-s">Categoría</label>
-          <select class="form-inp-s">
-            <option>Todas</option>
-            <option>Educación</option>
-            <option>Salud</option>
-            <option>Medio Ambiente</option>
-            <option>Tecnología</option>
-            <option>Comunidad</option>
-          </select>
-        </div>
-        <div>
-          <label class="form-label-s">ODS</label>
-          <select class="form-inp-s">
-            <option>Todos</option>
-            <option>ODS 2</option>
-            <option>ODS 3</option>
-            <option>ODS 4</option>
-            <option>ODS 9</option>
-            <option>ODS 11</option>
-            <option>ODS 15</option>
-          </select>
-        </div>
-        <div>
-          <label class="form-label-s">Periodo</label>
-          <select class="form-inp-s">
-            <option>Todos</option>
-            <option>Invierno 2024</option>
-            <option>Feb–Jun 2024</option>
-            <option>Verano 2024</option>
-            <option>Ago–Dic 2024</option>
-          </select>
-        </div>
-        <div>
-          <label class="form-label-s">Beneficiarios mínimos</label>
-          <input type="number" class="form-inp-s" placeholder="Ej. 50">
-        </div>
-        <div>
-          <label class="form-label-s">Horas mínimas</label>
-          <input type="number" class="form-inp-s" placeholder="Ej. 100">
-        </div>
-      </div>
-      <div>
-        <label class="form-label-s">Avance mínimo (%)</label>
-        <input type="range" min="0" max="100" value="0" style="width:100%;accent-color:var(--azul-tec);">
-      </div>
-    </div>
-    <div class="modal-ft">
-      <button class="btn btn-sm" style="background:var(--gris-100);color:var(--gris-600);" onclick="document.getElementById('modalFiltros').classList.remove('open')">Cancelar</button>
-      <button class="btn btn-primary btn-sm" onclick="document.getElementById('modalFiltros').classList.remove('open')">Aplicar filtros</button>
-    </div>
-  </div>
-</div>
 
-<!-- MODAL EXPORTAR -->
-<div class="modal-overlay" id="modalExport">
-  <div class="modal-box" style="max-width:400px">
-    <div class="modal-head">
-      <div class="modal-head-title">⬇ Exportar Reporte</div>
-      <button class="modal-close-btn" onclick="document.getElementById('modalExport').classList.remove('open')">✕</button>
-    </div>
-    <div class="modal-bdy">
-      <p style="font-size:14px;color:var(--gris-600);margin-bottom:16px;">Selecciona el formato y rango de datos a exportar.</p>
-      <label class="form-label-s">Formato</label>
-      <select class="form-inp-s">
-        <option>CSV (Excel)</option>
-        <option>PDF — Reporte ejecutivo</option>
-        <option>JSON (API)</option>
-      </select>
-      <label class="form-label-s">Incluir</label>
-      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;">
-        <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gris-700);cursor:pointer;"><input type="checkbox" checked style="accent-color:var(--azul-tec)"> Datos generales de proyectos</label>
-        <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gris-700);cursor:pointer;"><input type="checkbox" checked style="accent-color:var(--azul-tec)"> Métricas de beneficiarios</label>
-        <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gris-700);cursor:pointer;"><input type="checkbox" style="accent-color:var(--azul-tec)"> Horas por voluntario</label>
-        <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gris-700);cursor:pointer;"><input type="checkbox" style="accent-color:var(--azul-tec)"> Distribución ODS</label>
-      </div>
-    </div>
-    <div class="modal-ft">
-      <button class="btn btn-sm" style="background:var(--gris-100);color:var(--gris-600);" onclick="document.getElementById('modalExport').classList.remove('open')">Cancelar</button>
-      <button class="btn btn-verde btn-sm" onclick="document.getElementById('modalExport').classList.remove('open')">⬇ Descargar</button>
-    </div>
-  </div>
-</div>
+
 
 <!-- ===================== MODAL NUEVO PROYECTO ===================== -->
 <div class="modal-overlay" id="modalNuevoProyecto">
@@ -380,7 +281,7 @@
       
         <div>
           <label class="form-label-s">Población Objetivo</label>
-          <select class="form-inp-s select-catalogo" data-catalogo="poblaciones"id="input-poblacion">
+          <select class="form-inp-s select-catalogo" data-catalogo="ods" id="input-poblacion">
             cargando..
           </select>
         </div>

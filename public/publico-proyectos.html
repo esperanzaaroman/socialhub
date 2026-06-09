@@ -49,24 +49,13 @@
     </div>
 
     <!-- Filtro por ODS -->
-    <select class="filtro-select" id="filtroODS">
-      <option value="">Todos los ODS</option>
-      <option value="ods1">ODS 1 – Sin pobreza</option>
-      <option value="ods3">ODS 3 – Salud y bienestar</option>
-      <option value="ods4">ODS 4 – Educación de calidad</option>
-      <option value="ods10">ODS 10 – Reducción desigualdades</option>
-      <option value="ods11">ODS 11 – Ciudades sostenibles</option>
-      <option value="ods12">ODS 12 – Consumo responsable</option>
-      <option value="ods13">ODS 13 – Acción por el clima</option>
+    <select class="select-catalogo filtro-select" data-catalogo="ods" id="filtroODS">
+
     </select>
 
     <!-- Filtro por población -->
-    <select class="filtro-select" id="filtroPoblacion">
-      <option value="">Toda la población</option>
-      <option value="niños">Niños</option>
-      <option value="adultos-mayores">Adultos mayores</option>
-      <option value="familias">Familias</option>
-      <option value="jovenes">Jóvenes</option>
+    <select class="select-catalogo filtro-select" data-catalogo = "poblaciones"id="filtroPoblacion">
+    
     </select>
 
   </div>
@@ -95,42 +84,57 @@
 
   <!-- ===== JAVASCRIPT ===== -->
   <script>
-    /* ============================================================
-       CATÁLOGO DE PROYECTOS — conectado a /api/proyectos
-       ============================================================ */
 
     var paleta = ['#5CA09E', '#9B5BA5', '#D7685B', '#7AB8DD', '#E89042', '#6366f1'];
 
-    /* Normaliza texto para comparaciones: minúsculas, sin acentos, guiones→espacios */
     function norm(s) {
       return (s || '').toLowerCase()
-        .normalize('NFD').replace(/[̀-ͯ]/g, '')
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
         .replace(/-/g, ' ');
     }
 
-    function estadoLabel(e) {
-      return e === 'activo' ? 'Activo' : 'Inactivo';
-    }
+    function estadoLabel(e) { return e === 'activo' ? 'Activo' : 'Inactivo'; }
+    function colorBadge(e)  { return e === 'activo' ? '#15803d' : '#64748b'; }
 
-    function colorBadge(e) {
-      return e === 'activo' ? '#15803d' : '#64748b';
-    }
-
-    /* Convierte un proyecto del API al formato interno */
+    /* Convierte un proyecto del API al formato interno
+       El API devuelve:
+         p.ods_ids        → array de ids     [3, 15]  (si el backend los incluye)
+         p.ods            → string de nombres "ODS 3: Salud..., ODS 15: ..."
+         p.poblacion_ids  → array de ids     [1, 2]
+         p.poblacion      → string de nombres
+    */
     function mapear(p) {
-      var odsLabels = p.ods ? p.ods.split(', ').filter(Boolean) : [];
+      var odsLabels = [];
+      if (Array.isArray(p.ods)) {
+        odsLabels = p.ods;
+      } else if (p.ods) {
+        odsLabels = p.ods.split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+      }
+
+      // IDs para filtrado: preferir el campo de ids si existe, si no extraer del string
+      var odsIds = Array.isArray(p.ods_ids) ? p.ods_ids.map(Number) : [];
+      var pobIds = Array.isArray(p.poblacion_ids) ? p.poblacion_ids.map(Number) : [];
+
+      var pobLabels = [];
+      if (Array.isArray(p.poblacion)) {
+        pobLabels = p.poblacion;
+      } else if (p.poblacion) {
+        pobLabels = p.poblacion.split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+      }
+
       return {
         id:          p.id_proyecto,
-        titulo:      p.nombre,
+        titulo:      p.nombre       || '',
         descripcion: p.descripcion_corta || '',
-        estado:      p.estado,
+        estado:      p.estado       || '',
         estadoLabel: estadoLabel(p.estado),
         color:       paleta[(p.id_proyecto - 1) % paleta.length],
         odsLabels:   odsLabels,
-        odsRaw:      p.ods || '',
-        pobRaw:      p.poblacion || '',
-        lider:       p.lider || '—',
-        categoria:   p.categoria || ''
+        odsIds:      odsIds,
+        pobLabels:   pobLabels,
+        pobIds:      pobIds,
+        lider:       p.lider        || '—',
+        categoria:   p.categoria    || ''
       };
     }
 
@@ -138,17 +142,15 @@
     var icoCorazon  = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
 
     function htmlChips(labels) {
-      return labels.map(function (l) { return '<span class="chip-ods">' + l + '</span>'; }).join('');
+      return labels.slice(0, 3).map(function (l) {
+        return '<span class="chip-ods">' + l + '</span>';
+      }).join('');
     }
 
     function htmlTarjeta(p) {
-      var letra = p.titulo.charAt(0).toUpperCase();
+      var letra = (p.titulo || '?').charAt(0).toUpperCase();
       return `
-        <div class="tarjeta-catalogo"
-             data-ods="${p.odsRaw}"
-             data-estado="${p.estado}"
-             data-poblacion="${p.pobRaw}"
-             data-titulo="${p.titulo.toLowerCase()} ${p.descripcion.toLowerCase()}">
+        <div class="tarjeta-catalogo">
           <div class="catalogo-banner" style="background-color:${p.color};">
             <div class="chips-ods">${htmlChips(p.odsLabels)}</div>
             <span class="badge-catalogo" style="color:${colorBadge(p.estado)};">● ${p.estadoLabel}</span>
@@ -158,11 +160,11 @@
             <div class="catalogo-titulo">${p.titulo}</div>
             <div class="catalogo-desc">${p.descripcion}</div>
             <div class="catalogo-stats">
-              <div class="catalogo-stat" style="color:${p.color};">
+              <div class="catalogo-stat">
                 ${icoPersonas} <span style="font-weight:600;color:#0f172a;">${p.lider}</span>
               </div>
               <div class="catalogo-stat" style="color:#64748b;">
-                ${icoCorazon} <span style="color:#64748b;">${p.categoria}</span>
+                ${icoCorazon} <span>${p.categoria}</span>
               </div>
             </div>
             <a class="catalogo-btn" href="proyecto-detalle.html?id=${p.id}" style="background-color:${p.color};">
@@ -191,25 +193,40 @@
     }
 
     function aplicarFiltros() {
-      var texto = document.getElementById('inputBusqueda').value.toLowerCase().trim();
-      var ods   = document.getElementById('filtroODS').value;      // ej. 'ods4'
-      var pobl  = document.getElementById('filtroPoblacion').value; // ej. 'niños'
+      var texto   = norm(document.getElementById('inputBusqueda').value.trim());
+      var odsVal  = document.getElementById('filtroODS').value;       // '' o id como string
+      var pobVal  = document.getElementById('filtroPoblacion').value;  // '' o id como string
 
       var filtrados = proyectos.filter(function (p) {
-        var pasaTexto = texto === '' ||
-          p.titulo.toLowerCase().includes(texto) ||
-          p.descripcion.toLowerCase().includes(texto);
 
-        /* 'ods4' → 'ods 4' → busca coincidencia exacta en los items del string de ODS */
-        var pasaODS = ods === '' || (function () {
-          var buscar = norm(ods).replace('ods', 'ods '); // 'ods4'→'ods 4'
-          return norm(p.odsRaw).split(', ').some(function (item) {
-            return item.trim() === buscar;
+        // Texto en título o descripción
+        var pasaTexto = texto === '' ||
+          norm(p.titulo).includes(texto) ||
+          norm(p.descripcion).includes(texto);
+
+        // ODS: comparar por id si el proyecto tiene odsIds, si no por texto normalizado
+        var pasaODS = odsVal === '' || (function() {
+          var id = parseInt(odsVal);
+          if (p.odsIds.length > 0) {
+            return p.odsIds.includes(id);
+          }
+          // Fallback: buscar el número del ODS en los labels
+          return p.odsLabels.some(function(l) {
+            var m = l.match(/ODS\s*(\d+)/i);
+            return m && parseInt(m[1]) === id;
           });
         })();
 
-        /* Normaliza y busca dentro del string de población */
-        var pasaPob = pobl === '' || norm(p.pobRaw).includes(norm(pobl));
+        // Población: comparar por id si el proyecto tiene pobIds, si no por texto
+        var pasaPob = pobVal === '' || (function() {
+          var id = parseInt(pobVal);
+          if (p.pobIds.length > 0) {
+            return p.pobIds.includes(id);
+          }
+          return p.pobLabels.some(function(l) {
+            return norm(l).includes(norm(pobVal));
+          });
+        })();
 
         return pasaTexto && pasaODS && pasaPob;
       });
@@ -217,11 +234,12 @@
       renderizar(filtrados);
     }
 
-    /* ── Carga inicial desde el API ─────────────────────────── */
+    /* ── Carga inicial ──────────────────────────────────────── */
     fetch('/api/proyectos')
       .then(function (r) { return r.json(); })
       .then(function (data) {
-        proyectos = data.map(mapear);
+        var lista = Array.isArray(data) ? data : (data.data || []);
+        proyectos = lista.map(mapear);
         renderizar(proyectos);
       })
       .catch(function () {

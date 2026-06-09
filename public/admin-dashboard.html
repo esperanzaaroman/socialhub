@@ -10,6 +10,8 @@
 <script src="js/navbar.js"></script>
 <script src="js/admin-dashboard.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
@@ -78,7 +80,7 @@
         <p style="color:var(--gris-500);font-size:14px;">Supervisión general del programa de Servicio Social · Generado hoy</p>
       </div>
       <div style="display:flex;gap:10px;align-items:center;">
-        <button class="btn btn-primary btn-sm">⬇ Exportar reporte</button>
+        <button class="btn btn-primary btn-sm"id="btn-export-pdf" onclick="exportarPDF()">⬇ Exportar reporte</button>
 
         <button
           id="btn-create-leader"
@@ -285,41 +287,8 @@
           <div class="ods-row" style="font-size:11px;font-weight:700;color:var(--gris-400);text-transform:uppercase;letter-spacing:0.8px;">
             <span>ODS</span><span>Distribución de proyectos</span><span>Proyectos</span><span>Benef.</span>
           </div>
-          <div class="ods-row">
-            <span class="ods-name"><span style="font-size:16px;">📚</span> ODS 4 · Educación</span>
-            <div class="ods-bar-wrap"><div class="ods-bar-bg"><div class="ods-bar-fill" style="width:85%;background:var(--azul);"></div></div></div>
-            <span class="ods-count" style="color:var(--azul)">12</span>
-            <span class="ods-pct">412</span>
-          </div>
-          <div class="ods-row">
-            <span class="ods-name"><span style="font-size:16px;">💊</span> ODS 3 · Salud</span>
-            <div class="ods-bar-wrap"><div class="ods-bar-bg"><div class="ods-bar-fill" style="width:60%;background:var(--verde);"></div></div></div>
-            <span class="ods-count" style="color:var(--verde)">8</span>
-            <span class="ods-pct">287</span>
-          </div>
-          <div class="ods-row">
-            <span class="ods-name"><span style="font-size:16px;">🌱</span> ODS 15 · Ecosistemas</span>
-            <div class="ods-bar-wrap"><div class="ods-bar-bg"><div class="ods-bar-fill" style="width:50%;background:#22c55e;"></div></div></div>
-            <span class="ods-count" style="color:#22c55e">7</span>
-            <span class="ods-pct">198</span>
-          </div>
-          <div class="ods-row">
-            <span class="ods-name"><span style="font-size:16px;">🏘️</span> ODS 11 · Ciudades</span>
-            <div class="ods-bar-wrap"><div class="ods-bar-bg"><div class="ods-bar-fill" style="width:42%;background:var(--naranja);"></div></div></div>
-            <span class="ods-count" style="color:var(--naranja)">6</span>
-            <span class="ods-pct">210</span>
-          </div>
-          <div class="ods-row">
-            <span class="ods-name"><span style="font-size:16px;">💻</span> ODS 9 · Industria</span>
-            <div class="ods-bar-wrap"><div class="ods-bar-bg"><div class="ods-bar-fill" style="width:30%;background:var(--morado);"></div></div></div>
-            <span class="ods-count" style="color:var(--morado)">4</span>
-            <span class="ods-pct">92</span>
-          </div>
-          <div class="ods-row">
-            <span class="ods-name"><span style="font-size:16px;">🍽️</span> ODS 2 · Hambre cero</span>
-            <div class="ods-bar-wrap"><div class="ods-bar-bg"><div class="ods-bar-fill" style="width:8%;background:var(--rojo);"></div></div></div>
-            <span class="ods-count" style="color:var(--rojo)">1</span>
-            <span class="ods-pct">48</span>
+          <div id="ods-filas">
+            <div style="padding:24px;text-align:center;color:var(--gris-400);font-size:13px;">Cargando datos ODS…</div>
           </div>
         </div>
       </div>
@@ -333,22 +302,22 @@
         <div class="ind-row">
           <span class="ind-label">Crecimiento de beneficiarios (YoY)</span>
           <div style="display:flex;align-items:center;gap:8px;">
-            <span class="ind-value">+19.5%</span>
-            <span class="ind-badge up">↑ Bueno</span>
+            <span class="ind-value" id="ind-crecimiento-ben">—</span>
+            <span class="ind-badge up" id="ind-crecimiento-ben-badge">↑</span>
           </div>
         </div>
         <div class="ind-row">
           <span class="ind-label">Tasa de retención de prestadores</span>
           <div style="display:flex;align-items:center;gap:8px;">
-            <span class="ind-value">74%</span>
-            <span class="ind-badge up">↑ Alta</span>
+            <span class="ind-value" id="ind-retencion-pre">—</span>
+            <span class="ind-badge up" id="ind-retencion-pre-badge">—</span>
           </div>
         </div>
         <div class="ind-row">
           <span class="ind-label">Impacto por ODS más cubierto</span>
           <div style="display:flex;align-items:center;gap:8px;">
-            <span class="ind-value">ODS 4</span>
-            <span class="ind-badge up">Educación</span>
+            <span class="ind-value" id="ind-ods-top">—</span>
+            <span class="ind-badge up" id="ind-ods-top-nombre">—</span>
           </div>
         </div>
       </div>
@@ -452,6 +421,52 @@
 
 </div>
 
+ <script> 
+  async function exportarPDF() {
+    const btn = document.getElementById('btn-export-pdf');
+    btn.disabled = true;
+    btn.innerText = 'Generando…';
 
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+    const secciones = [
+        'sec-proyectos',
+        'sec-beneficiarios',
+        'sec-prestadores',
+        'sec-horas',
+        'sec-ods',
+        'sec-mapa'
+    ];
+
+    let y = 10;
+    const pageW = doc.internal.pageSize.getWidth();
+
+    for (const id of secciones) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+
+        const canvas  = await html2canvas(el, { scale: 1.5, useCORS: true });
+        const imgData = canvas.toDataURL('image/png');
+        const ratio   = canvas.width / canvas.height;
+        const imgW    = pageW - 20;   // margen 10mm cada lado
+        const imgH    = imgW / ratio;
+
+        if (y + imgH > doc.internal.pageSize.getHeight() - 10) {
+            doc.addPage();
+            y = 10;
+        }
+
+        doc.addImage(imgData, 'PNG', 10, y, imgW, imgH);
+        y += imgH + 6;
+    }
+
+    const fecha = new Date().toLocaleDateString('es-MX').replace(/\//g, '-');
+    doc.save(`reporte-dashboard-${fecha}.pdf`);
+
+    btn.disabled = false;
+    btn.innerText = '⬇ Exportar PDF';
+}
+ </script>
 </body>
 </html>

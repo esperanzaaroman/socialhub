@@ -8,6 +8,7 @@ require('dotenv').config();
 const conexion = require("./config/db");
 console.log(process.env.DB_NAME);
 
+const liderRoutes = require('./routes/lideresRoutes')
 const horasRoutes = require('./routes/horasRoutes');
 const beneficiarioRoutes = require('./routes/beneficiariosRoutes');
 const prestadorRoutes = require('./routes/prestadorRoutes');
@@ -17,6 +18,7 @@ const adminRoutes = require('./routes/adminRoutes');
 const authRoutes = require('./routes/auth');
 const metricaRoutes = require('./routes/metricaRoutes');
 const proyectoRoutes = require('./routes/proyectoRoutes');
+const odsRoutes = require('./routes/odsRoutes');
 const { notFoundHandler, errorHandler } = require('./middleware/errorHandler');
 const { sendSuccess } = require('./utils/apiResponse');
 const forumRoutes =
@@ -46,6 +48,8 @@ app.get('/api/health', (req, res) => {
     });
 });
 
+app.use('/api/lideres',liderRoutes);
+app.use('/api/ods',odsRoutes);
 app.use('/api/auth', authRoutes);           
 app.use('/api/horas',horasRoutes)
 app.use('/api',metricaRoutes);
