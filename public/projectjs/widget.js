@@ -6,27 +6,27 @@ export function crearNodoKpi(widget) {
 
     itemElement.setAttribute('data-id-widget', widget.id_widget);
     itemElement.querySelector('.widget-title').innerText = widget.nombre_widget;
+
     const operacionLabel = {
-        SUM:   'Total',
-        AVG:   'Promedio',
-        COUNT: 'Conteo',
-        MAX:   'Máximo',
-        MIN:   'Mínimo'
+        SUM: 'Total', AVG: 'Promedio', COUNT: 'Conteo', MAX: 'Máximo', MIN: 'Mínimo'
     }[widget.operacion] || widget.operacion;
+
     const unidad = widget.unidad_metrica || '';
     itemElement.querySelector('.widget-operation').innerText = operacionLabel;
     itemElement.querySelector('.widget-unit').innerText = unidad;
 
-    const valorAMostrar = widget.valor_calculado !== null && widget.valor_calculado !== undefined 
-        ? widget.valor_calculado 
-        : 0;
+    const valorAMostrar = widget.valor_calculado ?? 0;
     itemElement.querySelector('.widget-value').innerText = valorAMostrar;
-    
+
+    // Badge visual en widgets obligatorios
+    if (widget.es_obligatorio) {
+        const badge = itemElement.querySelector('.widget-obligatorio-badge');
+        if (badge) badge.style.display = 'inline-block';
+    }
+
     if (configUi.color) {
         const tarjeta = itemElement.querySelector('.widget-card');
-        if (tarjeta) {
-            tarjeta.style.borderTop = `4px solid ${configUi.color}`;
-        }
+        if (tarjeta) tarjeta.style.borderTop = `4px solid ${configUi.color}`;
     }
 
     return itemElement;
@@ -40,16 +40,16 @@ export function crearNodoGrafica(widget) {
 
     itemElement.setAttribute('data-id-widget', widget.id_widget);
     itemElement.querySelector('.widget-title').innerText = widget.nombre_widget;
+
     const canvas = itemElement.querySelector('.widget-chart');
     if (canvas) {
         canvas.dataset.unidad = widget.unidad_metrica || '';
         canvas.dataset.nombre = widget.nombre_widget || '';
     }
+
     if (configUi.color) {
         const tarjeta = itemElement.querySelector('.widget-card');
-        if (tarjeta) {
-            tarjeta.style.borderTop = `4px solid ${configUi.color}`;
-        }
+        if (tarjeta) tarjeta.style.borderTop = `4px solid ${configUi.color}`;
     }
 
     return itemElement;

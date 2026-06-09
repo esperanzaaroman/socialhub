@@ -8,6 +8,8 @@ require('dotenv').config();
 const conexion = require("./config/db");
 console.log(process.env.DB_NAME);
 
+const beneficiarioRoutes = require('./routes/beneficiariosRoutes');
+const prestadorRoutes = require('./routes/prestadorRoutes');
 const catalogoRoutes = require('./routes/catalogoRoutes');
 const widgetRoutes = require('./routes/widgetRoutes');
 const adminRoutes = require('./routes/adminRoutes');
@@ -31,6 +33,9 @@ app.use(express.json());
 
 app.use(express.static(path.join(__dirname,"../public")));
 
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/publico-inicio.html'));
+});
 app.use('/api/widgets',widgetRoutes);
 app.use('/api/proyectos',proyectoRoutes);
 app.get('/api/health', (req, res) => {
@@ -48,6 +53,9 @@ app.use('/api/widgets', widgetRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/catalogos',catalogoRoutes);
+app.use('/api/beneficiarios',beneficiarioRoutes);
+app.use('/api/prestadores',prestadorRoutes);
+
 app.use(
   '/api/forum',
   forumRoutes
