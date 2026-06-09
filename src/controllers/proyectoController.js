@@ -79,7 +79,7 @@ async function getLideresByProyecto(req, res) {
     });
   }
 }
-module.exports = {createProyecto,getProyectoById,obtenerTodosLosProyectos,getBeneficiariosCount, getLideresByProyecto};
+
 const getBeneficiariosCount = asyncHandler(async (req, res) => {
     const id_proyecto = parseInt(req.params.id, 10);
     const [rows] = await db.execute(
@@ -89,4 +89,4 @@ const getBeneficiariosCount = asyncHandler(async (req, res) => {
     res.json({ status: 'success', data: { total: rows[0].total, id_proyecto } });
 });
 
-module.exports = { createProyecto, getProyectoById, obtenerTodosLosProyectos, getBeneficiariosCount };
+module.exports = { createProyecto, getProyectoById, obtenerTodosLosProyectos, getBeneficiariosCount, getLideresByProyecto};
