@@ -1,4 +1,5 @@
 import { crearNodoGrafica, crearNodoKpi } from "./widget.js";
+
 let loteCSV = [];
 
 const gridStack = GridStack.init({
@@ -40,12 +41,14 @@ function configurarInterfazPorRol(puedeEditar) {
         if (botonAgregar) botonAgregar.style.display = 'inline-flex';
         gridStack.opts.resizable = { handles: 'se' };
         document.querySelectorAll('.btn-eliminar-widget').forEach(btn => btn.style.display = 'inline-block');
+        document.body.classList.remove('modo-lectura');
     } else {
         gridStack.enableMove(false);
         gridStack.enableResize(false);
         if (botonAgregar) botonAgregar.style.display = 'none';
         document.querySelectorAll('.btn-eliminar-widget').forEach(btn => btn.style.display = 'none');
         document.querySelectorAll('.grid-stack-item').forEach(el => el.style.cursor = 'default');
+        document.body.classList.add('modo-lectura');
     }
 }
 
@@ -72,7 +75,7 @@ gridStack.on('change', async function(event, items) {
         alto:  item.h
     }));
     try {
-        await fetch('/api/widgets/layout', {
+        await fetch('http://localhost:3000/api/widgets/layout', {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ widgets: actualizaciones })
@@ -236,13 +239,16 @@ function renderWidgets(widgets) {
 
         // Gráfica
         if (!esKpi) {
-            const canvas       = nuevoWidgetHTML.querySelector('.widget-chart');
-            const unidad       = canvas.dataset.unidad || '';
+            const canvas        = nuevoWidgetHTML.querySelector('.widget-chart');
+            const unidad        = canvas.dataset.unidad || '';
             const nombreMetrica = canvas.dataset.nombre || widget.nombre_widget;
-            const historial    = widget.historial || [];
+            const historial     = widget.historial || [];
+            const agrupacion    = configUi.agrupacion_beneficiarios || 'fecha';
+            const esPorEtiqueta = widget.id_metrica === 1 && ['genero', 'edad'].includes(agrupacion);
 
             const labelsReales = historial.length > 0
                 ? historial.map(item => {
+                    if (esPorEtiqueta) return item.label || '—';
                     const f = new Date(item.fecha);
                     return isNaN(f.getTime()) ? item.fecha : `${f.getDate()}/${f.getMonth() + 1}`;
                 })
@@ -252,26 +258,38 @@ function renderWidgets(widgets) {
                 ? historial.map(item => parseFloat(item.valor_decimal) || 0)
                 : [parseFloat(widget.valor_calculado) || 0];
 
+            // Para pastel con etiquetas únicas (género/edad) múltiples colores
+            const tipoGrafica = configUi.tipo_grafica || 'bar';
+            const colorBase   = configUi.color || '#6366f1';
+            const bgColors = esPorEtiqueta && tipoGrafica === 'pie'
+                ? ['#6366f1','#10b981','#f59e0b','#ef4444','#3b82f6','#8b5cf6','#ec4899','#14b8a6']
+                      .slice(0, labelsReales.length)
+                : colorBase;
+
             const miGrafica = new Chart(canvas, {
-                type: configUi.tipo_grafica || 'bar',
+                type: tipoGrafica,
                 data: {
                     labels: labelsReales,
                     datasets: [{
                         label: nombreMetrica,
                         data: valoresReales,
-                        backgroundColor: configUi.color || '#6366f1',
-                        borderColor:     configUi.color || '#6366f1',
+                        backgroundColor: bgColors,
+                        borderColor:     Array.isArray(bgColors) ? bgColors : colorBase,
                         borderWidth: 2,
-                        fill: configUi.tipo_grafica === 'line' ? false : true
+                        fill: tipoGrafica === 'line' ? false : true
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
+                    plugins: { legend: { display: tipoGrafica === 'pie' || esPorEtiqueta } },
+                    scales: tipoGrafica === 'pie' ? {} : {
                         x: {
-                            title: { display: true, text: 'Fecha', color: '#94a3b8', font: { size: 11 } },
+                            title: {
+                                display: true,
+                                text: esPorEtiqueta ? (agrupacion === 'genero' ? 'Género' : 'Rango de edad') : 'Fecha',
+                                color: '#94a3b8', font: { size: 11 }
+                            },
                             ticks: { color: '#94a3b8', font: { size: 10 } }
                         },
                         y: {
@@ -338,6 +356,13 @@ function abrirModalEditar(widget) {
     const selectTipo = document.getElementById('editar-widget-tipo-grafica');
     if (selectTipo) selectTipo.value = widget.ui_config?.tipo_grafica || 'bar';
 
+    // Agrupación beneficiarios en editar
+    const wrapAgrupEditar = document.getElementById('editar-wrapper-agrupacion-beneficiarios');
+    const selectAgrupEditar = document.getElementById('editar-widget-agrupacion-beneficiarios');
+    const esBenefWidget = widget.id_metrica === 1 && esGrafica;
+    if (wrapAgrupEditar) wrapAgrupEditar.style.display = esBenefWidget ? 'block' : 'none';
+    if (selectAgrupEditar) selectAgrupEditar.value = widget.ui_config?.agrupacion_beneficiarios || 'fecha';
+
     document.getElementById('editar-nueva-fecha').value = new Date().toISOString().slice(0, 10);
     document.getElementById('editar-nuevo-valor').value = '';
 
@@ -386,6 +411,11 @@ function inicializarFormEditar() {
         if (esGrafica) {
             const selectTipo = document.getElementById('editar-widget-tipo-grafica');
             uiConfig.tipo_grafica = selectTipo ? selectTipo.value : 'bar';
+            const wrapAgrup = document.getElementById('editar-wrapper-agrupacion-beneficiarios');
+            if (wrapAgrup?.style.display !== 'none') {
+                uiConfig.agrupacion_beneficiarios =
+                    document.getElementById('editar-widget-agrupacion-beneficiarios')?.value || 'fecha';
+            }
         }
 
         const payload = {
@@ -458,6 +488,18 @@ function inicializarModalCrearListeners() {
     const radioExistente  = document.getElementById('metrica-tipo-existente');
     const radioNueva      = document.getElementById('metrica-tipo-nueva');
 
+    // Helper: recalcular si mostrar el selector de agrupación
+    function actualizarAgrupacionBenef() {
+        const esGrafica   = document.getElementById('widget-plantilla')?.value === '2';
+        const esGeneral   = document.getElementById('metrica-tipo-general')?.checked;
+        const selectGen   = document.getElementById('widget-metrica');
+        // Es beneficiarios si: origen=general Y la métrica seleccionada es id=1
+        const idSelec     = parseInt(selectGen?.value);
+        const esBeneficiarios = esGeneral && idSelec === 1;
+        const wrapAgrup   = document.getElementById('wrapper-agrupacion-beneficiarios');
+        if (wrapAgrup) wrapAgrup.style.display = (esGrafica && esBeneficiarios) ? 'block' : 'none';
+    }
+
     // Tipo de visualización
     if (selectPlantilla && wrapTipoGrafica) {
         selectPlantilla.addEventListener('change', (e) => {
@@ -469,6 +511,7 @@ function inicializarModalCrearListeners() {
             if (selectTipoGrafica) {
                 esGrafica ? selectTipoGrafica.setAttribute('required', 'true') : selectTipoGrafica.removeAttribute('required');
             }
+            actualizarAgrupacionBenef();
         });
     }
 
@@ -482,6 +525,7 @@ function inicializarModalCrearListeners() {
             // Métricas generales no admiten carga manual de datos
             document.getElementById('wrapper-captura-datos').style.display = "none";
             cargarMetricasFiltradas('generales');
+            actualizarAgrupacionBenef();
         });
     }
 
@@ -493,6 +537,7 @@ function inicializarModalCrearListeners() {
             document.getElementById('nueva-metrica-nombre').removeAttribute('required');
             document.getElementById('wrapper-captura-datos').style.display = "block";
             cargarMetricasFiltradas('proyecto', idProyectoActual);
+            actualizarAgrupacionBenef();
         });
     }
 
@@ -502,8 +547,12 @@ function inicializarModalCrearListeners() {
             wrapNueva.style.display = "block";
             document.getElementById('nueva-metrica-nombre').setAttribute('required', 'true');
             document.getElementById('wrapper-captura-datos').style.display = "block";
+            actualizarAgrupacionBenef();
         });
     }
+
+    // Detectar cuando cambia la métrica seleccionada (para mostrar/ocultar agrupación)
+    document.getElementById('widget-metrica')?.addEventListener('change', actualizarAgrupacionBenef);
 
     // Método de captura
     if (selectEntrada && wrapManual && wrapCSV) {
@@ -601,7 +650,13 @@ function inicializarFormCrear() {
         const idPlantilla = parseInt(document.getElementById('widget-plantilla').value, 10);
         const tipoEntrada = document.getElementById('metrica-entrada-tipo').value;
         const configUi    = { color: document.getElementById('widget-color').value };
-        if (idPlantilla === 2) configUi.tipo_grafica = document.getElementById('widget-tipo-grafica').value;
+        if (idPlantilla === 2) {
+            configUi.tipo_grafica = document.getElementById('widget-tipo-grafica').value;
+            const agrupSelect = document.getElementById('widget-agrupacion-beneficiarios');
+            if (agrupSelect && agrupSelect.closest('#wrapper-agrupacion-beneficiarios')?.style.display !== 'none') {
+                configUi.agrupacion_beneficiarios = agrupSelect.value;
+            }
+        }
 
         const payloadBase = {
             id_proyecto:   idProyectoActual,
@@ -667,7 +722,7 @@ function inicializarFormCrear() {
 async function enviarWidgetAlBackend(payload) {
     try {
         const token = localStorage.getItem('token');
-        const respuesta = await fetch('/api/widgets', {
+        const respuesta = await fetch('http://localhost:3000/api/widgets', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
             body: JSON.stringify(payload)
@@ -789,6 +844,7 @@ function inicializarModalRegistroPersona() {
 
     // ── Leer y previsualizar CSV ──────────────────────────────────────────────
 
+    
 
     document.getElementById('registro-archivo-csv').addEventListener('change', function() {
         const file = this.files?.[0];
@@ -861,7 +917,7 @@ function inicializarModalRegistroPersona() {
             if (!resp.ok) throw new Error();
             const data = await resp.json();
             const insertados = data.data?.insertados ?? loteCSV.length;
-            alert(` ${insertados} registro(s) importado(s) correctamente.`);
+            alert(`✅ ${insertados} registro(s) importado(s) correctamente.`);
             modalEl.classList.remove('open');
             limpiarPreviewCSV();
             window.location.reload();
@@ -895,6 +951,7 @@ function inicializarModalRegistroPersona() {
         }
     });
 
+    // ── Submit formulario manual prestador ────────────────────────────────────
 
     formPrest.addEventListener('submit', async (e) => {
         e.preventDefault();

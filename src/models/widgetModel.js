@@ -76,7 +76,40 @@ const obtenerHistorial = async (widget) => {
 
     switch (widget.id_metrica) {
         case 1: {
-            // Beneficiarios — nuevos por día
+            const agrupacion = widget.ui_config?.agrupacion_beneficiarios || 'fecha';
+
+            if (agrupacion === 'genero') {
+                const [rows] = await db.execute(
+                    `SELECT COALESCE(genero, 'sin_dato') AS label, COUNT(*) AS valor_decimal
+                     FROM beneficiarios WHERE id_proyecto = ?
+                     GROUP BY genero ORDER BY valor_decimal DESC`,
+                    [widget.id_proyecto]
+                );
+                return rows;
+            }
+
+            if (agrupacion === 'edad') {
+                const [rows] = await db.execute(
+                    `SELECT
+                         CASE
+                             WHEN edad IS NULL            THEN 'Sin dato'
+                             WHEN edad < 13               THEN '0-12'
+                             WHEN edad BETWEEN 13 AND 17  THEN '13-17'
+                             WHEN edad BETWEEN 18 AND 25  THEN '18-25'
+                             WHEN edad BETWEEN 26 AND 35  THEN '26-35'
+                             WHEN edad BETWEEN 36 AND 50  THEN '36-50'
+                             WHEN edad BETWEEN 51 AND 65  THEN '51-65'
+                             ELSE '65+'
+                         END AS label,
+                         COUNT(*) AS valor_decimal
+                     FROM beneficiarios WHERE id_proyecto = ?
+                     GROUP BY label ORDER BY MIN(COALESCE(edad, 999)) ASC`,
+                    [widget.id_proyecto]
+                );
+                return rows;
+            }
+
+            // 'fecha' — default
             const [rows] = await db.execute(
                 `SELECT DATE(fecha_registro) AS fecha, COUNT(*) AS valor_decimal
                  FROM beneficiarios

@@ -46,7 +46,6 @@ app.get('/api/health', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);           
-app.use(express.static(path.join(__dirname, "../public")));
 
 app.use('/api',metricaRoutes);
 app.use('/api/widgets', widgetRoutes);

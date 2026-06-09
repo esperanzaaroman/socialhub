@@ -81,25 +81,4 @@ const getProyectoById = async (req,res) => {
         res.status(500).json({error:'Error del Servidor'});
     }
 };
-<<<<<<< HEAD
 module.exports = {createProyecto,getProyectoById,obtenerTodosLosProyectos,getBeneficiariosCount};
-=======
-const updateProyecto = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { nombre, descripcion_corta, estado } = req.body;
-
-        if (!nombre || !descripcion_corta || !estado) {
-            return res.status(400).json({ error: 'Faltan campos obligatorios' });
-        }
-
-        await ProyectoModel.update(id, { nombre, descripcion_corta, estado });
-        res.json({ message: 'Proyecto actualizado correctamente' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Error del servidor' });
-    }
-};
-
-module.exports = {createProyecto, getProyectoById, obtenerTodosLosProyectos, updateProyecto};
->>>>>>> origin/metriquinis-cludini

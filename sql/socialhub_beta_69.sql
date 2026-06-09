@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-06-2026 a las 01:46:50
+-- Tiempo de generación: 08-06-2026 a las 22:48:20
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -58,11 +58,31 @@ CREATE TABLE `archivos_csv` (
 --
 
 CREATE TABLE `beneficiarios` (
-  `id_beneficiarios` int(11) NOT NULL,
+  `id_beneficiario` int(11) NOT NULL,
   `id_proyecto` int(11) DEFAULT NULL,
   `nombre` varchar(30) NOT NULL,
-  `fecha_registro` datetime DEFAULT current_timestamp()
+  `fecha_registro` datetime DEFAULT current_timestamp(),
+  `genero` enum('masculino','femenino','otro','prefiero_no_decir') DEFAULT NULL,
+  `edad` tinyint(3) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `beneficiarios_stats`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `beneficiarios_stats` (
+`id_proyecto` int(11)
+,`total` bigint(21)
+,`masculino` decimal(23,0)
+,`femenino` decimal(23,0)
+,`otro` decimal(23,0)
+,`sin_dato_genero` decimal(23,0)
+,`edad_promedio` decimal(5,1)
+,`edad_minima` tinyint(3) unsigned
+,`edad_maxima` tinyint(3) unsigned
+);
 
 -- --------------------------------------------------------
 
@@ -97,14 +117,6 @@ CREATE TABLE `comentario_foro` (
   `fecha_publicacion` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `comentario_foro`
---
-
-INSERT INTO `comentario_foro` (`id_comentario`, `id_usuario`, `id_publi`, `texto`, `fecha_publicacion`) VALUES
-(1, 1, 1, 'hola chaparrita', '2026-06-06 00:13:14'),
-(2, 2, 1, 'holaaa', '2026-06-06 00:19:25');
-
 -- --------------------------------------------------------
 
 --
@@ -122,17 +134,37 @@ CREATE TABLE `dashboard_widget` (
   `ancho` int(11) DEFAULT NULL,
   `alto` int(11) DEFAULT NULL,
   `ui_config` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
-  `operacion` enum('SUM','AVG','COUNT','MAX','MIN') DEFAULT NULL
+  `operacion` enum('SUM','AVG','COUNT','MAX','MIN') DEFAULT NULL,
+  `es_obligatorio` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `dashboard_widget`
 --
 
-INSERT INTO `dashboard_widget` (`id_widget`, `id_proyecto`, `id_metrica`, `id_plantilla`, `nombre_widget`, `pos_x`, `pos_y`, `ancho`, `alto`, `ui_config`, `operacion`) VALUES
-(139, 1, 29, 2, 'Chaparritas', 0, 7, 12, 5, '{\"color\":\"#6366f1\",\"tipo_grafica\":\"line\"}', 'SUM'),
-(141, 1, 29, 1, 'Chaparritas', 0, 5, 12, 2, '{\"color\":\"#c2c2c2\"}', 'AVG'),
-(142, 1, 29, 2, 'Chaparritas', 0, 0, 12, 5, '{\"color\":\"#6366f1\",\"tipo_grafica\":\"bar\"}', 'SUM');
+INSERT INTO `dashboard_widget` (`id_widget`, `id_proyecto`, `id_metrica`, `id_plantilla`, `nombre_widget`, `pos_x`, `pos_y`, `ancho`, `alto`, `ui_config`, `operacion`, `es_obligatorio`) VALUES
+(164, 1, 1, 1, 'Beneficiarios Totales', 0, 0, 4, 3, '{\"color\":\"#6366f1\"}', 'COUNT', 1),
+(165, 2, 1, 1, 'Beneficiarios Totales', 0, 0, 4, 3, '{\"color\":\"#6366f1\"}', 'COUNT', 1),
+(166, 3, 1, 1, 'Beneficiarios Totales', 0, 0, 4, 3, '{\"color\":\"#6366f1\"}', 'COUNT', 1),
+(167, 1, 2, 1, 'Prestadores Activos', 4, 0, 4, 3, '{\"color\":\"#10b981\"}', 'COUNT', 1),
+(168, 2, 2, 1, 'Prestadores Activos', 4, 0, 4, 3, '{\"color\":\"#10b981\"}', 'COUNT', 1),
+(169, 3, 2, 1, 'Prestadores Activos', 4, 0, 4, 3, '{\"color\":\"#10b981\"}', 'COUNT', 1),
+(170, 1, 3, 1, 'Horas de Servicio', 8, 0, 4, 3, '{\"color\":\"#f59e0b\"}', 'SUM', 1),
+(171, 2, 3, 1, 'Horas de Servicio', 8, 0, 4, 3, '{\"color\":\"#f59e0b\"}', 'SUM', 1),
+(172, 3, 3, 1, 'Horas de Servicio', 8, 0, 4, 3, '{\"color\":\"#f59e0b\"}', 'SUM', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `horas_proyecto`
+--
+
+CREATE TABLE `horas_proyecto` (
+  `id_horas` int(11) NOT NULL,
+  `id_proyecto` int(11) NOT NULL,
+  `horas` decimal(10,2) NOT NULL,
+  `fecha` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -212,24 +244,18 @@ CREATE TABLE `metricas_proyecto` (
   `id_metrica` int(11) NOT NULL,
   `nombre` varchar(50) NOT NULL,
   `unidad` varchar(50) DEFAULT NULL,
-  `es_general` tinyint(1) NOT NULL DEFAULT 0
+  `es_general` tinyint(1) NOT NULL DEFAULT 0,
+  `id_proyecto` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `metricas_proyecto`
 --
 
-INSERT INTO `metricas_proyecto` (`id_metrica`, `nombre`, `unidad`, `es_general`) VALUES
-(1, 'Alumnos Regularizados', 'ALUM_REG', 0),
-(2, 'Horas de Clase Impartidas', 'HRS_CLASE', 0),
-(3, 'Kilos de Plástico Reciclado', 'KG_PET', 0),
-(4, 'Beneficiarios Totales', 'Beneficiarios', 1),
-(5, 'Prestadores Activos', 'Prestadores', 1),
-(6, 'Horas de Servicio', 'Horas', 1),
-(26, 'Chaparritas Ricas', 'Chaparritas', 0),
-(27, 'Chaparritas Ricas', 'Chaparritas', 0),
-(28, 'Chaparritas Ricas', 'Chaparritas', 0),
-(29, 'Chaparritas Ricas', 'Chaparritas', 0);
+INSERT INTO `metricas_proyecto` (`id_metrica`, `nombre`, `unidad`, `es_general`, `id_proyecto`) VALUES
+(1, 'Beneficiarios Totales', 'Beneficiarios', 1, NULL),
+(2, 'Prestadores Activos', 'Prestadores', 1, NULL),
+(3, 'Horas de Servicio', 'Horas', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -384,6 +410,19 @@ INSERT INTO `proyecto_ods` (`id_proyecto`, `id_ods`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `proyecto_prestador`
+--
+
+CREATE TABLE `proyecto_prestador` (
+  `id_proyecto_prestador` int(11) NOT NULL,
+  `id_proyecto` int(11) NOT NULL,
+  `estatus` varchar(20) DEFAULT 'activo',
+  `fecha_alta` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `publicacion_foro`
 --
 
@@ -395,13 +434,6 @@ CREATE TABLE `publicacion_foro` (
   `id_proyecto` int(11) DEFAULT NULL,
   `multimedia_publi` varchar(200) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `publicacion_foro`
---
-
-INSERT INTO `publicacion_foro` (`id_publi`, `id_usuario`, `texto`, `fecha_publicacion`, `id_proyecto`, `multimedia_publi`) VALUES
-(1, 1, 'Hola soy chaparrita', '2026-06-06 00:13:04', 1, 'uploads/foro/foro-1780726384045.png');
 
 -- --------------------------------------------------------
 
@@ -492,168 +524,7 @@ CREATE TABLE `valores_metricas` (
 --
 
 INSERT INTO `valores_metricas` (`id_valor`, `id_metrica`, `id_archivo`, `fecha`, `valor_decimal`, `valor_entero`, `valor_texto`) VALUES
-(7, 4, NULL, '2026-06-07 09:31:23', 50.00, NULL, NULL),
-(8, 4, NULL, '2026-06-07 09:38:38', 35.00, NULL, NULL),
-(311, 4, NULL, '2026-06-07 17:58:52', 12.00, NULL, NULL),
-(317, 26, NULL, '2026-06-08 00:13:56', 90.00, NULL, NULL),
-(318, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(319, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(320, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(321, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(322, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(323, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(324, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(325, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(326, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(327, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(328, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(329, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(330, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(331, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(332, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(333, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(334, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(335, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(336, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(337, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(338, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(339, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(340, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(341, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(342, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(343, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(344, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(345, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(346, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(347, 26, NULL, '2026-06-07 18:14:21', 2026.00, NULL, NULL),
-(348, 4, NULL, '2026-06-08 00:17:08', 90.00, NULL, NULL),
-(349, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(350, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(351, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(352, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(353, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(354, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(355, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(356, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(357, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(358, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(359, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(360, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(361, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(362, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(363, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(364, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(365, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(366, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(367, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(368, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(369, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(370, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(371, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(372, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(373, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(374, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(375, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(376, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(377, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(378, 27, NULL, '2026-06-07 18:35:11', 2026.00, NULL, NULL),
-(379, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(380, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(381, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(382, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(383, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(384, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(385, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(386, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(387, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(388, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(389, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(390, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(391, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(392, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(393, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(394, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(395, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(396, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(397, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(398, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(399, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(400, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(401, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(402, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(403, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(404, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(405, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(406, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(407, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(408, 28, NULL, '2026-06-07 18:38:34', 2026.00, NULL, NULL),
-(409, 4, NULL, '2026-06-08 00:48:27', 20.00, NULL, NULL),
-(410, 4, NULL, '2026-06-08 01:08:51', 80.00, NULL, NULL),
-(411, 29, NULL, '2026-06-08 03:57:29', 80.00, NULL, NULL),
-(412, 29, NULL, '2026-06-08 03:58:55', 80.00, NULL, NULL),
-(413, 29, NULL, '2026-06-08 03:59:36', 90.00, NULL, NULL),
-(414, 29, NULL, '2026-06-08 04:00:18', 80.00, NULL, NULL),
-(415, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(416, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(417, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(418, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(419, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(420, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(421, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(422, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(423, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(424, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(425, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(426, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(427, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(428, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(429, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(430, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(431, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(432, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(433, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(434, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(435, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(436, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(437, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(438, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(439, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(440, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(441, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(442, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(443, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(444, 29, NULL, '2026-06-08 04:03:15', 2026.00, NULL, NULL),
-(445, 29, NULL, '2026-06-08 04:07:23', 90.00, NULL, NULL),
-(446, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL),
-(447, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL),
-(448, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL),
-(449, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL),
-(450, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL),
-(451, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL),
-(452, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL),
-(453, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL),
-(454, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL),
-(455, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL),
-(456, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL),
-(457, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL),
-(458, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL),
-(459, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL),
-(460, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL),
-(461, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL),
-(462, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL),
-(463, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL),
-(464, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL),
-(465, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL),
-(466, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL),
-(467, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL),
-(468, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL),
-(469, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL),
-(470, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL),
-(471, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL),
-(472, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL),
-(473, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL),
-(474, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL),
-(475, 29, NULL, '2026-06-08 04:44:53', 2026.00, NULL, NULL);
+(507, 3, NULL, '2026-06-08 06:00:00', 20.00, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -736,6 +607,15 @@ INSERT INTO `visualizacion_color` (`id_visual_color`, `id_visual`, `color`) VALU
 -- --------------------------------------------------------
 
 --
+-- Estructura para la vista `beneficiarios_stats`
+--
+DROP TABLE IF EXISTS `beneficiarios_stats`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `beneficiarios_stats`  AS SELECT `beneficiarios`.`id_proyecto` AS `id_proyecto`, count(0) AS `total`, sum(`beneficiarios`.`genero` = 'masculino') AS `masculino`, sum(`beneficiarios`.`genero` = 'femenino') AS `femenino`, sum(`beneficiarios`.`genero` = 'otro') AS `otro`, sum(`beneficiarios`.`genero` is null) AS `sin_dato_genero`, round(avg(`beneficiarios`.`edad`),1) AS `edad_promedio`, min(`beneficiarios`.`edad`) AS `edad_minima`, max(`beneficiarios`.`edad`) AS `edad_maxima` FROM `beneficiarios` GROUP BY `beneficiarios`.`id_proyecto` ;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura para la vista `vista_all_projects`
 --
 DROP TABLE IF EXISTS `vista_all_projects`;
@@ -771,7 +651,7 @@ ALTER TABLE `archivos_csv`
 -- Indices de la tabla `beneficiarios`
 --
 ALTER TABLE `beneficiarios`
-  ADD PRIMARY KEY (`id_beneficiarios`),
+  ADD PRIMARY KEY (`id_beneficiario`),
   ADD KEY `id_proyecto` (`id_proyecto`);
 
 --
@@ -796,6 +676,13 @@ ALTER TABLE `dashboard_widget`
   ADD KEY `id_proyecto` (`id_proyecto`),
   ADD KEY `id_metrica` (`id_metrica`),
   ADD KEY `id_plantilla` (`id_plantilla`);
+
+--
+-- Indices de la tabla `horas_proyecto`
+--
+ALTER TABLE `horas_proyecto`
+  ADD PRIMARY KEY (`id_horas`),
+  ADD KEY `id_proyecto` (`id_proyecto`);
 
 --
 -- Indices de la tabla `imagenes`
@@ -829,7 +716,8 @@ ALTER TABLE `like_foro`
 -- Indices de la tabla `metricas_proyecto`
 --
 ALTER TABLE `metricas_proyecto`
-  ADD PRIMARY KEY (`id_metrica`);
+  ADD PRIMARY KEY (`id_metrica`),
+  ADD KEY `id_proyecto` (`id_proyecto`);
 
 --
 -- Indices de la tabla `modificacion`
@@ -878,6 +766,13 @@ ALTER TABLE `proyecto`
 ALTER TABLE `proyecto_ods`
   ADD PRIMARY KEY (`id_proyecto`,`id_ods`),
   ADD KEY `id_ods` (`id_ods`);
+
+--
+-- Indices de la tabla `proyecto_prestador`
+--
+ALTER TABLE `proyecto_prestador`
+  ADD PRIMARY KEY (`id_proyecto_prestador`),
+  ADD KEY `id_proyecto` (`id_proyecto`);
 
 --
 -- Indices de la tabla `publicacion_foro`
@@ -943,7 +838,7 @@ ALTER TABLE `archivos_csv`
 -- AUTO_INCREMENT de la tabla `beneficiarios`
 --
 ALTER TABLE `beneficiarios`
-  MODIFY `id_beneficiarios` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_beneficiario` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `categoria`
@@ -961,7 +856,13 @@ ALTER TABLE `comentario_foro`
 -- AUTO_INCREMENT de la tabla `dashboard_widget`
 --
 ALTER TABLE `dashboard_widget`
-  MODIFY `id_widget` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=143;
+  MODIFY `id_widget` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=180;
+
+--
+-- AUTO_INCREMENT de la tabla `horas_proyecto`
+--
+ALTER TABLE `horas_proyecto`
+  MODIFY `id_horas` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `imagenes`
@@ -1012,6 +913,12 @@ ALTER TABLE `proyecto`
   MODIFY `id_proyecto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT de la tabla `proyecto_prestador`
+--
+ALTER TABLE `proyecto_prestador`
+  MODIFY `id_proyecto_prestador` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `publicacion_foro`
 --
 ALTER TABLE `publicacion_foro`
@@ -1039,7 +946,7 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de la tabla `valores_metricas`
 --
 ALTER TABLE `valores_metricas`
-  MODIFY `id_valor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=476;
+  MODIFY `id_valor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=508;
 
 --
 -- AUTO_INCREMENT de la tabla `visualizacion`
@@ -1085,6 +992,12 @@ ALTER TABLE `dashboard_widget`
   ADD CONSTRAINT `dashboard_widget_ibfk_3` FOREIGN KEY (`id_plantilla`) REFERENCES `plantilla` (`id_plantilla`) ON DELETE CASCADE;
 
 --
+-- Filtros para la tabla `horas_proyecto`
+--
+ALTER TABLE `horas_proyecto`
+  ADD CONSTRAINT `horas_proyecto_ibfk_1` FOREIGN KEY (`id_proyecto`) REFERENCES `proyecto` (`id_proyecto`) ON DELETE CASCADE;
+
+--
 -- Filtros para la tabla `imagenes`
 --
 ALTER TABLE `imagenes`
@@ -1109,6 +1022,12 @@ ALTER TABLE `lider_proyecto`
 ALTER TABLE `like_foro`
   ADD CONSTRAINT `like_foro_ibfk_1` FOREIGN KEY (`id_publi`) REFERENCES `publicacion_foro` (`id_publi`),
   ADD CONSTRAINT `like_foro_ibfk_2` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`);
+
+--
+-- Filtros para la tabla `metricas_proyecto`
+--
+ALTER TABLE `metricas_proyecto`
+  ADD CONSTRAINT `metricas_proyecto_ibfk_1` FOREIGN KEY (`id_proyecto`) REFERENCES `proyecto` (`id_proyecto`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `modificacion`
@@ -1142,6 +1061,12 @@ ALTER TABLE `proyecto`
 ALTER TABLE `proyecto_ods`
   ADD CONSTRAINT `proyecto_ods_ibfk_1` FOREIGN KEY (`id_proyecto`) REFERENCES `proyecto` (`id_proyecto`) ON DELETE CASCADE,
   ADD CONSTRAINT `proyecto_ods_ibfk_2` FOREIGN KEY (`id_ods`) REFERENCES `ods` (`id_ods`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `proyecto_prestador`
+--
+ALTER TABLE `proyecto_prestador`
+  ADD CONSTRAINT `proyecto_prestador_ibfk_1` FOREIGN KEY (`id_proyecto`) REFERENCES `proyecto` (`id_proyecto`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `publicacion_foro`

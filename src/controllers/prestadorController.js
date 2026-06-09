@@ -8,7 +8,7 @@ const crearPrestadorIndividual = asyncHandler(async (req, res) => {
     }
 
     const [result] = await db.execute(
-        `INSERT INTO prestadores (id_proyecto, estatus, fecha_alta) 
+        `INSERT INTO proyecto_prestador (id_proyecto, estatus, fecha_alta) 
          VALUES (?, ?, ?)`,
         [
             id_proyecto, 
@@ -28,7 +28,7 @@ const getPrestadoresPorProyecto = asyncHandler(async (req, res) => {
     const id_proyecto = req.params.id;
 
     const [rows] = await db.execute(
-        `SELECT * FROM prestadores WHERE id_proyecto = ?`,
+        `SELECT * FROM proyecto_prestador WHERE id_proyecto = ?`,
         [id_proyecto]
     );
 
@@ -51,7 +51,7 @@ const cargaMasivaPrestadores = asyncHandler(async (req, res) => {
 
     const values = [];
     // Basado en tu formulario manual, asumimos estatus y fecha_alta (puedes agregar más)
-    let sql = `INSERT INTO prestadores (id_proyecto, estatus, fecha_alta) VALUES `;
+    let sql = `INSERT INTO proyecto_prestador (id_proyecto, estatus, fecha_alta) VALUES `;
 
     prestadores.forEach((p, index) => {
         const estatus = p.estatus || p.Estatus || 'Activo';
