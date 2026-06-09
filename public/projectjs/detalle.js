@@ -364,10 +364,11 @@ function abrirModalEditar(widget) {
     if (wrapAgrupEditar) wrapAgrupEditar.style.display = esBenefWidget ? 'block' : 'none';
     if (selectAgrupEditar) selectAgrupEditar.value = widget.ui_config?.agrupacion_beneficiarios || 'fecha';
 
-    document.getElementById('editar-nueva-fecha').value = new Date().toISOString().slice(0, 10);
-    document.getElementById('editar-nuevo-valor').value = '';
+    const hoy = new Date();
+    document.getElementById('editar-nueva-fecha').value =
+        `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2,'0')}-${String(hoy.getDate()).padStart(2,'0')}`;
+        document.getElementById('editar-nuevo-valor').value = '';
 
-    // Operación: oculta si es obligatorio O si es gráfica
     document.getElementById('editar-wrapper-operacion').style.display =
         (esObligatorio || esGrafica) ? 'none' : 'block';
 

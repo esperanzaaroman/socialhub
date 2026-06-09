@@ -73,7 +73,7 @@ const getMetricasByProyecto = asyncHandler(async (req, res) => {
 
     const [rows] = await db.execute(
         `SELECT mp.id_metrica, mp.nombre, mp.unidad, mp.es_general
-         FROM metricas_proyectos mp
+         FROM metricas_proyecto mp
          WHERE mp.id_proyecto = ?
          ORDER BY mp.nombre ASC`,
         [id_proyecto]

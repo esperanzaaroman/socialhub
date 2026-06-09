@@ -3,7 +3,6 @@ const asyncHandler  = require('../middleware/asyncHandler');
 const db            = require('../config/db');
 const { seedWidgetsObligatorios } = require('./widgetController');
 
-
 const obtenerTodosLosProyectos = asyncHandler(async (req, res) => {
     const proyectos = await ProyectoModel.getAll();
     res.json(proyectos);
@@ -11,9 +10,6 @@ const obtenerTodosLosProyectos = asyncHandler(async (req, res) => {
 
 const createProyecto = async (req, res) => {
     const connection = await db.getConnection();
-    const id_proyecto = await ProyectoModel.create(req.body);
-    await seedWidgetsObligatorios(id_proyecto); 
-    res.status(201).json({ message: 'Proyecto creado', id_proyecto });
     try {
         await connection.beginTransaction();
 
@@ -21,12 +17,12 @@ const createProyecto = async (req, res) => {
         const { titulo, descorta, idcategoria } = req.body;
 
         if (!titulo || !descorta || !idcategoria) {
+            await connection.rollback();
             connection.release();
             return res.status(400).json({ error: 'Faltan campos obligatorios' });
         }
 
-
-        // Crear los 3 widgets obligatorios (Beneficiarios, Prestadores, Horas)
+        const id_proyecto = await ProyectoModel.create(req.body, connection);
         await seedWidgetsObligatorios(id_proyecto, connection);
 
         await connection.commit();
