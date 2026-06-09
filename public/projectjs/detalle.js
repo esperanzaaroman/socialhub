@@ -34,6 +34,7 @@ function obtenerUrlEmbed(urlCompartida) {
 // ─── Rol / interfaz ───────────────────────────────────────────────────────────
 
 function configurarInterfazPorRol(puedeEditar) {
+
     const botonAgregar = document.getElementById('btn-agregar-widget');
     if (puedeEditar) {
         gridStack.enableMove(true);
@@ -106,6 +107,122 @@ async function cargarDetalleProyecto() {
 
 
         configurarInterfazPorRol(proyecto.puedoEditar);
+
+        // Imagen principal del proyecto
+        const projectMainImage =
+        document.getElementById('project-main-image');
+
+        const changeProjectImageBtn =
+        document.getElementById('change-project-image-btn');
+
+        const projectImageInput =
+        document.getElementById('project-image-input');
+
+        const responseImagen =
+        await fetch(
+            `http://localhost:3000/api/proyectos/${idProyecto}/imagen`
+        );
+
+        const dataImagen =
+        await responseImagen.json();
+
+        if (
+        projectMainImage &&
+        dataImagen.imagen &&
+        dataImagen.imagen.url
+        ) {
+        projectMainImage.src =
+            `http://localhost:3000/${dataImagen.imagen.url}`;
+        }
+
+        if (
+        proyecto.puedoEditar &&
+        changeProjectImageBtn
+        ) {
+        changeProjectImageBtn.style.display =
+            'inline-flex';
+        }
+
+        if (
+        changeProjectImageBtn &&
+        projectImageInput
+        ) {
+        changeProjectImageBtn.addEventListener(
+            'click',
+            function() {
+            projectImageInput.click();
+            }
+        );
+        }
+
+        if (projectImageInput) {
+        projectImageInput.addEventListener(
+            'change',
+            async function() {
+
+            const archivo =
+                projectImageInput.files[0];
+
+            if (!archivo) {
+                return;
+            }
+
+            const formData =
+                new FormData();
+
+            formData.append(
+                'imagen_proyecto',
+                archivo
+            );
+
+            const token =
+                localStorage.getItem('token');
+
+            const response =
+                await fetch(
+                `http://localhost:3000/api/proyectos/${idProyecto}/imagen`,
+                {
+                    method: 'PUT',
+                    headers: {
+                    Authorization:
+                        `Bearer ${token}`
+                    },
+                    body: formData
+                }
+                );
+
+            const data =
+                await response.json();
+
+            if (response.ok) {
+                alert('Imagen actualizada correctamente ✅');
+                window.location.reload();
+            }
+            else {
+                alert(
+                data.mensaje ||
+                'Error actualizando imagen'
+                );
+            }
+
+            }
+        );
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
 
         // ===== LÍDER DEL PROYECTO =====
 

@@ -415,18 +415,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
     <div class="hero-gallery-side">
       <div class="carrusel-contenedor">
-        <div class="carrusel-slides" id="carruselSlides">
-          <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=600" class="slide active">
-          <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=600" class="slide">
-          <img src="https://img.freepik.com/foto-gratis/ninos-jugando-cesped_1098-504.jpg?semt=ais_hybrid&w=740&q=80" class="slide">
-        </div>
-        
-        <button class="carrusel-btn prev" onclick="cambiarSlide(-1)">&#10094;</button>
-        <button class="carrusel-btn next" onclick="cambiarSlide(1)">&#10095;</button>
-        
-        <div class="carrusel-dots" id="carruselDots"></div>
+        <img
+          id="project-main-image"
+          src="assets/img/placeholder.png"
+          alt="Imagen del proyecto"
+          style="
+            width:100%;
+            height:100%;
+            object-fit:cover;
+          "
+        >
+
+        <button
+          id="change-project-image-btn"
+          class="btn btn-primary btn-sm"
+          style="
+            position:absolute;
+            right:16px;
+            bottom:16px;
+            display:none;
+            z-index:20;
+          "
+        >
+          Cambiar imagen
+        </button>
+
+        <input
+          id="project-image-input"
+          type="file"
+          accept="image/*"
+          style="display:none;"
+        >
       </div>
-    </div>
+
+  </div>
 
   </div>
 </div>
