@@ -63,7 +63,6 @@ async function cargarNavbar(paginaActiva) {
 
   else if (rol === 'lider') {
     navLinks.innerHTML = `
-      <a href="lider-dashboard.html" class="navbar-link ${paginaActiva === 'dashboard' ? 'active' : ''}">Dashboard</a>
       <a href="lider-proyectos.html" class="navbar-link ${paginaActiva === 'proyectos' ? 'active' : ''}">Mis Proyectos</a>
       <a href="foro.html" class="navbar-link ${paginaActiva === 'foro' ? 'active' : ''}">Foro</a>
       <a href="publico-inicio.html" class="navbar-link ${paginaActiva === 'inicio' ? 'active' : ''}">Inicio público</a>

@@ -74,7 +74,7 @@ loginBtn.addEventListener('click', async () => {
         else if (data.role === 'lider') {
 
         window.location.href =
-            'lider-dashboard.html';
+            'lider-proyectos.html';
 
         }
         else {
