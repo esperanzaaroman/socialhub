@@ -298,44 +298,7 @@ h1, .project-section-title {
 
 </style>
 <script>
-/* const params = new URLSearchParams(window.location.search);
-const rol = params.get('rol') || 'publico';
 
-document.addEventListener('DOMContentLoaded', function() {
-  const navEl = document.getElementById('nav-links');
-  const navRight = document.getElementById('nav-right');
-  const actionBar = document.getElementById('action-bar');
-  const breadcrumbHome = document.getElementById('bc-home');
-
-  if (rol === 'lider') {
-    navEl.innerHTML = `
-      <a href="lider-dashboard.html" class="navbar-link">Dashboard</a>
-      <a href="lider-proyectos.html" class="navbar-link active">Mis Proyectos</a>
-      <a href="foro.html?rol=lider" class="navbar-link">Foro</a>`;
-    navRight.innerHTML = `<span class="navbar-badge">Líder Social</span><a href="lider-perfil.html?rol=lider" class="navbar-avatar">A</a>`;
-    breadcrumbHome.href = 'lider-proyectos.html';
-    breadcrumbHome.textContent = 'Mis Proyectos';
-    if (actionBar) actionBar.style.display = 'flex';
-  } else if (rol === 'admin') {
-    navEl.innerHTML = `
-      <a href="admin-dashboard.html" class="navbar-link">Dashboard</a>
-      <a href="admin-proyectos.html" class="navbar-link active">Proyectos</a>
-      <a href="foro.html?rol=admin" class="navbar-link">Foro</a>`;
-    navRight.innerHTML = `<span class="navbar-badge">Administrador</span><a href="#" class="navbar-avatar" style="background:var(--morado);"></a>`;
-    breadcrumbHome.href = 'admin-proyectos.html';
-    breadcrumbHome.textContent = 'Todos los Proyectos';
-    if (actionBar) { actionBar.style.display = 'flex'; actionBar.innerHTML = `<div><div class="action-bar-label">Vista de Administrador</div><div class="action-bar-sub">Supervisando proyecto</div></div><div style="display:flex;gap:8px;"><a href="#" class="btn btn-outline btn-sm">Exportar métricas</a><a href="#" class="btn btn-secondary btn-sm">Contactar líder</a></div>`; }
-  } else {
-    navEl.innerHTML = `
-      <a href="publico-inicio.html" class="navbar-link">Inicio</a>
-      <a href="publico-proyectos.html" class="navbar-link active">Proyectos</a>
-      <a href="foro.html" class="navbar-link">Foro</a>`;
-    navRight.innerHTML = '';
-    breadcrumbHome.href = 'publico-proyectos.html';
-    breadcrumbHome.textContent = 'Proyectos';
-    if (actionBar) actionBar.style.display = 'none';
-  }
-}); */
 
 function toggleCustomizer() {
   document.getElementById('customizer-sidebar').classList.toggle('open');
@@ -348,13 +311,7 @@ function resetStyles() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const userRol = urlParams.get('rol');
 
-  // Solo mostrar botón si es líder
-  if (userRol === 'lider') {
-    document.getElementById('btn-open-customizer').style.display = 'block';
-  }
 
   const colorInput = document.getElementById('primaryColorPicker');
   const fontInput = document.getElementById('fontPicker');
@@ -372,7 +329,7 @@ document.addEventListener('DOMContentLoaded', function() {
     fontInput.value = savedFont;
   }
 
-  // Escuchar cambios
+
   colorInput.addEventListener('input', (e) => {
     document.documentElement.style.setProperty('--proyecto-primario', e.target.value);
     localStorage.setItem('p-color-' + window.location.pathname, e.target.value);
@@ -477,6 +434,9 @@ document.addEventListener('DOMContentLoaded', () => {
 <div class="project-layout">
   <!-- MAIN -->
   <div>
+    <button id="btn-open-customizer" class="solo-edicion" onclick="toggleCustomizer()" >
+      HOLA SOY EL BOTON DE COLORES Y FONTS uwu
+      </button>
 
     <!--VIDEO-->
   <div class="project-section">
@@ -872,9 +832,6 @@ document.addEventListener('DOMContentLoaded', () => {
   </div>
 </footer>
 
-<button id="btn-open-customizer" class="btn-customizer-toggle" onclick="toggleCustomizer()" style="display:none;">
-  
-</button>
 
 <div id="customizer-sidebar" class="customizer-sidebar">
   <div class="customizer-header">
