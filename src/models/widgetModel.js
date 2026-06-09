@@ -40,21 +40,22 @@ const calcularValorWidget = async (widget) => {
             return rows[0].resultado ?? 0;
         }
         case 2: {
+            // Prestadores activos — COUNT de prestador_proyecto
             const [rows] = await db.execute(
                 `SELECT COUNT(*) AS resultado
                  FROM proyecto_prestador
-                 WHERE id_proyecto = ?`,
+                 WHERE id_proyecto = ? AND estatus = 'activo'`,
                 [widget.id_proyecto]
             );
             return rows[0].resultado ?? 0;
         }
         case 3: {
-            // Horas de servicio — valor numérico en valores_metricas (SUM normal)
+            // Horas de servicio — SUM de tabla horas_servicio ligada al proyecto
             const [rows] = await db.execute(
-                `SELECT COALESCE(SUM(valor_decimal), 0) AS resultado
-                 FROM valores_metricas
-                 WHERE id_metrica = ?`,
-                [widget.id_metrica]
+                `SELECT COALESCE(SUM(horas), 0) AS resultado
+                 FROM horas_proyecto
+                 WHERE id_proyecto = ?`,
+                [widget.id_proyecto]
             );
             return rows[0].resultado ?? 0;
         }
@@ -77,39 +78,42 @@ const obtenerHistorial = async (widget) => {
     switch (widget.id_metrica) {
         case 1: {
             const agrupacion = widget.ui_config?.agrupacion_beneficiarios || 'fecha';
-
+ 
             if (agrupacion === 'genero') {
                 const [rows] = await db.execute(
-                    `SELECT COALESCE(genero, 'sin_dato') AS label, COUNT(*) AS valor_decimal
-                     FROM beneficiarios WHERE id_proyecto = ?
-                     GROUP BY genero ORDER BY valor_decimal DESC`,
+                    `SELECT 
+                        COALESCE(genero, 'sin_dato') AS label,
+                        COUNT(*) AS valor_decimal
+                     FROM beneficiarios
+                     WHERE id_proyecto = ?
+                     GROUP BY genero
+                     ORDER BY valor_decimal DESC`,
                     [widget.id_proyecto]
                 );
                 return rows;
             }
-
+ 
             if (agrupacion === 'edad') {
                 const [rows] = await db.execute(
                     `SELECT
-                         CASE
-                             WHEN edad IS NULL            THEN 'Sin dato'
-                             WHEN edad < 13               THEN '0-12'
-                             WHEN edad BETWEEN 13 AND 17  THEN '13-17'
-                             WHEN edad BETWEEN 18 AND 25  THEN '18-25'
-                             WHEN edad BETWEEN 26 AND 35  THEN '26-35'
-                             WHEN edad BETWEEN 36 AND 50  THEN '36-50'
-                             WHEN edad BETWEEN 51 AND 65  THEN '51-65'
-                             ELSE '65+'
-                         END AS label,
-                         COUNT(*) AS valor_decimal
-                     FROM beneficiarios WHERE id_proyecto = ?
-                     GROUP BY label ORDER BY MIN(COALESCE(edad, 999)) ASC`,
+                        CASE
+                            WHEN edad IS NULL      THEN 'Sin dato'
+                            WHEN edad < 12         THEN 'Menor (0-11)'
+                            WHEN edad BETWEEN 12 AND 17 THEN 'Adolescente (12-17)'
+                            WHEN edad BETWEEN 18 AND 25 THEN 'Joven (18-25)'
+                            WHEN edad BETWEEN 26 AND 59 THEN 'Adulto (26-59)'
+                            ELSE 'Adulto mayor (60+)'
+                        END AS label,
+                        COUNT(*) AS valor_decimal
+                     FROM beneficiarios
+                     WHERE id_proyecto = ?
+                     GROUP BY label
+                     ORDER BY MIN(COALESCE(edad, 999))`,
                     [widget.id_proyecto]
                 );
                 return rows;
             }
-
-            // 'fecha' — default
+ 
             const [rows] = await db.execute(
                 `SELECT DATE(fecha_registro) AS fecha, COUNT(*) AS valor_decimal
                  FROM beneficiarios
@@ -129,19 +133,31 @@ const obtenerHistorial = async (widget) => {
             return rows;
         }
         case 2: {
+            // Prestadores — altas por día
             const [rows] = await db.execute(
                 `SELECT DATE(fecha_alta) AS fecha, COUNT(*) AS valor_decimal
                  FROM proyecto_prestador
                  WHERE id_proyecto = ?
-                 GROUP BY DATE(fecha)
+                 GROUP BY DATE(fecha_alta)
                  ORDER BY fecha ASC`,
                 [widget.id_proyecto]
             );
             return rows;
         }
-        case 3:
+        case 3: {
+            // Horas — agrupadas por día desde horas_servicio
+            const [rows] = await db.execute(
+                `SELECT fecha, SUM(horas) AS valor_decimal
+                 FROM horas_proyecto
+                 WHERE id_proyecto = ?
+                 GROUP BY fecha
+                 ORDER BY fecha ASC`,
+                [widget.id_proyecto]
+            );
+            return rows;
+        }
         default: {
-            // Horas y métricas normales — historial de valores_metricas
+            // Métricas normales del proyecto — valores_metricas
             const [rows] = await db.execute(
                 `SELECT fecha, valor_decimal, valor_entero
                  FROM valores_metricas
@@ -162,8 +178,18 @@ const enriquecerWidget = async (widget) => {
         try { widget.ui_config = JSON.parse(widget.ui_config); }
         catch { widget.ui_config = {}; }
     }
-    widget.valor_calculado = await calcularValorWidget(widget);
-    widget.historial       = await obtenerHistorial(widget);
+    try {
+        widget.valor_calculado = await calcularValorWidget(widget);
+    } catch (err) {
+        console.error(`Error calculando valor widget ${widget.id_widget}:`, err.message);
+        widget.valor_calculado = 0;
+    }
+    try {
+        widget.historial = await obtenerHistorial(widget);
+    } catch (err) {
+        console.error(`Error historial widget ${widget.id_widget}:`, err.message);
+        widget.historial = [];
+    }
     return widget;
 };
 

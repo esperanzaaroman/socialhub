@@ -416,13 +416,14 @@ function abrirModalEditar(widget) {
 
     const esObligatorio   = !!widget.es_obligatorio;
     const esGrafica       = widget.id_visualizacion === 2;
+    const esHoras = widget.id_metrica === 3;
 
     const inputId = document.getElementById('editar-widget-id');
     inputId.value                   = widget.id_widget;
     inputId.dataset.idMetrica       = widget.id_metrica;
     inputId.dataset.idVisualizacion = widget.id_visualizacion;
 
-    document.getElementById('editar-widget-obligatorio').value = esObligatorio ? '1' : '0';
+    document.getElementById('editar-widget-obligatorio').value = esObligatorio || esHoras  ? '1' : '0';
     document.getElementById('editar-widget-nombre').value      = widget.nombre_widget;
     document.getElementById('editar-widget-operacion').value   = widget.operacion || 'SUM';
     document.getElementById('editar-widget-color').value       = widget.ui_config?.color || '#6366f1';
@@ -437,10 +438,11 @@ function abrirModalEditar(widget) {
     if (wrapAgrupEditar) wrapAgrupEditar.style.display = esBenefWidget ? 'block' : 'none';
     if (selectAgrupEditar) selectAgrupEditar.value = widget.ui_config?.agrupacion_beneficiarios || 'fecha';
 
-    document.getElementById('editar-nueva-fecha').value = new Date().toISOString().slice(0, 10);
-    document.getElementById('editar-nuevo-valor').value = '';
+    const hoy = new Date();
+    document.getElementById('editar-nueva-fecha').value =
+        `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2,'0')}-${String(hoy.getDate()).padStart(2,'0')}`;
+        document.getElementById('editar-nuevo-valor').value = '';
 
-    // Operación: oculta si es obligatorio O si es gráfica
     document.getElementById('editar-wrapper-operacion').style.display =
         (esObligatorio || esGrafica) ? 'none' : 'block';
 

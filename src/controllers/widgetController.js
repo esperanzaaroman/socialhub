@@ -10,8 +10,6 @@ const WIDGETS_OBLIGATORIOS = [
     { id_metrica: 3, nombre_widget: 'Horas de Servicio',     operacion: 'SUM',   color: '#f59e0b', pos_x: 8 },
 ];
 
-// 1 y 2 leen de tablas reales. 3 (horas) es valor numérico en valores_metricas,
-// pero igual se excluye de la inserción automática de valores al crear widget.
 const METRICAS_ESPECIALES = [1, 2, 3];
 
 const parsePositiveInt = (value, fieldName) => {
@@ -74,12 +72,13 @@ const getMetricasByProyecto = asyncHandler(async (req, res) => {
     const id_proyecto = parsePositiveInt(req.params.id_proyecto, 'id_proyecto');
 
     const [rows] = await db.execute(
-        `SELECT id_metrica, nombre, unidad, es_general
-        FROM metricas_proyecto
-        WHERE id_proyecto = ?
-        ORDER BY nombre ASC`,
+        `SELECT mp.id_metrica, mp.nombre, mp.unidad, mp.es_general
+         FROM metricas_proyecto mp
+         WHERE mp.id_proyecto = ?
+         ORDER BY mp.nombre ASC`,
         [id_proyecto]
     );
+
     sendSuccess(res, { message: 'Métricas del proyecto obtenidas', data: { metricas: rows } });
 });
 
@@ -120,7 +119,7 @@ const createWidgetDinamico = async (req, res) => {
 
         // Vincular métrica al proyecto (si no es especial y no existe el vínculo)
         if (!METRICAS_ESPECIALES.includes(idMetricaFinal)) {
-           await connection.execute(
+            await connection.execute(
                 `UPDATE metricas_proyecto SET id_proyecto = ?
                 WHERE id_metrica = ? AND id_proyecto IS NULL`,
                 [parseInt(id_proyecto, 10), idMetricaFinal]
@@ -192,6 +191,7 @@ const agregarValorWidget = asyncHandler(async (req, res) => {
             const v = parseFloat(item.valor);
             if (isNaN(v)) continue;
 
+            // Parsear fecha igual que en detalle.js (soporta DD/MM/YYYY y YYYY-MM-DD)
             const str = String(item.fecha).trim();
             let fechaFinal;
             const matchDMY = str.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
@@ -202,16 +202,15 @@ const agregarValorWidget = asyncHandler(async (req, res) => {
                     .toISOString().slice(0, 19).replace('T', ' ');
             }
 
-            if (id_metrica === 6) {
-                // Horas de servicio — insertar en horas_servicio
-                // id_prestador requerido; si no viene usamos 0 (ajusta según tu auth)
+            if (id_metrica === 3) {
+                const id_prestador = parseInt(item.id_prestador) || req.usuario?.id || null;
                 await connection.execute(
-                    `INSERT INTO horas_servicio (id_proyecto, horas, fecha, descripcion)
-                     VALUES (?, ?, ?, ?)`,
-                    [id_proyecto, v, fechaFinal.slice(0, 10), item.descripcion || null]
+                    `INSERT INTO horas_proyecto (id_proyecto, horas, fecha)
+                     VALUES (?, ?, ?)`,
+                    [parseInt(id_proyecto,10),v,fechaFinal.slice(0, 10)|| null]
                 );
             } else {
-                // Métricas normales + beneficiarios (4) → valores_metricas
+                // Métricas normales — valores_metricas
                 await connection.execute(
                     `INSERT INTO valores_metricas (id_metrica, valor_decimal, fecha) VALUES (?, ?, ?)`,
                     [id_metrica, v, fechaFinal]
