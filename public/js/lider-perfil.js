@@ -305,20 +305,28 @@ if (profilePostsContainer) {
   if (saveProfileBtn) {
     saveProfileBtn.addEventListener('click', async function() {
 
-      const username =
-        document.getElementById('input-username')?.value;
+    const username =
+      document.getElementById('input-username')?.value ||
+      usuario.username;
 
-      const correo =
-        document.getElementById('input-correo')?.value;
+    const correo =
+      document.getElementById('input-correo')?.value ||
+      usuario.correo;
 
-      const telefono =
-        document.getElementById('input-telefono')?.value;
+    const telefono =
+      document.getElementById('input-telefono')?.value ||
+      usuario.telefono ||
+      '';
 
-      const linkedin =
-        document.getElementById('input-linkedin')?.value;
+    const linkedin =
+      document.getElementById('input-linkedin')?.value ||
+      usuario.linkedin ||
+      '';
 
-      const carrera =
-        document.getElementById('input-carrera')?.value;
+    const carrera =
+      document.getElementById('input-carrera')?.value ||
+      usuario.carrera ||
+      '';
 
       const emailRegex =
         /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
