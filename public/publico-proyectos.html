@@ -218,7 +218,7 @@
     }
 
     /* ── Carga inicial desde el API ─────────────────────────── */
-    fetch('http://localhost:3000/api/proyectos')
+    fetch('/api/proyectos')
       .then(function (r) { return r.json(); })
       .then(function (data) {
         proyectos = data.map(mapear);
