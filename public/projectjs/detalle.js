@@ -342,13 +342,14 @@ function abrirModalEditar(widget) {
 
     const esObligatorio   = !!widget.es_obligatorio;
     const esGrafica       = widget.id_visualizacion === 2;
+    const esHoras = widget.id_metrica === 3;
 
     const inputId = document.getElementById('editar-widget-id');
     inputId.value                   = widget.id_widget;
     inputId.dataset.idMetrica       = widget.id_metrica;
     inputId.dataset.idVisualizacion = widget.id_visualizacion;
 
-    document.getElementById('editar-widget-obligatorio').value = esObligatorio ? '1' : '0';
+    document.getElementById('editar-widget-obligatorio').value = esObligatorio || esHoras  ? '1' : '0';
     document.getElementById('editar-widget-nombre').value      = widget.nombre_widget;
     document.getElementById('editar-widget-operacion').value   = widget.operacion || 'SUM';
     document.getElementById('editar-widget-color').value       = widget.ui_config?.color || '#6366f1';
