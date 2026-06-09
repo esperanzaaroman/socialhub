@@ -1,7 +1,8 @@
+
 document.addEventListener(
   'DOMContentLoaded',
   async function() {
-
+    console.log('entre a cargarInfo')
     await verificarLider();
 
     const usuario =
@@ -20,6 +21,7 @@ document.addEventListener(
         `¡Hola, ${usuario.username}! 👋`;
 
     }
-
   }
 );
+
+

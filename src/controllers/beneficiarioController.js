@@ -40,7 +40,16 @@ const getBeneficiariosPorProyecto = asyncHandler(async (req, res) => {
         data: rows
     });
 });
+const getBeneficiarios = asyncHandler(async(req,res)=>{
+    const [rows] = await db.execute(
+        'SELECT * FROM beneficiarios'
+    );
+    res.json({
+        status: "success",
+        data:rows
+    })
 
+})
 // Carga masiva de beneficiarios por proyecto
 const cargaMasivaBeneficiarios = asyncHandler(async (req, res) => {
     const { id_proyecto, beneficiarios } = req.body; 
@@ -79,5 +88,6 @@ const cargaMasivaBeneficiarios = asyncHandler(async (req, res) => {
 module.exports = {
     getBeneficiariosPorProyecto,
     cargaMasivaBeneficiarios,
-    crearBeneficiarioIndividual
+    crearBeneficiarioIndividual,
+    getBeneficiarios
 };

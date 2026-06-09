@@ -1,5 +1,6 @@
 const db = require('../config/db');
 const asyncHandler = require('../middleware/asyncHandler');
+
 const crearPrestadorIndividual = asyncHandler(async (req, res) => {
     const { id_proyecto, estatus, fecha_alta } = req.body;
 
@@ -10,11 +11,7 @@ const crearPrestadorIndividual = asyncHandler(async (req, res) => {
     const [result] = await db.execute(
         `INSERT INTO proyecto_prestador (id_proyecto, estatus, fecha_alta) 
          VALUES (?, ?, ?)`,
-        [
-            id_proyecto, 
-            estatus || 'Activo', 
-            fecha_alta || new Date()
-        ]
+        [id_proyecto, estatus || 'activo', fecha_alta || new Date()]
     );
 
     res.status(201).json({
@@ -23,40 +20,35 @@ const crearPrestadorIndividual = asyncHandler(async (req, res) => {
         insertId: result.insertId
     });
 });
-// Obtener todos los prestadores por proyecto
+
 const getPrestadoresPorProyecto = asyncHandler(async (req, res) => {
     const id_proyecto = req.params.id;
 
     const [rows] = await db.execute(
-        `SELECT * FROM proyecto_prestador WHERE id_proyecto = ?`,
+        `SELECT pp.*, p.periodo, p.estado AS estado_proyecto, p.nombre AS nombre_proyecto
+         FROM proyecto_prestador pp
+         JOIN proyecto p ON pp.id_proyecto = p.id_proyecto
+         WHERE pp.id_proyecto = ?`,
         [id_proyecto]
     );
 
-    res.json({
-        status: "success",
-        data: rows
-    });
+    res.json({ status: "success", data: rows });
 });
 
-// Carga masiva de prestadores por proyecto
 const cargaMasivaPrestadores = asyncHandler(async (req, res) => {
     const { id_proyecto, prestadores } = req.body;
 
-    if (!id_proyecto) {
+    if (!id_proyecto)
         return res.status(400).json({ error: 'El id_proyecto es obligatorio.' });
-    }
-    if (!prestadores || !Array.isArray(prestadores) || prestadores.length === 0) {
+    if (!prestadores || !Array.isArray(prestadores) || prestadores.length === 0)
         return res.status(400).json({ error: 'No se proporcionaron prestadores válidos.' });
-    }
 
     const values = [];
-    // Basado en tu formulario manual, asumimos estatus y fecha_alta (puedes agregar más)
     let sql = `INSERT INTO proyecto_prestador (id_proyecto, estatus, fecha_alta) VALUES `;
 
     prestadores.forEach((p, index) => {
-        const estatus = p.estatus || p.Estatus || 'Activo';
-        const fecha = p.fecha_alta || p.fecha || p.Fecha || new Date();
-
+        const estatus = p.estatus || p.Estatus || 'activo';
+        const fecha   = p.fecha_alta || p.fecha || p.Fecha || new Date();
         sql += `(?, ?, ?)${index === prestadores.length - 1 ? '' : ', '}`;
         values.push(id_proyecto, estatus, fecha);
     });
@@ -65,15 +57,29 @@ const cargaMasivaPrestadores = asyncHandler(async (req, res) => {
 
     res.status(201).json({
         status: "success",
-        data: {
-            insertados: prestadores.length
-        },
+        data: { insertados: prestadores.length },
         message: 'Lote de prestadores cargado exitosamente.'
     });
+});
+
+const getPrestadores = asyncHandler(async (req, res) => {
+    const [rows] = await db.execute(
+        `SELECT 
+            pp.*,
+            p.periodo,
+            p.estado   AS estado_proyecto,
+            p.nombre   AS nombre_proyecto,
+            YEAR(pp.fecha_alta) AS anio
+         FROM proyecto_prestador pp
+         JOIN proyecto p ON pp.id_proyecto = p.id_proyecto`
+    );
+
+    res.json({ status: "success", data: rows });
 });
 
 module.exports = {
     getPrestadoresPorProyecto,
     cargaMasivaPrestadores,
-    crearPrestadorIndividual
+    crearPrestadorIndividual,
+    getPrestadores
 };

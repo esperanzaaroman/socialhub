@@ -8,6 +8,7 @@ require('dotenv').config();
 const conexion = require("./config/db");
 console.log(process.env.DB_NAME);
 
+const horasRoutes = require('./routes/horasRoutes');
 const beneficiarioRoutes = require('./routes/beneficiariosRoutes');
 const prestadorRoutes = require('./routes/prestadorRoutes');
 const catalogoRoutes = require('./routes/catalogoRoutes');
@@ -46,7 +47,7 @@ app.get('/api/health', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);           
-
+app.use('/api/horas',horasRoutes)
 app.use('/api',metricaRoutes);
 app.use('/api/widgets', widgetRoutes);
 app.use('/api/admin', adminRoutes);

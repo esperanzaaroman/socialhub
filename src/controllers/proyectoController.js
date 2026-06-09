@@ -14,9 +14,9 @@ const createProyecto = async (req, res) => {
         await connection.beginTransaction();
 
         req.body.id_admin = req.usuario.id;
-        const { titulo, descorta, idcategoria } = req.body;
+        const { titulo, descorta, idcategoria, ods, finicio, ffin, estado, periodo} = req.body;
 
-        if (!titulo || !descorta || !idcategoria) {
+        if (!titulo || !descorta || !idcategoria||!periodo||!finicio||!ffin||!estado||!periodo) {
             await connection.rollback();
             connection.release();
             return res.status(400).json({ error: 'Faltan campos obligatorios' });
