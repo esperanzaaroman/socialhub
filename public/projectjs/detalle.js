@@ -104,7 +104,81 @@ async function cargarDetalleProyecto() {
         const proyecto      = respuestaJson.data;
         const proyectoData  = proyecto.proyecto;
 
+
         configurarInterfazPorRol(proyecto.puedoEditar);
+
+        // ===== LÍDER DEL PROYECTO =====
+
+        const respuestaLideres =
+        await fetch(
+            `http://localhost:3000/api/proyectos/${idProyecto}/lideres`,
+            {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+            }
+        );
+
+        const lideres =
+        await respuestaLideres.json();
+
+        const liderPrincipal =
+        lideres[0];
+
+        if (liderPrincipal) {
+
+        const avatar =
+            document.getElementById('proyecto-lider-avatar');
+
+        const nombre =
+            document.getElementById('proyecto-lider-nombre');
+
+        const carrera =
+            document.getElementById('proyecto-lider-carrera');
+
+        const link =
+            document.getElementById('proyecto-lider-link');
+
+        if (avatar) {
+
+            avatar.innerHTML =
+            liderPrincipal.foto_perfil
+                ? `
+                <img
+                    src="http://localhost:3000/${liderPrincipal.foto_perfil}"
+                    alt="Foto"
+                    style="
+                    width:100%;
+                    height:100%;
+                    object-fit:cover;
+                    border-radius:50%;
+                    "
+                >
+                `
+                : liderPrincipal.username
+                    .charAt(0)
+                    .toUpperCase();
+
+        }
+
+        if (nombre) {
+            nombre.textContent =
+            liderPrincipal.username;
+        }
+
+        if (carrera) {
+            carrera.textContent =
+            liderPrincipal.carrera ||
+            'Líder social';
+        }
+
+        if (link) {
+            link.href =
+            `lider-perfil.html?id=${liderPrincipal.id_usuario}`;
+        }
+
+        }
+
 
         // Rellenar campos con data-proyecto
         Object.entries(proyectoData).forEach(([clave, valor]) => {

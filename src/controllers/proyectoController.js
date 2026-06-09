@@ -81,4 +81,18 @@ const getProyectoById = async (req,res) => {
         res.status(500).json({error:'Error del Servidor'});
     }
 };
-module.exports = {createProyecto,getProyectoById,obtenerTodosLosProyectos,getBeneficiariosCount};
+
+async function getLideresByProyecto(req, res) {
+  try {
+    const lideres =
+      await ProyectoModel.getLideresByProyecto(req.params.id);
+
+    res.json(lideres);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      mensaje: 'Error obteniendo líderes del proyecto'
+    });
+  }
+}
+module.exports = {createProyecto,getProyectoById,obtenerTodosLosProyectos,getBeneficiariosCount, getLideresByProyecto};

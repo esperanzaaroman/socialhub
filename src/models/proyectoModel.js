@@ -48,14 +48,49 @@ const ProyectoModel = {
         return rows[0];
     },
 
+
     update: async (id, data) => {
-        const { nombre, descripcion_corta, estado } = data;
-        await db.execute(
-            `UPDATE proyecto SET nombre = ?, descripcion_corta = ?, estado = ? WHERE id_proyecto = ?`,
-            [nombre, descripcion_corta, estado, id]
-        );
+    const { nombre, descripcion_corta, estado } = data;
+    await db.execute(
+        `UPDATE proyecto SET nombre = ?, descripcion_corta = ?, estado = ? WHERE id_proyecto = ?`,
+        [nombre, descripcion_corta, estado, id]
+    );
+    },
+
+    getLideresByProyecto: async (id_proyecto) => {
+    const [rows] = await db.execute(
+        `
+        SELECT
+        u.id_usuario,
+        u.username,
+        u.foto_perfil,
+        u.linkedin,
+        l.carrera,
+        lp.rol
+        FROM lider_proyecto lp
+        INNER JOIN usuario u
+        ON u.id_usuario = lp.id_lider
+        INNER JOIN lider l
+        ON l.id_lider = lp.id_lider
+        WHERE lp.id_proyecto = ?
+        AND lp.estado = 'activo'
+        `,
+        [id_proyecto]
+    );
+
+    return rows;
     }
 
-}
+    };
+
+
+
+
+
+
+
+
+
+
 
 module.exports = ProyectoModel;

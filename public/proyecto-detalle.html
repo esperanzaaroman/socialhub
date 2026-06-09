@@ -589,21 +589,47 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class = "info-row"><span class = "info-key">Población(es) Objetivo</span><span data-proyecto="poblacion" class="info-val">cargando..</span></div>
     </div>
 
-    <!-- LIDER -->
+    <!--lider-->
     <div class="lider-card">
       <div class="info-card-title">Líder del proyecto</div>
+
       <div class="lider-header">
-        <div class="avatar avatar-md" style="background:linear-gradient(135deg,#1e40af,#3b82f6);">A</div>
+        <div
+          id="proyecto-lider-avatar"
+          class="avatar avatar-md"
+          style="background:linear-gradient(135deg,#1e40af,#3b82f6);"
+        >
+          ?
+        </div>
+
         <div>
-          <div class="lider-info-name">Ana Martínez García</div>
-          <div class="lider-info-role">Lic. Ciencias de la Educación · 7mo semestre</div>
+          <div id="proyecto-lider-nombre" class="lider-info-name">
+            Cargando...
+          </div>
+
+          <div id="proyecto-lider-carrera" class="lider-info-role">
+            Cargando...
+          </div>
         </div>
       </div>
-      <div style="font-size:13px;color:var(--gris-500);margin-bottom:14px;line-height:1.6;">
-        Especialista en didáctica y desarrollo curricular. Tiene experiencia previa con poblaciones vulnerables.
+
+      <div
+        id="proyecto-lider-desc"
+        style="font-size:13px;color:var(--gris-500);margin-bottom:14px;line-height:1.6;"
+      >
+        Líder asignado a este proyecto.
       </div>
-      <a href="lider-perfil.html" class="btn btn-outline" style="width:100%;justify-content:center;">Ver perfil completo →</a>
+
+      <a
+        id="proyecto-lider-link"
+        href="#"
+        class="btn btn-outline"
+        style="width:100%;justify-content:center;"
+      >
+        Ver perfil completo →
+      </a>
     </div>
+
 
 
   </div>
