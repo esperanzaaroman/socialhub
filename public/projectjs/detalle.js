@@ -34,6 +34,7 @@ function obtenerUrlEmbed(urlCompartida) {
 // ─── Rol / interfaz ───────────────────────────────────────────────────────────
 
 function configurarInterfazPorRol(puedeEditar) {
+
     const botonAgregar = document.getElementById('btn-agregar-widget');
     if (puedeEditar) {
         gridStack.enableMove(true);
@@ -104,7 +105,271 @@ async function cargarDetalleProyecto() {
         const proyecto      = respuestaJson.data;
         const proyectoData  = proyecto.proyecto;
 
+
         configurarInterfazPorRol(proyecto.puedoEditar);
+
+        // ===== ESTILO DEL PROYECTO =====
+        const colorInput =
+        document.getElementById('primaryColorPicker');
+
+        const fontInput =
+        document.getElementById('fontPicker');
+
+        if (proyectoData.color_primario) {
+        document.documentElement.style.setProperty(
+            '--proyecto-primario',
+            proyectoData.color_primario
+        );
+
+        if (colorInput) {
+            colorInput.value =
+            proyectoData.color_primario;
+        }
+        }
+
+        if (proyectoData.font_titulo) {
+        document.documentElement.style.setProperty(
+            '--proyecto-font',
+            proyectoData.font_titulo
+        );
+
+        if (fontInput) {
+            fontInput.value =
+            proyectoData.font_titulo;
+        }
+        }
+
+        async function guardarEstiloProyecto() {
+        const token =
+            localStorage.getItem('token');
+
+        await fetch(
+            `/api/proyectos/${idProyecto}/estilo`,
+            {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                color_primario: colorInput.value,
+                font_titulo: fontInput.value
+            })
+            }
+        );
+        }
+
+        if (colorInput) {
+        colorInput.addEventListener('change', async function() {
+            document.documentElement.style.setProperty(
+            '--proyecto-primario',
+            colorInput.value
+            );
+
+            await guardarEstiloProyecto();
+        });
+        }
+
+        if (fontInput) {
+        fontInput.addEventListener('change', async function() {
+            document.documentElement.style.setProperty(
+            '--proyecto-font',
+            fontInput.value
+            );
+
+            await guardarEstiloProyecto();
+        });
+        }
+
+
+        // Imagen principal del proyecto
+        const projectMainImage =
+        document.getElementById('project-main-image');
+
+        const changeProjectImageBtn =
+        document.getElementById('change-project-image-btn');
+
+        const projectImageInput =
+        document.getElementById('project-image-input');
+
+        const responseImagen =
+        await fetch(
+            `http://localhost:3000/api/proyectos/${idProyecto}/imagen`
+        );
+
+        const dataImagen =
+        await responseImagen.json();
+
+        if (
+        projectMainImage &&
+        dataImagen.imagen &&
+        dataImagen.imagen.url
+        ) {
+        projectMainImage.src =
+            `http://localhost:3000/${dataImagen.imagen.url}`;
+        }
+
+        if (
+        proyecto.puedoEditar &&
+        changeProjectImageBtn
+        ) {
+        changeProjectImageBtn.style.display =
+            'inline-flex';
+        }
+
+        if (
+        changeProjectImageBtn &&
+        projectImageInput
+        ) {
+        changeProjectImageBtn.addEventListener(
+            'click',
+            function() {
+            projectImageInput.click();
+            }
+        );
+        }
+
+        if (projectImageInput) {
+        projectImageInput.addEventListener(
+            'change',
+            async function() {
+
+            const archivo =
+                projectImageInput.files[0];
+
+            if (!archivo) {
+                return;
+            }
+
+            const formData =
+                new FormData();
+
+            formData.append(
+                'imagen_proyecto',
+                archivo
+            );
+
+            const token =
+                localStorage.getItem('token');
+
+            const response =
+                await fetch(
+                `http://localhost:3000/api/proyectos/${idProyecto}/imagen`,
+                {
+                    method: 'PUT',
+                    headers: {
+                    Authorization:
+                        `Bearer ${token}`
+                    },
+                    body: formData
+                }
+                );
+
+            const data =
+                await response.json();
+
+            if (response.ok) {
+                alert('Imagen actualizada correctamente ✅');
+                window.location.reload();
+            }
+            else {
+                alert(
+                data.mensaje ||
+                'Error actualizando imagen'
+                );
+            }
+
+            }
+        );
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+        // ===== LÍDER DEL PROYECTO =====
+
+        const respuestaLideres =
+        await fetch(
+            `http://localhost:3000/api/proyectos/${idProyecto}/lideres`,
+            {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+            }
+        );
+
+        const lideres =
+        await respuestaLideres.json();
+
+        const liderPrincipal =
+        lideres[0];
+
+        if (liderPrincipal) {
+
+        const avatar =
+            document.getElementById('proyecto-lider-avatar');
+
+        const nombre =
+            document.getElementById('proyecto-lider-nombre');
+
+        const carrera =
+            document.getElementById('proyecto-lider-carrera');
+
+        const link =
+            document.getElementById('proyecto-lider-link');
+
+        if (avatar) {
+
+            avatar.innerHTML =
+            liderPrincipal.foto_perfil
+                ? `
+                <img
+                    src="http://localhost:3000/${liderPrincipal.foto_perfil}"
+                    alt="Foto"
+                    style="
+                    width:100%;
+                    height:100%;
+                    object-fit:cover;
+                    border-radius:50%;
+                    "
+                >
+                `
+                : liderPrincipal.username
+                    .charAt(0)
+                    .toUpperCase();
+
+        }
+
+        if (nombre) {
+            nombre.textContent =
+            liderPrincipal.username;
+        }
+
+        if (carrera) {
+            carrera.textContent =
+            liderPrincipal.carrera ||
+            'Líder social';
+        }
+
+        if (link) {
+            link.href =
+            `lider-perfil.html?id=${liderPrincipal.id_usuario}`;
+        }
+
+        }
+
 
         // Rellenar campos con data-proyecto
         Object.entries(proyectoData).forEach(([clave, valor]) => {

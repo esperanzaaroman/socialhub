@@ -1105,3 +1105,45 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+--- adding columnas para porder personalizar perfillll
+ALTER TABLE proyecto
+ADD COLUMN color_primario VARCHAR(20) DEFAULT '#1e40af',
+ADD COLUMN font_titulo VARCHAR(100) DEFAULT "'Sora', sans-serif";
+
+---sdding it to vista pq luego selecciona de vista para ediatr perfil
+CREATE OR REPLACE VIEW vista_proyecto_completo AS
+SELECT
+  p.id_proyecto,
+  p.nombre,
+  p.descripcion_corta,
+  p.descripcion_larga,
+  p.id_categoria,
+  p.fecha_inicio,
+  p.fecha_fin,
+  p.periodo,
+  p.video_url,
+  p.estado,
+  p.color_primario,
+  p.font_titulo,
+  c.nombre AS categoria,
+  GROUP_CONCAT(DISTINCT o.nombre SEPARATOR ', ') AS ods,
+  GROUP_CONCAT(DISTINCT pbo.nombre SEPARATOR ', ') AS poblacion,
+  GROUP_CONCAT(DISTINCT u.username SEPARATOR ', ') AS lider
+FROM proyecto p
+LEFT JOIN proyecto_ods po
+  ON p.id_proyecto = po.id_proyecto
+LEFT JOIN lider_proyecto lo
+  ON p.id_proyecto = lo.id_proyecto
+LEFT JOIN poblacion_proyecto pp
+  ON p.id_proyecto = pp.id_proyecto
+LEFT JOIN poblacion_objetivo pbo
+  ON pp.id_poblacion = pbo.id_poblacion
+LEFT JOIN ods o
+  ON po.id_ods = o.id_ods
+LEFT JOIN categoria c
+  ON p.id_categoria = c.id_categoria
+LEFT JOIN usuario u
+  ON lo.id_lider = u.id_usuario
+GROUP BY p.id_proyecto;

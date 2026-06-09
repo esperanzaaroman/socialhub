@@ -66,6 +66,109 @@ const getProyectoById = async (req, res) => {
     }
 };
 
+async function getLideresByProyecto(req, res) {
+  try {
+    const lideres =
+      await ProyectoModel.getLideresByProyecto(req.params.id);
+
+    res.json(lideres);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      mensaje: 'Error obteniendo líderes del proyecto'
+    });
+  }
+}
+
+
+async function getProyectoImagen(req, res) {
+  try {
+
+    const imagen =
+      await ProyectoModel.getImagenByProyecto(
+        req.params.id
+      );
+
+    res.json({
+      imagen: imagen || null
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      mensaje: 'Error obteniendo imagen'
+    });
+
+  }
+}
+
+async function updateProyectoImagen(req, res) {
+  try {
+
+    if (!req.file) {
+
+      return res.status(400).json({
+        mensaje: 'No se recibió ninguna imagen'
+      });
+
+    }
+
+    const url =
+      `uploads/proyectos/${req.file.filename}`;
+
+    await ProyectoModel.updateImagenProyecto(
+      req.params.id,
+      url
+    );
+
+    res.json({
+      mensaje: 'Imagen actualizada',
+      url
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      mensaje: 'Error actualizando imagen'
+    });
+
+  }
+}
+async function updateEstiloProyecto(req, res) {
+  try {
+    const {
+      color_primario,
+      font_titulo
+    } = req.body;
+
+    if (!color_primario || !font_titulo) {
+      return res.status(400).json({
+        mensaje: 'Faltan color o fuente'
+      });
+    }
+
+    await ProyectoModel.updateEstiloProyecto(
+      req.params.id,
+      color_primario,
+      font_titulo
+    );
+
+    res.json({
+      mensaje: 'Estilo actualizado correctamente'
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      mensaje: 'Error actualizando estilo'
+    });
+  }
+}
 const getBeneficiariosCount = asyncHandler(async (req, res) => {
     const id_proyecto = parseInt(req.params.id, 10);
     const [rows] = await db.execute(
@@ -75,4 +178,6 @@ const getBeneficiariosCount = asyncHandler(async (req, res) => {
     res.json({ status: 'success', data: { total: rows[0].total, id_proyecto } });
 });
 
-module.exports = { createProyecto, getProyectoById, obtenerTodosLosProyectos, getBeneficiariosCount };
+
+
+module.exports = { createProyecto, getProyectoById, obtenerTodosLosProyectos, getBeneficiariosCount, getLideresByProyecto, getProyectoImagen, updateProyectoImagen, updateEstiloProyecto};

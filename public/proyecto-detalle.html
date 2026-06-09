@@ -297,87 +297,46 @@ h1, .project-section-title {
 }
 
 </style>
+
 <script>
-
-
 function toggleCustomizer() {
-  document.getElementById('customizer-sidebar').classList.toggle('open');
+  document
+    .getElementById('customizer-sidebar')
+    .classList
+    .toggle('open');
 }
 
-function resetStyles() {
-  localStorage.removeItem('p-color-' + window.location.pathname);
-  localStorage.removeItem('p-font-' + window.location.pathname);
+async function resetStyles() {
+  const params =
+    new URLSearchParams(window.location.search);
+
+  const idProyecto =
+    params.get('id');
+
+  const token =
+    localStorage.getItem('token');
+
+  await fetch(
+    `/api/proyectos/${idProyecto}/estilo`,
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        color_primario: '#1e40af',
+        font_titulo: "'Sora', sans-serif"
+      })
+    }
+  );
+
   location.reload();
 }
-
-document.addEventListener('DOMContentLoaded', function() {
-
-
-  const colorInput = document.getElementById('primaryColorPicker');
-  const fontInput = document.getElementById('fontPicker');
-
-  // Recuperar datos guardados
-  const savedColor = localStorage.getItem('p-color-' + window.location.pathname);
-  const savedFont = localStorage.getItem('p-font-' + window.location.pathname);
-
-  if (savedColor) {
-    document.documentElement.style.setProperty('--proyecto-primario', savedColor);
-    colorInput.value = savedColor;
-  }
-  if (savedFont) {
-    document.documentElement.style.setProperty('--proyecto-font', savedFont);
-    fontInput.value = savedFont;
-  }
-
-
-  colorInput.addEventListener('input', (e) => {
-    document.documentElement.style.setProperty('--proyecto-primario', e.target.value);
-    localStorage.setItem('p-color-' + window.location.pathname, e.target.value);
-  });
-
-  fontInput.addEventListener('change', (e) => {
-    document.documentElement.style.setProperty('--proyecto-font', e.target.value);
-    localStorage.setItem('p-font-' + window.location.pathname, e.target.value);
-  });
-});
-  
-let slideIndex = 0;
-const slides = document.getElementsByClassName("slide");
-
-function mostrarSlide(n) {
-  if (n >= slides.length) slideIndex = 0;
-  if (n < 0) slideIndex = slides.length - 1;
-  
-  for (let i = 0; i < slides.length; i++) {
-    slides[i].classList.remove("active");
-  }
-  slides[slideIndex].classList.add("active");
-  actualizarDots();
-}
-
-function cambiarSlide(n) {
-  mostrarSlide(slideIndex += n);
-}
-
-function actualizarDots() {
-  const dotsContainer = document.getElementById("carruselDots");
-  dotsContainer.innerHTML = "";
-  for (let i = 0; i < slides.length; i++) {
-    let dot = document.createElement("span");
-    dot.className = "dot" + (i === slideIndex ? " active" : "");
-    dot.onclick = () => { slideIndex = i; mostrarSlide(slideIndex); };
-    dotsContainer.appendChild(dot);
-  }
-}
-
-// Auto-play cada 5 segundos
-setInterval(() => cambiarSlide(1), 5000);
-
-// Inicializar al cargar
-document.addEventListener('DOMContentLoaded', () => {
-  actualizarDots();
-});
 </script>
+
+
+
 </head>
 <body>
 
@@ -415,18 +374,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
     <div class="hero-gallery-side">
       <div class="carrusel-contenedor">
-        <div class="carrusel-slides" id="carruselSlides">
-          <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=600" class="slide active">
-          <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=600" class="slide">
-          <img src="https://img.freepik.com/foto-gratis/ninos-jugando-cesped_1098-504.jpg?semt=ais_hybrid&w=740&q=80" class="slide">
-        </div>
-        
-        <button class="carrusel-btn prev" onclick="cambiarSlide(-1)">&#10094;</button>
-        <button class="carrusel-btn next" onclick="cambiarSlide(1)">&#10095;</button>
-        
-        <div class="carrusel-dots" id="carruselDots"></div>
+        <img
+          id="project-main-image"
+          src="assets/img/placeholder.png"
+          alt="Imagen del proyecto"
+          style="
+            width:100%;
+            height:100%;
+            object-fit:cover;
+          "
+        >
+
+        <button
+          id="change-project-image-btn"
+          class="btn btn-primary btn-sm"
+          style="
+            position:absolute;
+            right:16px;
+            bottom:16px;
+            display:none;
+            z-index:20;
+          "
+        >
+          Cambiar imagen
+        </button>
+
+        <input
+          id="project-image-input"
+          type="file"
+          accept="image/*"
+          style="display:none;"
+        >
       </div>
-    </div>
+
+  </div>
 
   </div>
 </div>
@@ -434,9 +415,16 @@ document.addEventListener('DOMContentLoaded', () => {
 <div class="project-layout">
   <!-- MAIN -->
   <div>
-    <button id="btn-open-customizer" class="solo-edicion" onclick="toggleCustomizer()" >
-      HOLA SOY EL BOTON DE COLORES Y FONTS uwu
+    <div class="hero-actions">
+      <button
+        id="btn-open-customizer"
+        style="margin-bottom: 20px;"
+        class="btn btn-primary solo-edicion"
+        onclick="toggleCustomizer()"
+      >
+        🎨 Personalizar Proyecto
       </button>
+    </div>
 
     <!--VIDEO-->
   <div class="project-section">
@@ -589,21 +577,47 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class = "info-row"><span class = "info-key">Población(es) Objetivo</span><span data-proyecto="poblacion" class="info-val">cargando..</span></div>
     </div>
 
-    <!-- LIDER -->
+    <!--lider-->
     <div class="lider-card">
       <div class="info-card-title">Líder del proyecto</div>
+
       <div class="lider-header">
-        <div class="avatar avatar-md" style="background:linear-gradient(135deg,#1e40af,#3b82f6);">A</div>
+        <div
+          id="proyecto-lider-avatar"
+          class="avatar avatar-md"
+          style="background:linear-gradient(135deg,#1e40af,#3b82f6);"
+        >
+          ?
+        </div>
+
         <div>
-          <div class="lider-info-name">Ana Martínez García</div>
-          <div class="lider-info-role">Lic. Ciencias de la Educación · 7mo semestre</div>
+          <div id="proyecto-lider-nombre" class="lider-info-name">
+            Cargando...
+          </div>
+
+          <div id="proyecto-lider-carrera" class="lider-info-role">
+            Cargando...
+          </div>
         </div>
       </div>
-      <div style="font-size:13px;color:var(--gris-500);margin-bottom:14px;line-height:1.6;">
-        Especialista en didáctica y desarrollo curricular. Tiene experiencia previa con poblaciones vulnerables.
+
+      <div
+        id="proyecto-lider-desc"
+        style="font-size:13px;color:var(--gris-500);margin-bottom:14px;line-height:1.6;"
+      >
+        Líder asignado a este proyecto.
       </div>
-      <a href="lider-perfil.html" class="btn btn-outline" style="width:100%;justify-content:center;">Ver perfil completo →</a>
+
+      <a
+        id="proyecto-lider-link"
+        href="#"
+        class="btn btn-outline"
+        style="width:100%;justify-content:center;"
+      >
+        Ver perfil completo →
+      </a>
     </div>
+
 
 
   </div>
