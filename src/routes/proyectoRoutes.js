@@ -10,6 +10,11 @@ const uploadProjectImage =
   require('../middleware/projectImageUploadMiddleware');
 console.log(typeof verifyToken);
 router.post('/',verifyToken,proyectoController.createProyecto);
+router.put(
+  '/:id/estilo',
+  verifyToken,
+  proyectoController.updateEstiloProyecto
+);
 router.get(
   '/:id/imagen',
   proyectoController.getProyectoImagen

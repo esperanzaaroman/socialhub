@@ -138,7 +138,37 @@ async function updateProyectoImagen(req, res) {
 
   }
 }
+async function updateEstiloProyecto(req, res) {
+  try {
+    const {
+      color_primario,
+      font_titulo
+    } = req.body;
 
+    if (!color_primario || !font_titulo) {
+      return res.status(400).json({
+        mensaje: 'Faltan color o fuente'
+      });
+    }
+
+    await ProyectoModel.updateEstiloProyecto(
+      req.params.id,
+      color_primario,
+      font_titulo
+    );
+
+    res.json({
+      mensaje: 'Estilo actualizado correctamente'
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      mensaje: 'Error actualizando estilo'
+    });
+  }
+}
 const getBeneficiariosCount = asyncHandler(async (req, res) => {
     const id_proyecto = parseInt(req.params.id, 10);
     const [rows] = await db.execute(
@@ -148,4 +178,6 @@ const getBeneficiariosCount = asyncHandler(async (req, res) => {
     res.json({ status: 'success', data: { total: rows[0].total, id_proyecto } });
 });
 
-module.exports = { createProyecto, getProyectoById, obtenerTodosLosProyectos, getBeneficiariosCount, getLideresByProyecto, getProyectoImagen, updateProyectoImagen};
+
+
+module.exports = { createProyecto, getProyectoById, obtenerTodosLosProyectos, getBeneficiariosCount, getLideresByProyecto, getProyectoImagen, updateProyectoImagen, updateEstiloProyecto};

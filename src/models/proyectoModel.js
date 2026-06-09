@@ -122,9 +122,24 @@ const ProyectoModel = {
           url
         ]
       );
+    },
+
+    updateEstiloProyecto: async (id_proyecto, color_primario, font_titulo) => {
+    await db.execute(
+        `
+        UPDATE proyecto
+        SET
+        color_primario = ?,
+        font_titulo = ?
+        WHERE id_proyecto = ?
+        `,
+        [
+        color_primario,
+        font_titulo,
+        id_proyecto
+        ]
+    );
     }
-
-
 
     };
 

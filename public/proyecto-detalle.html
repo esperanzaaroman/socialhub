@@ -297,87 +297,46 @@ h1, .project-section-title {
 }
 
 </style>
+
 <script>
-
-
 function toggleCustomizer() {
-  document.getElementById('customizer-sidebar').classList.toggle('open');
+  document
+    .getElementById('customizer-sidebar')
+    .classList
+    .toggle('open');
 }
 
-function resetStyles() {
-  localStorage.removeItem('p-color-' + window.location.pathname);
-  localStorage.removeItem('p-font-' + window.location.pathname);
+async function resetStyles() {
+  const params =
+    new URLSearchParams(window.location.search);
+
+  const idProyecto =
+    params.get('id');
+
+  const token =
+    localStorage.getItem('token');
+
+  await fetch(
+    `/api/proyectos/${idProyecto}/estilo`,
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        color_primario: '#1e40af',
+        font_titulo: "'Sora', sans-serif"
+      })
+    }
+  );
+
   location.reload();
 }
-
-document.addEventListener('DOMContentLoaded', function() {
-
-
-  const colorInput = document.getElementById('primaryColorPicker');
-  const fontInput = document.getElementById('fontPicker');
-
-  // Recuperar datos guardados
-  const savedColor = localStorage.getItem('p-color-' + window.location.pathname);
-  const savedFont = localStorage.getItem('p-font-' + window.location.pathname);
-
-  if (savedColor) {
-    document.documentElement.style.setProperty('--proyecto-primario', savedColor);
-    colorInput.value = savedColor;
-  }
-  if (savedFont) {
-    document.documentElement.style.setProperty('--proyecto-font', savedFont);
-    fontInput.value = savedFont;
-  }
-
-
-  colorInput.addEventListener('input', (e) => {
-    document.documentElement.style.setProperty('--proyecto-primario', e.target.value);
-    localStorage.setItem('p-color-' + window.location.pathname, e.target.value);
-  });
-
-  fontInput.addEventListener('change', (e) => {
-    document.documentElement.style.setProperty('--proyecto-font', e.target.value);
-    localStorage.setItem('p-font-' + window.location.pathname, e.target.value);
-  });
-});
-  
-let slideIndex = 0;
-const slides = document.getElementsByClassName("slide");
-
-function mostrarSlide(n) {
-  if (n >= slides.length) slideIndex = 0;
-  if (n < 0) slideIndex = slides.length - 1;
-  
-  for (let i = 0; i < slides.length; i++) {
-    slides[i].classList.remove("active");
-  }
-  slides[slideIndex].classList.add("active");
-  actualizarDots();
-}
-
-function cambiarSlide(n) {
-  mostrarSlide(slideIndex += n);
-}
-
-function actualizarDots() {
-  const dotsContainer = document.getElementById("carruselDots");
-  dotsContainer.innerHTML = "";
-  for (let i = 0; i < slides.length; i++) {
-    let dot = document.createElement("span");
-    dot.className = "dot" + (i === slideIndex ? " active" : "");
-    dot.onclick = () => { slideIndex = i; mostrarSlide(slideIndex); };
-    dotsContainer.appendChild(dot);
-  }
-}
-
-// Auto-play cada 5 segundos
-setInterval(() => cambiarSlide(1), 5000);
-
-// Inicializar al cargar
-document.addEventListener('DOMContentLoaded', () => {
-  actualizarDots();
-});
 </script>
+
+
+
 </head>
 <body>
 

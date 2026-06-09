@@ -108,6 +108,80 @@ async function cargarDetalleProyecto() {
 
         configurarInterfazPorRol(proyecto.puedoEditar);
 
+        // ===== ESTILO DEL PROYECTO =====
+        const colorInput =
+        document.getElementById('primaryColorPicker');
+
+        const fontInput =
+        document.getElementById('fontPicker');
+
+        if (proyectoData.color_primario) {
+        document.documentElement.style.setProperty(
+            '--proyecto-primario',
+            proyectoData.color_primario
+        );
+
+        if (colorInput) {
+            colorInput.value =
+            proyectoData.color_primario;
+        }
+        }
+
+        if (proyectoData.font_titulo) {
+        document.documentElement.style.setProperty(
+            '--proyecto-font',
+            proyectoData.font_titulo
+        );
+
+        if (fontInput) {
+            fontInput.value =
+            proyectoData.font_titulo;
+        }
+        }
+
+        async function guardarEstiloProyecto() {
+        const token =
+            localStorage.getItem('token');
+
+        await fetch(
+            `/api/proyectos/${idProyecto}/estilo`,
+            {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                color_primario: colorInput.value,
+                font_titulo: fontInput.value
+            })
+            }
+        );
+        }
+
+        if (colorInput) {
+        colorInput.addEventListener('change', async function() {
+            document.documentElement.style.setProperty(
+            '--proyecto-primario',
+            colorInput.value
+            );
+
+            await guardarEstiloProyecto();
+        });
+        }
+
+        if (fontInput) {
+        fontInput.addEventListener('change', async function() {
+            document.documentElement.style.setProperty(
+            '--proyecto-font',
+            fontInput.value
+            );
+
+            await guardarEstiloProyecto();
+        });
+        }
+
+
         // Imagen principal del proyecto
         const projectMainImage =
         document.getElementById('project-main-image');
