@@ -13,7 +13,7 @@ document.addEventListener(
 
     const response =
       await fetch(
-        '/api/auth/leaders'
+        'http://localhost:3000/api/auth/leaders'
       );
 
     const lideres =
