@@ -178,6 +178,34 @@ const getBeneficiariosCount = asyncHandler(async (req, res) => {
     res.json({ status: 'success', data: { total: rows[0].total, id_proyecto } });
 });
 
+async function getMisProyectos(req, res) {
+  try {
+    const proyectos =
+      await ProyectoModel.getByLider(req.usuario.id);
 
+    res.json(proyectos);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      mensaje: 'Error obteniendo proyectos del líder'
+    });
+  }
+}
 
-module.exports = { createProyecto, getProyectoById, obtenerTodosLosProyectos, getBeneficiariosCount, getLideresByProyecto, getProyectoImagen, updateProyectoImagen, updateEstiloProyecto};
+async function getProyectosByLiderId(req, res) {
+  try {
+    const proyectos =
+      await ProyectoModel.getByLider(
+        req.params.id
+      );
+
+    res.json(proyectos);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      mensaje: 'Error obteniendo proyectos del líder'
+    });
+  }
+}
+
+module.exports = { createProyecto, getProyectoById, obtenerTodosLosProyectos, getBeneficiariosCount, getLideresByProyecto, getProyectoImagen, updateProyectoImagen, updateEstiloProyecto, getMisProyectos, getProyectosByLiderId};

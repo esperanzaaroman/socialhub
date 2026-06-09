@@ -36,9 +36,7 @@
       <div class="page-title">Mis Proyectos</div>
       <div class="page-subtitle">Gestiona, edita y sube métricas de tus proyectos activos</div>
     </div>
-    <button class="btn btn-primary btn-lg" onclick="document.getElementById('modalCrear').classList.add('open')">
-      ＋ Nuevo Proyecto
-    </button>
+
   </div>
 </div>
 
@@ -48,114 +46,37 @@
     <div class="strip-stat">
       <div class="strip-dot" style="background:var(--verde)"></div>
       <span class="strip-label">Activos:</span>
-      <span class="strip-val">3</span>
+      <span class="strip-val" id="stat-activos">0</span>
     </div>
-    <div class="strip-stat">
-      <div class="strip-dot" style="background:var(--naranja)"></div>
-      <span class="strip-label">Pausados:</span>
-      <span class="strip-val">1</span>
-    </div>
-    <div class="strip-stat">
-      <div class="strip-dot" style="background:var(--azul)"></div>
-      <span class="strip-label">Completados:</span>
-      <span class="strip-val">1</span>
-    </div>
+
     <div class="strip-stat">
       <div class="strip-dot" style="background:var(--gris-300)"></div>
-      <span class="strip-label">Borradores:</span>
-      <span class="strip-val">1</span>
+      <span class="strip-label">Inactivos:</span>
+      <span class="strip-val" id="stat-inactivos">0</span>
     </div>
     <div style="margin-left:auto; display:flex; gap:24px; align-items:center;">
       <div class="strip-stat">
     
-        <span class="strip-label">Total beneficiarios:</span>
-        <span class="strip-val" style="color:var(--verde)">342</span>
       </div>
       <div class="strip-stat">
-        
-        <span class="strip-label">Horas acumuladas:</span>
-        <span class="strip-val" style="color:var(--azul-tec)">1,120</span>
+
       </div>
     </div>
   </div>
 </div>
 
-<!-- TOOLBAR -->
-<div class="toolbar">
-  <div class="toolbar-inner">
-    <div class="search-input-wrap">
-      <span class="search-icon"></span>
-      <input type="text" class="search-input" placeholder="Buscar proyecto...">
-    </div>
-    <select class="filter-select">
-      <option>Todos los estados</option>
-      <option>Activo</option>
-      <option>Pausado</option>
-      <option>Completado</option>
-      <option>Borrador</option>
-    </select>
-    <select class="filter-select">
-      <option>Todas las categorías</option>
-      <option>Educación</option>
-      <option>Salud</option>
-      <option>Medio Ambiente</option>
-      <option>Tecnología</option>
-      <option>Arte y Cultura</option>
-    </select>
+
+
     <div class="view-toggle">
-      <button class="view-btn active">⊞</button>
-      <button class="view-btn">☰</button>
+
     </div>
   </div>
 </div>
 
 <!-- MAIN -->
 <div class="main-layout">
-  <div class="proj-grid">
-
-    <!-- PROYECTO 1 — ACTIVO -->
-    <div class="proj-card">
-      <div class="proj-card-banner banner-edu">
-        <span class="proj-status-badge status-activo">● Activo</span>
-        <span class="proj-card-emoji"></span>
-      </div>
-      <div class="proj-card-body">
-        <div class="proj-card-category">Educación · ODS 4</div>
-        <div class="proj-card-title">Tutorías para Secundaria en Zonas Rurales</div>
-        <div class="proj-card-desc">Apoyo académico en matemáticas y lectura para estudiantes de secundaria en colonias periféricas de Puebla.</div>
-        <div class="progress-wrap">
-          <div class="progress-header"><span>Avance del periodo</span><span>72%</span></div>
-          <div class="progress-bar"><div class="progress-fill" style="width:72%"></div></div>
-        </div>
-        <div class="proj-card-metrics">
-          <div class="metric-mini">
-            <div class="metric-mini-val" style="color:var(--verde)">128</div>
-            <div class="metric-mini-lab">Beneficiarios</div>
-          </div>
-          <div class="metric-mini">
-            <div class="metric-mini-val" style="color:var(--azul-tec)">480h</div>
-            <div class="metric-mini-lab">Horas</div>
-          </div>
-          <div class="metric-mini">
-            <div class="metric-mini-val" style="color:var(--naranja)">8</div>
-            <div class="metric-mini-lab">prestadores de servicio</div>
-          </div>
-        </div>
-        <div class="proj-card-footer">
-          <a href="proyecto-detalle.html" class="btn btn-primary btn-sm">Ver detalle →</a>
-        </div>
-      </div>
-    </div>
-
-   
-
-    <!-- NUEVO PROYECTO (placeholder) -->
-    <a href="#" class="new-proj-card" onclick="document.getElementById('modalCrear').classList.add('open'); return false;">
-      <div class="new-proj-icon">➕</div>
-      <div class="new-proj-title">Crear nuevo proyecto</div>
-      <div class="new-proj-sub">Define objetivos, beneficiarios y métricas desde el inicio</div>
-    </a>
-
+  <div class="proj-grid"  id="projects-grid">
+    Cargando proyectos...
   </div>
 </div>
 

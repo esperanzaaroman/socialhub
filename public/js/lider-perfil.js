@@ -111,6 +111,79 @@ if (profilePostsContainer) {
 }
 
 
+
+    const profileProjectsContainer =
+      document.getElementById('profile-projects');
+
+    if (profileProjectsContainer) {
+      try {
+        const responseProjects =
+          await fetch(
+            `/api/proyectos/lider/${usuario.id_usuario}`
+          );
+
+        const proyectos =
+          await responseProjects.json();
+
+        profileProjectsContainer.innerHTML = '';
+
+        if (!Array.isArray(proyectos) || proyectos.length === 0) {
+          profileProjectsContainer.innerHTML = `
+            <p style="color:#64748b;">
+              Este líder aún no tiene proyectos asignados.
+            </p>
+          `;
+        }
+        else {
+          proyectos.forEach(function(proyecto) {
+            profileProjectsContainer.innerHTML += `
+              <a
+                href="proyecto-detalle.html?id=${proyecto.id_proyecto}"
+                class="proyecto-mini"
+              >
+                <div
+                  class="proyecto-mini-icon"
+                  style="background:${proyecto.color_primario || '#2563eb'};"
+                >
+                  📁
+                </div>
+
+                <div class="proyecto-mini-info">
+                  <div class="proyecto-mini-name">
+                    ${proyecto.nombre}
+                  </div>
+
+                  <div class="proyecto-mini-meta">
+                    ${proyecto.categoria || 'Sin categoría'} · ${proyecto.estado || ''}
+                  </div>
+                </div>
+
+                <span class="tag tag-verde">
+                  ${proyecto.estado || 'activo'}
+                </span>
+              </a>
+            `;
+          });
+        }
+      } catch (error) {
+        console.error('Error cargando proyectos del líder:', error);
+
+        profileProjectsContainer.innerHTML = `
+          <p style="color:#64748b;">
+            Error cargando proyectos.
+          </p>
+        `;
+      }
+    }
+
+
+
+
+
+
+
+
+
   let modoEdicion = false;
 
   if (nombre) {

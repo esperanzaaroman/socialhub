@@ -124,6 +124,8 @@ const ProyectoModel = {
       );
     },
 
+
+
     updateEstiloProyecto: async (id_proyecto, color_primario, font_titulo) => {
     await db.execute(
         `
@@ -139,7 +141,41 @@ const ProyectoModel = {
         id_proyecto
         ]
     );
-    }
+    },
+    
+    getByLider: async (id_lider) => {
+    const [rows] = await db.execute(
+        `
+        SELECT
+        p.id_proyecto,
+        p.nombre,
+        p.descripcion_corta,
+        p.estado,
+        p.color_primario,
+        p.fecha_inicio,
+        p.fecha_fin,
+        p.periodo,
+        c.nombre AS categoria,
+        GROUP_CONCAT(DISTINCT o.nombre SEPARATOR ', ') AS ods
+        FROM proyecto p
+        INNER JOIN lider_proyecto lp
+        ON lp.id_proyecto = p.id_proyecto
+        LEFT JOIN categoria c
+        ON p.id_categoria = c.id_categoria
+        LEFT JOIN proyecto_ods po
+        ON p.id_proyecto = po.id_proyecto
+        LEFT JOIN ods o
+        ON po.id_ods = o.id_ods
+        WHERE lp.id_lider = ?
+        AND lp.estado = 'activo'
+        GROUP BY p.id_proyecto
+        ORDER BY p.fecha_inicio DESC
+        `,
+        [id_lider]
+    );
+
+    return rows;
+    }   
 
     };
 
