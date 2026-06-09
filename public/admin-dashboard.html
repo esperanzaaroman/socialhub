@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SocialHub — Dashboard Administrador</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="admin-dashboard.css">
+<script src="auth.js"></script>
+<script src="js/navbar.js"></script>
+<script src="js/admin-dashboard.js"></script>
+</head>
+<body>
+
+<!-- NAVBAR ADMIN -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="admin-dashboard.html" class="navbar-logo">
+      <img src="assets/img/logo.png" alt="Logo SocialHub" class="navbar-logo-icon">
+      <div class="navbar-logo-text">
+        <div class="navbar-logo-title">SocialHub</div>
+        <div class="navbar-logo-sub">Servicio Social</div>
+      </div>
+    </a>
+    <div class="navbar-links" id="nav-links">
+    </div>
+    <div class="navbar-right" id="nav-right">
+    </div>
+  </div>
+</nav>
+
+<div class="dash-layout">
+  <!-- SIDEBAR -->
+  <aside class="dash-sidebar">
+    <div class="sidebar-user">
+      <div class="sidebar-user-wrap">
+        <div class="avatar avatar-md" style="background:linear-gradient(135deg,var(--morado),var(--azul-tec));">🛡️</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name" id="welcome-name">Panel admin.</div>
+          <div class="sidebar-user-role">Administrador</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-section-label">General</div>
+    <a href="admin-dashboard.html" class="sidebar-link active"><span class="icon">📈</span> Dashboard Global</a>
+    <a href="admin-proyectos.html" class="sidebar-link"><span class="icon">🗂️</span> Todos los Proyectos</a>
+    <a href="foro.html" class="sidebar-link"><span class="icon">💬</span> Foro</a>
+
+    <div class="sidebar-section-label" style="margin-top:12px;">Métricas</div>
+    <a href="#sec-prestadores" class="sidebar-link"><span class="icon">👥</span> Prestadores</a>
+    <a href="#sec-beneficiarios" class="sidebar-link"><span class="icon">🌱</span> Beneficiarios</a>
+    <a href="#sec-horas" class="sidebar-link"><span class="icon">⏱️</span> Horas de Servicio</a>
+    <a href="#sec-ods" class="sidebar-link"><span class="icon">🎯</span> Distribución ODS</a>
+    <a href="#sec-mapa" class="sidebar-link"><span class="icon">🗺️</span> Mapa de Proyectos</a>
+
+    <div class="sidebar-section-label" style="margin-top:12px;">Sistema</div>
+    <a href="lider-perfil.html" class="sidebar-link"><span class="icon">👤</span>Mi Perfil</a>
+    <a href="publico-inicio.html" class="sidebar-link"><span class="icon">🌐</span>Vista pública</a>
+    <a
+      href="#"
+      class="sidebar-link"
+      onclick="logout()"
+    >
+      <span class="icon">🚪</span>
+      Cerrar sesión
+    </a>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="dash-main">
+
+    <!-- HEADER -->
+    <div class="dash-header">
+      <div>
+        <h1 style="font-family:'Sora',sans-serif;font-size:26px;font-weight:800;color:var(--gris-900);margin-bottom:4px;">Dashboard Global 📊</h1>
+        <p style="color:var(--gris-500);font-size:14px;">Supervisión general del programa de Servicio Social · Generado hoy</p>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <button class="btn btn-primary btn-sm">⬇ Exportar reporte</button>
+
+        <button
+          id="btn-create-leader"
+          class="btn btn-primary btn-sm"
+        >
+          ➕ Registrar Líder
+        </button>
+
+        <button
+          id="btn-create-admin"
+          class="btn btn-secondary btn-sm"
+        >
+          🛡️ Registrar Admin
+        </button>
+      </div>
+    </div>
+
+    <!-- KPI CARDS -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-icon azul">👥</div>
+        <div class="kpi-info">
+          <div class="kpi-val">142</div>
+          <div class="kpi-label">Prestadores activos</div>
+          <div class="kpi-trend up">↑ +18 vs periodo anterior</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon verde">🌱</div>
+        <div class="kpi-info">
+          <div class="kpi-val">1,247</div>
+          <div class="kpi-label">Beneficiarios totales</div>
+          <div class="kpi-trend up">↑ +204 este año</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon naranja">⏱️</div>
+        <div class="kpi-info">
+          <div class="kpi-val">6,820</div>
+          <div class="kpi-label">Horas de servicio</div>
+          <div class="kpi-trend up">↑ 48 h/prestador prom.</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon morado">📂</div>
+        <div class="kpi-info">
+          <div class="kpi-val">38</div>
+          <div class="kpi-label">Proyectos activos</div>
+          <div class="kpi-trend up">↑ +6 vs año anterior</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== PRESTADORES ===== -->
+    <div id="sec-prestadores">
+      <div class="section-label">👥 Prestadores de Servicio Social <span class="section-label-sub">Histórico y por periodo</span></div>
+      <div class="prest-grid">
+        <!-- Histórico -->
+        <div class="prest-card">
+          <div class="prest-card-title">📅 Prestadores por periodo activo</div>
+          <div class="period-bars">
+            <div class="period-row">
+              <span class="period-name">Invierno</span>
+              <div class="period-bar-wrap">
+                <div class="period-bar-bg"><div class="period-bar-fill" style="width:35%;background:var(--azul);height:100%"></div></div>
+              </div>
+              <span class="period-val">28</span>
+            </div>
+            <div class="period-row">
+              <span class="period-name">Feb–Jun</span>
+              <div class="period-bar-wrap">
+                <div class="period-bar-bg"><div class="period-bar-fill" style="width:80%;background:var(--verde);height:100%"></div></div>
+              </div>
+              <span class="period-val">64</span>
+            </div>
+            <div class="period-row">
+              <span class="period-name">Verano</span>
+              <div class="period-bar-wrap">
+                <div class="period-bar-bg"><div class="period-bar-fill" style="width:25%;background:var(--naranja);height:100%"></div></div>
+              </div>
+              <span class="period-val">20</span>
+            </div>
+            <div class="period-row">
+              <span class="period-name">Ago–Dic</span>
+              <div class="period-bar-wrap">
+                <div class="period-bar-bg"><div class="period-bar-fill" style="width:100%;background:var(--morado);height:100%"></div></div>
+              </div>
+              <span class="period-val">80</span>
+            </div>
+          </div>
+          <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--gris-100);display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:13px;color:var(--gris-500);">Total histórico acumulado</span>
+            <span style="font-family:'Sora',sans-serif;font-size:24px;font-weight:800;color:var(--azul-tec);">648</span>
+          </div>
+        </div>
+
+        <!-- Por año -->
+        <div class="prest-card">
+          <div class="prest-card-title">📊 Crecimiento anual de prestadores</div>
+          <div class="bar-chart-css">
+            <div class="bar-col">
+              <span class="bar-val">82</span>
+              <div class="bar-fill" style="height:55px"></div>
+              <span class="bar-label">2020</span>
+            </div>
+            <div class="bar-col">
+              <span class="bar-val">95</span>
+              <div class="bar-fill" style="height:64px"></div>
+              <span class="bar-label">2021</span>
+            </div>
+            <div class="bar-col">
+              <span class="bar-val">110</span>
+              <div class="bar-fill" style="height:74px"></div>
+              <span class="bar-label">2022</span>
+            </div>
+            <div class="bar-col">
+              <span class="bar-val">124</span>
+              <div class="bar-fill" style="height:84px"></div>
+              <span class="bar-label">2023</span>
+            </div>
+            <div class="bar-col">
+              <span class="bar-val">142</span>
+              <div class="bar-fill naranja" style="height:96px"></div>
+              <span class="bar-label">2024</span>
+            </div>
+          </div>
+          <div style="margin-top:8px;padding:12px;background:var(--verde-light);border-radius:var(--radius-sm);">
+            <div style="font-size:13px;color:var(--verde-dark);font-weight:600;">📈 Crecimiento 2020–2024: <strong>+73%</strong></div>
+            <div style="font-size:12px;color:var(--verde-dark);margin-top:2px;">Promedio anual: +15 nuevos prestadores por año</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== BENEFICIARIOS ===== -->
+    <div id="sec-beneficiarios">
+      <div class="section-label">🌱 Beneficiarios <span class="section-label-sub">Acumulado, género y rangos de edad</span></div>
+      <div class="benef-grid">
+        <div class="benef-main">
+          <div class="benef-total">1,247</div>
+          <div class="benef-total-label">Beneficiarios totales acumulados</div>
+
+          <!-- By year -->
+          <div style="margin-bottom:18px;">
+            <div style="font-size:13px;font-weight:600;color:var(--gris-600);margin-bottom:10px;">Por año</div>
+            <div class="bar-chart-css" style="height:100px">
+              <div class="bar-col"><span class="bar-val" style="font-size:10px">680</span><div class="bar-fill" style="height:55px"></div><span class="bar-label">2020</span></div>
+              <div class="bar-col"><span class="bar-val" style="font-size:10px">790</span><div class="bar-fill" style="height:63px"></div><span class="bar-label">2021</span></div>
+              <div class="bar-col"><span class="bar-val" style="font-size:10px">930</span><div class="bar-fill" style="height:75px"></div><span class="bar-label">2022</span></div>
+              <div class="bar-col"><span class="bar-val" style="font-size:10px">1,043</span><div class="bar-fill" style="height:84px"></div><span class="bar-label">2023</span></div>
+              <div class="bar-col"><span class="bar-val" style="font-size:10px">1,247</span><div class="bar-fill naranja" style="height:100px"></div><span class="bar-label">2024</span></div>
+            </div>
+          </div>
+
+          <!-- Gender -->
+          <div style="font-size:13px;font-weight:600;color:var(--gris-600);margin-bottom:10px;">Por género</div>
+          <div class="gender-row">
+            <div class="gender-item">
+              <div class="gender-val" style="color:var(--azul)">674</div>
+              <div class="gender-label">♀ Mujeres (54%)</div>
+              <div style="margin-top:6px;height:4px;background:var(--gris-200);border-radius:10px;overflow:hidden;"><div style="width:54%;height:100%;background:var(--azul);border-radius:10px;"></div></div>
+            </div>
+            <div class="gender-item">
+              <div class="gender-val" style="color:var(--verde)">548</div>
+              <div class="gender-label">♂ Hombres (44%)</div>
+              <div style="margin-top:6px;height:4px;background:var(--gris-200);border-radius:10px;overflow:hidden;"><div style="width:44%;height:100%;background:var(--verde);border-radius:10px;"></div></div>
+            </div>
+            <div class="gender-item">
+              <div class="gender-val" style="color:var(--morado)">25</div>
+              <div class="gender-label">⚧ No binario (2%)</div>
+              <div style="margin-top:6px;height:4px;background:var(--gris-200);border-radius:10px;overflow:hidden;"><div style="width:2%;height:100%;background:var(--morado);border-radius:10px;"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Edad -->
+        <div class="age-breakdown">
+          <div style="font-family:'Sora',sans-serif;font-size:15px;font-weight:700;color:var(--gris-800);margin-bottom:16px;">👶 Rangos de edad</div>
+          <div class="ods-list">
+            <div class="age-row">
+              <span class="age-range">3–5 años</span>
+              <div class="age-bar-mini"><div class="age-bar-fill" style="width:15%;background:var(--naranja)"></div></div>
+              <span class="age-count" style="color:var(--naranja)">87</span>
+            </div>
+            <div class="age-row">
+              <span class="age-range">6–12 años</span>
+              <div class="age-bar-mini"><div class="age-bar-fill" style="width:55%;background:var(--azul)"></div></div>
+              <span class="age-count" style="color:var(--azul)">312</span>
+            </div>
+            <div class="age-row">
+              <span class="age-range">12–15 años</span>
+              <div class="age-bar-mini"><div class="age-bar-fill" style="width:35%;background:var(--verde)"></div></div>
+              <span class="age-count" style="color:var(--verde)">198</span>
+            </div>
+            <div class="age-row">
+              <span class="age-range">15–17 años</span>
+              <div class="age-bar-mini"><div class="age-bar-fill" style="width:22%;background:var(--morado)"></div></div>
+              <span class="age-count" style="color:var(--morado)">126</span>
+            </div>
+            <div class="age-row">
+              <span class="age-range">18–23+ años</span>
+              <div class="age-bar-mini"><div class="age-bar-fill" style="width:90%;background:var(--azul-tec)"></div></div>
+              <span class="age-count" style="color:var(--azul-tec)">524</span>
+            </div>
+          </div>
+          <div style="margin-top:16px;padding:12px;background:var(--azul-light);border-radius:var(--radius-sm);">
+            <div style="font-size:12px;color:#1e3a8a;font-weight:600;">📌 Grupo más beneficiado: 18–23+ años</div>
+            <div style="font-size:11px;color:#1e3a8a;opacity:0.8;margin-top:2px;">Principalmente adultos en proyectos de salud y empleo</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== HORAS ===== -->
+    <div id="sec-horas">
+      <div class="section-label">⏱️ Horas de Servicio <span class="section-label-sub">Acumulado y promedios</span></div>
+      <div class="horas-grid">
+        <div class="horas-card">
+          <div class="horas-card-title">Total acumulado</div>
+          <div class="horas-card-val" style="color:var(--azul-tec)">6,820</div>
+          <div class="horas-card-sub">horas desde el inicio del programa</div>
+          <div style="margin-top:12px;font-size:12px;color:var(--verde-dark);font-weight:600;background:var(--verde-light);padding:6px 10px;border-radius:6px;">↑ +1,240 vs año anterior</div>
+        </div>
+        <div class="horas-card">
+          <div class="horas-card-title">Promedio por prestador</div>
+          <div class="horas-card-val" style="color:var(--verde)">48.0</div>
+          <div class="horas-card-sub">horas promedio por prestador activo</div>
+          <div style="margin-top:12px;">
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--gris-400);margin-bottom:4px;"><span>Meta: 60h</span><span>80%</span></div>
+            <div style="height:6px;background:var(--gris-100);border-radius:10px;overflow:hidden;"><div style="width:80%;height:100%;background:var(--verde);border-radius:10px;"></div></div>
+          </div>
+        </div>
+        <div class="horas-card">
+          <div class="horas-card-title">Por periodo (2024)</div>
+          <div class="period-bars" style="margin-top:4px">
+            <div class="period-row">
+              <span class="period-name" style="width:80px;font-size:11px">Invierno</span>
+              <div class="period-bar-wrap"><div class="period-bar-bg"><div class="period-bar-fill" style="width:28%;background:var(--azul);height:8px;border-radius:10px;"></div></div></div>
+              <span class="period-val">680h</span>
+            </div>
+            <div class="period-row">
+              <span class="period-name" style="width:80px;font-size:11px">Feb–Jun</span>
+              <div class="period-bar-wrap"><div class="period-bar-bg"><div class="period-bar-fill" style="width:75%;background:var(--verde);height:8px;border-radius:10px;"></div></div></div>
+              <span class="period-val">1,820h</span>
+            </div>
+            <div class="period-row">
+              <span class="period-name" style="width:80px;font-size:11px">Verano</span>
+              <div class="period-bar-wrap"><div class="period-bar-bg"><div class="period-bar-fill" style="width:40%;background:var(--naranja);height:8px;border-radius:10px;"></div></div></div>
+              <span class="period-val">960h</span>
+            </div>
+            <div class="period-row">
+              <span class="period-name" style="width:80px;font-size:11px">Ago–Dic</span>
+              <div class="period-bar-wrap"><div class="period-bar-bg"><div class="period-bar-fill" style="width:100%;background:var(--morado);height:8px;border-radius:10px;"></div></div></div>
+              <span class="period-val">2,420h</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ODS ===== -->
+    <div id="sec-ods">
+      <div class="section-label">🎯 Distribución por ODS <span class="section-label-sub">Proyectos y beneficiarios por objetivo</span></div>
+      <div class="ods-grid-wrap">
+        <div class="ods-list">
+          <div class="ods-row" style="font-size:11px;font-weight:700;color:var(--gris-400);text-transform:uppercase;letter-spacing:0.8px;">
+            <span>ODS</span><span>Distribución de proyectos</span><span>Proyectos</span><span>Benef.</span>
+          </div>
+          <div class="ods-row">
+            <span class="ods-name"><span style="font-size:16px;">📚</span> ODS 4 · Educación</span>
+            <div class="ods-bar-wrap"><div class="ods-bar-bg"><div class="ods-bar-fill" style="width:85%;background:var(--azul);"></div></div></div>
+            <span class="ods-count" style="color:var(--azul)">12</span>
+            <span class="ods-pct">412</span>
+          </div>
+          <div class="ods-row">
+            <span class="ods-name"><span style="font-size:16px;">💊</span> ODS 3 · Salud</span>
+            <div class="ods-bar-wrap"><div class="ods-bar-bg"><div class="ods-bar-fill" style="width:60%;background:var(--verde);"></div></div></div>
+            <span class="ods-count" style="color:var(--verde)">8</span>
+            <span class="ods-pct">287</span>
+          </div>
+          <div class="ods-row">
+            <span class="ods-name"><span style="font-size:16px;">🌱</span> ODS 15 · Ecosistemas</span>
+            <div class="ods-bar-wrap"><div class="ods-bar-bg"><div class="ods-bar-fill" style="width:50%;background:#22c55e;"></div></div></div>
+            <span class="ods-count" style="color:#22c55e">7</span>
+            <span class="ods-pct">198</span>
+          </div>
+          <div class="ods-row">
+            <span class="ods-name"><span style="font-size:16px;">🏘️</span> ODS 11 · Ciudades</span>
+            <div class="ods-bar-wrap"><div class="ods-bar-bg"><div class="ods-bar-fill" style="width:42%;background:var(--naranja);"></div></div></div>
+            <span class="ods-count" style="color:var(--naranja)">6</span>
+            <span class="ods-pct">210</span>
+          </div>
+          <div class="ods-row">
+            <span class="ods-name"><span style="font-size:16px;">💻</span> ODS 9 · Industria</span>
+            <div class="ods-bar-wrap"><div class="ods-bar-bg"><div class="ods-bar-fill" style="width:30%;background:var(--morado);"></div></div></div>
+            <span class="ods-count" style="color:var(--morado)">4</span>
+            <span class="ods-pct">92</span>
+          </div>
+          <div class="ods-row">
+            <span class="ods-name"><span style="font-size:16px;">🍽️</span> ODS 2 · Hambre cero</span>
+            <div class="ods-bar-wrap"><div class="ods-bar-bg"><div class="ods-bar-fill" style="width:8%;background:var(--rojo);"></div></div></div>
+            <span class="ods-count" style="color:var(--rojo)">1</span>
+            <span class="ods-pct">48</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== INDICADORES + MAPA ===== -->
+    <div class="bottom-grid" id="sec-mapa">
+      <!-- Indicadores -->
+      <div class="indicadores-card">
+        <div class="section-label" style="margin-bottom:14px;">📐 Indicadores Clave</div>
+        <div class="ind-row">
+          <span class="ind-label">Crecimiento de beneficiarios (YoY)</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="ind-value">+19.5%</span>
+            <span class="ind-badge up">↑ Bueno</span>
+          </div>
+        </div>
+        <div class="ind-row">
+          <span class="ind-label">Horas promedio por prestador</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="ind-value">48h</span>
+            <span class="ind-badge up">En meta</span>
+          </div>
+        </div>
+        <div class="ind-row">
+          <span class="ind-label">Tasa de retención de prestadores</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="ind-value">74%</span>
+            <span class="ind-badge up">↑ Alta</span>
+          </div>
+        </div>
+        <div class="ind-row">
+          <span class="ind-label">Proyectos finalizados a tiempo</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="ind-value">81%</span>
+            <span class="ind-badge up">↑ Bien</span>
+          </div>
+        </div>
+        <div class="ind-row">
+          <span class="ind-label">Impacto por ODS más cubierto</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="ind-value">ODS 4</span>
+            <span class="ind-badge up">Educación</span>
+          </div>
+        </div>
+        <div class="ind-row">
+          <span class="ind-label">Proyectos sin métricas actualizadas</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="ind-value">4</span>
+            <span class="ind-badge down">⚠ Atención</span>
+          </div>
+        </div>
+        <div class="ind-row" style="border:none">
+          <span class="ind-label">Satisfacción general (encuesta)</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="ind-value">4.6/5</span>
+            <span class="ind-badge up">⭐ Excelente</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mapa -->
+      <div class="map-card">
+        <div class="map-header">
+          <span class="map-header-title">🗺️ Zonas de impacto — Puebla</span>
+          <span class="tag tag-azul" style="font-size:11px;">38 proyectos</span>
+        </div>
+        <div class="map-body">
+          <div class="map-visual">
+            <!-- Decorative dots simulating project locations -->
+            <div class="map-dot" style="width:36px;height:36px;top:30%;left:45%;font-size:11px;">12</div>
+            <div class="map-dot verde" style="width:28px;height:28px;top:50%;left:38%;font-size:10px;">8</div>
+            <div class="map-dot naranja" style="width:24px;height:24px;top:40%;left:60%;font-size:10px;">6</div>
+            <div class="map-dot morado" style="width:22px;height:22px;top:65%;left:52%;font-size:10px;">5</div>
+            <div class="map-dot" style="width:20px;height:20px;top:25%;left:30%;font-size:10px;">4</div>
+            <div class="map-dot verde" style="width:18px;height:18px;top:55%;left:70%;font-size:10px;">3</div>
+            <div class="map-label" style="top:20%;left:44%">Centro</div>
+            <div class="map-label" style="top:44%;left:27%">Cholula</div>
+            <div class="map-label" style="top:35%;left:59%">Atlixco</div>
+            <div class="map-label" style="top:60%;left:51%">Huejotzingo</div>
+          </div>
+          <div style="padding:14px 20px;border-top:1px solid var(--gris-100);">
+            <div style="display:flex;gap:16px;flex-wrap:wrap;">
+              <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--gris-600);">
+                <div style="width:10px;height:10px;border-radius:50%;background:var(--azul-tec)"></div>Educación/Salud
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--gris-600);">
+                <div style="width:10px;height:10px;border-radius:50%;background:var(--verde)"></div>Ambiente
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--gris-600);">
+                <div style="width:10px;height:10px;border-radius:50%;background:var(--naranja)"></div>Comunidad
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--gris-600);">
+                <div style="width:10px;height:10px;border-radius:50%;background:var(--morado)"></div>Tecnología
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ACTIVIDAD RECIENTE ===== -->
+    <div>
+      <div class="section-label">🕐 Actividad Reciente</div>
+      <div class="activity-card">
+        <div class="activity-item">
+          <div class="activity-dot" style="background:var(--verde)"></div>
+          <div class="activity-content">
+            <div class="activity-text"><strong>Ana García</strong> subió métricas al proyecto <strong>Tutorías para Secundaria</strong> — 128 beneficiarios registrados</div>
+            <div class="activity-time">Hace 2 horas · Ago–Dic 2024</div>
+          </div>
+          <a href="proyecto-detalle.html" class="btn btn-sm" style="background:var(--gris-100);color:var(--gris-600);white-space:nowrap;">Ver →</a>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot" style="background:var(--azul)"></div>
+          <div class="activity-content">
+            <div class="activity-text"><strong>Carlos Mendoza</strong> creó un nuevo proyecto: <strong>Apoyo psicosocial comunitario</strong></div>
+            <div class="activity-time">Hace 5 horas · ODS 3 — Salud</div>
+          </div>
+          <a href="proyecto-detalle.html" class="btn btn-sm" style="background:var(--gris-100);color:var(--gris-600);white-space:nowrap;">Ver →</a>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot" style="background:var(--naranja)"></div>
+          <div class="activity-content">
+            <div class="activity-text"><strong>Sofía Ramírez</strong> publicó en el foro: <strong>"¿Cómo medir impacto en proyectos de corto plazo?"</strong></div>
+            <div class="activity-time">Hace 1 día · Foro — Métricas</div>
+          </div>
+          <a href="foro.html" class="btn btn-sm" style="background:var(--gris-100);color:var(--gris-600);white-space:nowrap;">Ver →</a>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot" style="background:var(--rojo)"></div>
+          <div class="activity-content">
+            <div class="activity-text"><strong>Proyecto Alfabetización Digital</strong> marcado como <strong>Pausado</strong> — pendiente de revisión</div>
+            <div class="activity-time">Hace 2 días · Requiere atención</div>
+          </div>
+          <a href="admin-proyectos.html" class="btn btn-sm" style="background:var(--rojo-light);color:var(--rojo);white-space:nowrap;">Revisar →</a>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot" style="background:var(--morado)"></div>
+          <div class="activity-content">
+            <div class="activity-text"><strong>Luis Torres</strong> completó su periodo de servicio — 480 horas registradas en <strong>Reforestación Urbana</strong></div>
+            <div class="activity-time">Hace 3 días · Período Feb–Jun 2024</div>
+          </div>
+          <a href="lider-perfil.html" class="btn btn-sm" style="background:var(--gris-100);color:var(--gris-600);white-space:nowrap;">Perfil →</a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+
+<div
+  id="create-user-modal"
+  style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.45);
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+  "
+>
+
+  <div
+    style="
+      background:white;
+      padding:24px;
+      border-radius:16px;
+      width:420px;
+      max-width:90%;
+    "
+  >
+
+    <h2
+      id="modal-title"
+      style="margin-bottom:16px;"
+    >
+      Crear usuario
+    </h2>
+
+    <input
+      id="new-username"
+      class="form-input"
+      placeholder="Nombre"
+      style="margin-bottom:10px;width:100%;"
+    >
+
+    <input
+      id="new-email"
+      class="form-input"
+      placeholder="Correo"
+      style="margin-bottom:10px;width:100%;"
+    >
+
+    <input
+      id="new-password"
+      class="form-input"
+      placeholder="Contraseña temporal"
+      style="margin-bottom:10px;width:100%;"
+    >
+
+    <input
+      id="new-carrera"
+      class="form-input"
+      placeholder="Carrera"
+      style="margin-bottom:16px;width:100%;"
+    >
+
+    <div
+      style="
+        display:flex;
+        gap:10px;
+        justify-content:flex-end;
+      "
+    >
+
+      <button
+        id="cancel-create-user"
+        class="btn"
+      >
+        Cancelar
+      </button>
+
+      <button
+        id="save-create-user"
+        class="btn btn-primary"
+      >
+        Guardar
+      </button>
+
+      <div
+        id="create-user-message"
+        style="display:none;margin-top:12px;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:600;"
+      >
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SocialHub – Proyectos</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="estilos-comunes.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="publico-proyectos.css" />
+  <script src="auth.js"></script>
+  <script src="js/navbar.js"></script>
+  <script src="js/publico-proyectos.js"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="publico-inicio.html" class="navbar-logo">
+        <img src="assets/img/logo.png" alt="Logo SocialHub" class="navbar-logo-icon">
+        <div class="navbar-logo-text">
+          <span class="navbar-logo-title">SocialHub</span>
+          <span class="navbar-logo-sub">Servicio Social</span>
+        </div>
+      </a>
+      <div class="navbar-links" id="nav-links">
+        <a href="publico-inicio.html" class="navbar-link">Inicio</a>
+        <a href="publico-proyectos.html" class="navbar-link active">Proyectos</a>
+        <a href="foro.html?rol=publico" class="navbar-link">Foro</a>
+      </div>
+      <div class="navbar-right" id="nav-right"></div>
+    </div>
+  </nav>
+
+  <div class="encabezado-catalogo">
+    <h1>Catálogo de <span class="colorcitoo">Proyectos</span></h1>
+    <p>Explora todas las iniciativas solidarias</p>
+  </div>
+
+  <div class="barra-filtros">
+
+    <!-- Búsqueda por texto -->
+    <div class="campo-busqueda">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="text" id="inputBusqueda" placeholder="Buscar proyectos..." />
+    </div>
+
+    <!-- Filtro por ODS -->
+    <select class="filtro-select" id="filtroODS">
+      <option value="">Todos los ODS</option>
+      <option value="ods1">ODS 1 – Sin pobreza</option>
+      <option value="ods3">ODS 3 – Salud y bienestar</option>
+      <option value="ods4">ODS 4 – Educación de calidad</option>
+      <option value="ods10">ODS 10 – Reducción desigualdades</option>
+      <option value="ods11">ODS 11 – Ciudades sostenibles</option>
+      <option value="ods12">ODS 12 – Consumo responsable</option>
+      <option value="ods13">ODS 13 – Acción por el clima</option>
+    </select>
+
+    <!-- Filtro por población -->
+    <select class="filtro-select" id="filtroPoblacion">
+      <option value="">Toda la población</option>
+      <option value="niños">Niños</option>
+      <option value="adultos-mayores">Adultos mayores</option>
+      <option value="familias">Familias</option>
+      <option value="jovenes">Jóvenes</option>
+    </select>
+
+  </div>
+
+  <!-- Contador de resultados -->
+  <div class="contador-resultados" id="contadorResultados">
+    Cargando proyectos...
+  </div>
+
+  <!-- ===== CUADRÍCULA DE PROYECTOS ===== -->
+  <div class="catalogo-contenido">
+    <div class="cuadricula-catalogo" id="cuadriculaCatalogo">
+      <!-- Las tarjetas se generan con JavaScript -->
+    </div>
+
+    <!-- Estado vacío (se muestra si no hay resultados) -->
+    <div class="estado-vacio" id="estadoVacio">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none"
+           stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <h3>No se encontraron proyectos</h3>
+      <p>Intenta con otros filtros o términos de búsqueda.</p>
+    </div>
+  </div>
+
+  <!-- ===== JAVASCRIPT ===== -->
+  <script>
+    // =============================================
+    //  BASE DE DATOS DE PROYECTOS (pública)
+    //  En el futuro esto vendría del backend
+    // =============================================
+    var proyectos = [
+      {
+        id: 'crisalida',
+        titulo: 'Crisálida',
+        estado: 'Activo',
+        color: '#5CA09E',
+        ods: ['ods4', 'ods10'],
+        odsLabels: ['ODS 4', 'ODS 10'],
+        poblacion: 'niños',
+        descripcion: 'Apoyo educativo para estudiantes de escuelas técnicas, midiendo el aprendizaje con evaluaciones al inicio y final del programa.',
+        beneficiarios: 245,
+        voluntarios: 32,
+        horas: 1840,
+        progreso: 80
+      },
+      {
+        id: 'salud-comunitaria',
+        titulo: 'Salud Comunitaria',
+        estado: 'Activo',
+        color: '#9B5BA5',
+        ods: ['ods3', 'ods1'],
+        odsLabels: ['ODS 3', 'ODS 1'],
+        poblacion: 'familias',
+        descripcion: 'Chequeos médicos gratuitos y talleres de bienestar para colonias vulnerables de Puebla.',
+        beneficiarios: 520,
+        voluntarios: 45,
+        horas: 2300,
+        progreso: 70
+      },
+      {
+        id: 'ecoverde-campus',
+        titulo: 'EcoVerde Campus',
+        estado: 'Activo',
+        color: '#D7685B',
+        ods: ['ods13', 'ods11', 'ods12'],
+        odsLabels: ['ODS 13', 'ODS 11', 'ODS 12'],
+        poblacion: 'jovenes',
+        descripcion: 'Proyecto de sostenibilidad enfocado en reducción de residuos, jardines urbanos y educación ambiental.',
+        beneficiarios: 1200,
+        voluntarios: 68,
+        horas: 3200,
+        progreso: 90
+      },
+      {
+        id: 'codigo-futuro',
+        titulo: 'Código Futuro',
+        estado: 'Activo',
+        color: '#7AB8DD',
+        ods: ['ods4', 'ods10'],
+        odsLabels: ['ODS 4', 'ODS 10'],
+        poblacion: 'niños',
+        descripcion: 'Programa de alfabetización digital que enseña programación y tecnología a jóvenes de comunidades marginadas.',
+        beneficiarios: 180,
+        voluntarios: 22,
+        horas: 960,
+        progreso: 65
+      },
+      {
+        id: 'manos-que-ayudan',
+        titulo: 'Manos que Ayudan',
+        estado: 'Completado',
+        color: '#E89042',
+        ods: ['ods3', 'ods10'],
+        odsLabels: ['ODS 3', 'ODS 10'],
+        poblacion: 'adultos-mayores',
+        descripcion: 'Programa de acompañamiento y asistencia tecnológica para adultos mayores en asilos y centros de día.',
+        beneficiarios: 95,
+        voluntarios: 18,
+        horas: 720,
+        progreso: 100
+      },
+      {
+        id: 'agua-para-todos',
+        titulo: 'Agua Para Todos',
+        estado: 'Completado',
+        color: '#5CA09E',
+        ods: ['ods6', 'ods3'],
+        odsLabels: ['ODS 6', 'ODS 3'],
+        poblacion: 'familias',
+        descripcion: 'Iniciativa de acceso al agua limpia que instala sistemas de filtración y educa a comunidades sobre el uso responsable.',
+        beneficiarios: 340,
+        voluntarios: 26,
+        horas: 1100,
+        progreso: 100
+      },
+      {
+        id: 'puentes-digitales',
+        titulo: 'Puentes Digitales',
+        estado: 'Pendiente',
+        color: '#6366f1',
+        ods: ['ods4', 'ods9'],
+        odsLabels: ['ODS 4', 'ODS 9'],
+        poblacion: 'jovenes',
+        descripcion: 'Cerrando la brecha digital en zonas rurales con capacitación tecnológica y herramientas educativas.',
+        beneficiarios: 0,
+        voluntarios: 12,
+        horas: 0,
+        progreso: 10
+      },
+      {
+        id: 'alimenta-esperanza',
+        titulo: 'Alimenta Esperanza',
+        estado: 'Pendiente',
+        color: '#E89042',
+        ods: ['ods2', 'ods1'],
+        odsLabels: ['ODS 2', 'ODS 1'],
+        poblacion: 'familias',
+        descripcion: 'Banco de alimentos comunitario que conecta excedentes de negocios locales con familias en situación de vulnerabilidad.',
+        beneficiarios: 0,
+        voluntarios: 8,
+        horas: 0,
+        progreso: 5
+      }
+    ];
+
+ 
+
+    function colorBadge(estado) {
+      if (estado === 'Activo')     return '#15803d';
+      if (estado === 'En proceso') return '#1d4ed8';
+      if (estado === 'Completado') return '#9333ea';
+      return '#b45309'; /* Pendiente */
+    }
+
+    // Ícono SVG pequeño para las stats
+    var icoPersonas = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>';
+    var icoClock   = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+    var icoCorazon = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+
+    // Genera el HTML de chips ODS
+    function htmlChips(labels) {
+      return labels.map(function(l) {
+        return '<span class="chip-ods">' + l + '</span>';
+      }).join('');
+    }
+
+    // Genera el HTML completo de una tarjeta
+    function htmlTarjeta(p) {
+      var primerLetra = p.titulo.charAt(0).toUpperCase();
+      var benef = p.beneficiarios > 0 ? p.beneficiarios.toLocaleString() : '–';
+      var horas = p.horas > 0 ? p.horas.toLocaleString() : '–';
+
+      return `
+        <div class="tarjeta-catalogo" data-ods="${p.ods.join(',')}" data-estado="${p.estado}" data-poblacion="${p.poblacion}" data-titulo="${p.titulo.toLowerCase()} ${p.descripcion.toLowerCase()}">
+
+          <!-- Banner de color -->
+          <div class="catalogo-banner" style="background-color: ${p.color};">
+            <div class="chips-ods">${htmlChips(p.odsLabels)}</div>
+            <span class="badge-catalogo" style="color: ${colorBadge(p.estado)};">● ${p.estado}</span>
+            <div class="catalogo-letra-fondo">${primerLetra}</div>
+          </div>
+
+          <!-- Cuerpo -->
+          <div class="catalogo-cuerpo">
+            <div class="catalogo-titulo">${p.titulo}</div>
+            <div class="catalogo-desc">${p.descripcion}</div>
+
+            <!-- Stats -->
+            <div class="catalogo-stats">
+              <div class="catalogo-stat" style="color: ${p.color};">
+                ${icoCorazon} <span style="font-weight:600; color:#0f172a;">${benef}</span> <span style="color:#64748b;">beneficiarios</span>
+              </div>
+              <div class="catalogo-stat" style="color: #64748b;">
+                ${icoPersonas} <span style="font-weight:600; color:#0f172a;">${p.voluntarios}</span> <span style="color:#64748b;">Prestadores de servicio</span>
+              </div>
+            </div>
+
+            <!-- Botón -->
+            <a class="catalogo-btn" href="proyecto-detalle.html?id=${p.id}" style="background-color: ${p.color};">
+              Ver detalles del proyecto →
+            </a>
+          </div>
+        </div>
+      `;
+    }
+
+   
+    var contenedor   = document.getElementById('cuadriculaCatalogo');
+    var estadoVacio  = document.getElementById('estadoVacio');
+    var contador     = document.getElementById('contadorResultados');
+
+    // Renderiza todos los proyectos al cargar
+    function renderizar(lista) {
+      if (lista.length === 0) {
+        contenedor.innerHTML = '';
+        estadoVacio.style.display = 'block';
+        contador.textContent = 'Sin resultados para tu búsqueda.';
+      } else {
+        estadoVacio.style.display = 'none';
+        contador.textContent = lista.length + ' proyectos encontrados';
+        contenedor.innerHTML = lista.map(htmlTarjeta).join('');
+      }
+    }
+
+    // Aplica todos los filtros y re-renderiza
+    function aplicarFiltros() {
+      var textoBusq  = document.getElementById('inputBusqueda').value.toLowerCase().trim();
+      var odsSelec   = document.getElementById('filtroODS').value;
+      var poblSelec  = document.getElementById('filtroPoblacion').value;
+
+      var filtrados = proyectos.filter(function(p) {
+        // Filtro de texto
+        var pasaTexto = textoBusq === '' ||
+          p.titulo.toLowerCase().includes(textoBusq) ||
+          p.descripcion.toLowerCase().includes(textoBusq);
+
+        // Filtro ODS
+        var pasaODS = odsSelec === '' || p.ods.includes(odsSelec);
+
+        // Filtro población
+        var pasaPoblacion = poblSelec === '' || p.poblacion === poblSelec;
+
+        return pasaTexto && pasaODS && pasaPoblacion;
+      });
+
+      renderizar(filtrados);
+    }
+
+    // Escuchamos los cambios en los filtros
+    document.getElementById('inputBusqueda').addEventListener('input', aplicarFiltros);
+    document.getElementById('filtroODS').addEventListener('change', aplicarFiltros);
+    document.getElementById('filtroPoblacion').addEventListener('change', aplicarFiltros);
+
+    // Renderizado inicial
+    renderizar(proyectos);
+
+  </script>
+
+</body>
+</html>

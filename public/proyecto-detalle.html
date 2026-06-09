@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SocialHub — Aprende Conmigo</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="proyecto-detalle.css">
+<link href="https://cdn.jsdelivr.net/npm/gridstack@10.0.0/dist/gridstack.min.css" rel="stylesheet"/>
+<script src="auth.js"></script>
+<script src="js/navbar.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gridstack/dist/gridstack-all.js"></script>
+<script src = "https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="js/proyecto-detalle.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<style>
+
+:root {
+  --proyecto-primario: #1e40af; 
+  --proyecto-font: 'Sora', sans-serif;
+}
+
+
+.project-hero {
+  background: linear-gradient(135deg, var(--proyecto-primario) 0%, #0F2579 100%) !important;
+  padding: 48px 0;
+  position: relative;
+  overflow: hidden;
+
+}
+h1, .project-section-title {
+  font-family: var(--proyecto-font) !important;
+}
+
+.btn-customizer-toggle {
+  position: fixed; right: 25px; bottom: 25px; width: 60px; height: 60px;
+  border-radius: 50%; background: #F59E0B; color: white; border: none;
+  font-size: 24px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  z-index: 9999; transition: transform 0.2s;
+}
+
+.customizer-sidebar {
+  position: fixed; right: -320px; top: 0; width: 300px; height: 100%;
+  background: white; box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+  z-index: 10000; transition: right 0.3s ease; display: flex; flex-direction: column;
+}
+.customizer-sidebar.open { right: 0; }
+
+.customizer-header { background: #0F2579; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+.close-sidebar { background: none; border: none; color: white; font-size: 30px; cursor: pointer; }
+.customizer-body { padding: 25px; }
+
+.custom-group { margin-bottom: 25px; }
+.custom-group label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; }
+.custom-sub { font-size: 12px; color: #666; margin-bottom: 10px; }
+.custom-select { width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ddd; }
+#primaryColorPicker { width: 100%; height: 40px; border: none; cursor: pointer; }
+.btn-reset { width: 100%; padding: 10px; background: #f1f5f9; border: none; cursor: pointer; border-radius: 5px; font-size: 12px; }
+
+
+.project-hero::after {
+  content: '📚';
+  position: absolute;
+  right: 80px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 120px;
+  opacity: 0.15;
+}
+
+.project-hero-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.project-layout {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 32px;
+  align-items: start;
+}
+
+.project-section-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--gris-900);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--gris-200);
+}
+
+
+
+.metric-emoji { font-size: 28px; margin-bottom: 8px; }
+.metric-val {
+  font-family: 'Sora', sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--gris-900);
+  margin-bottom: 4px;
+}
+.metric-lab { font-size: 12px; color: var(--gris-400); font-weight: 500; }
+
+/* Demographics */
+.demo-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.demo-label { font-size: 13px; color: var(--gris-600); width: 80px; flex-shrink: 0; }
+.demo-track { flex: 1; height: 10px; background: var(--gris-200); border-radius: 10px; overflow: hidden; }
+.demo-fill { height: 100%; border-radius: 10px; }
+.demo-count { font-size: 13px; font-weight: 600; color: var(--gris-700); width: 40px; text-align: right; }
+
+/* Updates timeline */
+.update-item {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.update-item::before {
+  content: '';
+  position: absolute;
+  left: 19px;
+  top: 40px;
+  bottom: -24px;
+  width: 2px;
+  background: var(--gris-200);
+}
+
+.update-item:last-child::before { display: none; }
+
+.update-dot {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+  background: var(--gris-100);
+  border: 2px solid var(--gris-200);
+}
+
+.update-dot.blue { background: var(--azul-light); border-color: var(--azul); }
+.update-dot.green { background: var(--verde-light); border-color: var(--verde); }
+.update-dot.orange { background: #fef3c7; border-color: var(--naranja); }
+
+.update-content { flex: 1; }
+.update-title { font-size: 14px; font-weight: 600; color: var(--gris-900); margin-bottom: 4px; }
+.update-text { font-size: 13px; color: var(--gris-500); line-height: 1.6; }
+.update-date { font-size: 12px; color: var(--gris-400); margin-top: 4px; }
+
+.info-card { background: var(--blanco); border: 1px solid var(--gris-200); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
+.info-card-title { font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 700; color: var(--gris-800); margin-bottom: 14px; }
+.info-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--gris-100); font-size: 13px; }
+.info-row:last-child { border-bottom: none; }
+.info-key { color: var(--gris-500); }
+.info-val { font-weight: 600; color: var(--gris-800); }
+
+.lider-card {
+  background: var(--blanco);
+  border: 1px solid var(--gris-200);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.lider-header { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.lider-info-name { font-weight: 700; font-size: 15px; color: var(--gris-900); }
+.lider-info-role { font-size: 12px; color: var(--gris-400); margin-top: 2px; }
+
+.action-bar {
+  background: var(--blanco);
+  border: 1px solid var(--naranja);
+  border-left: 4px solid var(--naranja);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.action-bar-label { font-size: 14px; font-weight: 600; color: var(--gris-700); }
+.action-bar-sub { font-size: 12px; color: var(--gris-400); margin-top: 2px; }
+
+.video-responsive-container {
+    position: relative;
+    padding-bottom: 56.25%; 
+    height: 0;
+    overflow: hidden;
+    border-radius: 16px;
+    background: #000;
+    margin-bottom: 32px;
+}
+
+.video-responsive-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;  
+    height: 100% !important; 
+    border: 0;
+}
+
+.project-hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 24px;
+}
+
+.carrusel-contenedor {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  background: #000;
+}
+
+.carrusel-slides {
+  width: 100%;
+  height: 100%;
+}
+
+.slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+}
+
+.slide.active {
+  opacity: 1;
+}
+
+/* Botones de navegación */
+.carrusel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.3);
+  color: white;
+  border: none;
+  padding: 15px 10px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: background 0.3s;
+  z-index: 10;
+}
+
+.carrusel-btn:hover { background: rgba(0,0,0,0.6); }
+.prev { left: 0; border-radius: 0 5px 5px 0; }
+.next { right: 0; border-radius: 5px 0 0 5px; }
+
+/* Indicadores (bolitas) */
+.carrusel-dots {
+  position: absolute;
+  bottom: 15px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  background: rgba(255,255,255,0.5);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.dot.active { background: white; width: 25px; border-radius: 10px; }
+
+@media (max-width: 900px) {
+  .project-hero-inner { grid-template-columns: 1fr; text-align: center; }
+  .carrusel-contenedor { height: 250px; margin-top: 30px; }
+}
+
+</style>
+<script>
+/* const params = new URLSearchParams(window.location.search);
+const rol = params.get('rol') || 'publico';
+
+document.addEventListener('DOMContentLoaded', function() {
+  const navEl = document.getElementById('nav-links');
+  const navRight = document.getElementById('nav-right');
+  const actionBar = document.getElementById('action-bar');
+  const breadcrumbHome = document.getElementById('bc-home');
+
+  if (rol === 'lider') {
+    navEl.innerHTML = `
+      <a href="lider-dashboard.html" class="navbar-link">Dashboard</a>
+      <a href="lider-proyectos.html" class="navbar-link active">Mis Proyectos</a>
+      <a href="foro.html?rol=lider" class="navbar-link">Foro</a>`;
+    navRight.innerHTML = `<span class="navbar-badge">Líder Social</span><a href="lider-perfil.html?rol=lider" class="navbar-avatar">A</a>`;
+    breadcrumbHome.href = 'lider-proyectos.html';
+    breadcrumbHome.textContent = 'Mis Proyectos';
+    if (actionBar) actionBar.style.display = 'flex';
+  } else if (rol === 'admin') {
+    navEl.innerHTML = `
+      <a href="admin-dashboard.html" class="navbar-link">Dashboard</a>
+      <a href="admin-proyectos.html" class="navbar-link active">Proyectos</a>
+      <a href="foro.html?rol=admin" class="navbar-link">Foro</a>`;
+    navRight.innerHTML = `<span class="navbar-badge">Administrador</span><a href="#" class="navbar-avatar" style="background:var(--morado);"></a>`;
+    breadcrumbHome.href = 'admin-proyectos.html';
+    breadcrumbHome.textContent = 'Todos los Proyectos';
+    if (actionBar) { actionBar.style.display = 'flex'; actionBar.innerHTML = `<div><div class="action-bar-label">Vista de Administrador</div><div class="action-bar-sub">Supervisando proyecto</div></div><div style="display:flex;gap:8px;"><a href="#" class="btn btn-outline btn-sm">Exportar métricas</a><a href="#" class="btn btn-secondary btn-sm">Contactar líder</a></div>`; }
+  } else {
+    navEl.innerHTML = `
+      <a href="publico-inicio.html" class="navbar-link">Inicio</a>
+      <a href="publico-proyectos.html" class="navbar-link active">Proyectos</a>
+      <a href="foro.html" class="navbar-link">Foro</a>`;
+    navRight.innerHTML = '';
+    breadcrumbHome.href = 'publico-proyectos.html';
+    breadcrumbHome.textContent = 'Proyectos';
+    if (actionBar) actionBar.style.display = 'none';
+  }
+}); */
+
+function toggleCustomizer() {
+  document.getElementById('customizer-sidebar').classList.toggle('open');
+}
+
+function resetStyles() {
+  localStorage.removeItem('p-color-' + window.location.pathname);
+  localStorage.removeItem('p-font-' + window.location.pathname);
+  location.reload();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const userRol = urlParams.get('rol');
+
+  // Solo mostrar botón si es líder
+  if (userRol === 'lider') {
+    document.getElementById('btn-open-customizer').style.display = 'block';
+  }
+
+  const colorInput = document.getElementById('primaryColorPicker');
+  const fontInput = document.getElementById('fontPicker');
+
+  // Recuperar datos guardados
+  const savedColor = localStorage.getItem('p-color-' + window.location.pathname);
+  const savedFont = localStorage.getItem('p-font-' + window.location.pathname);
+
+  if (savedColor) {
+    document.documentElement.style.setProperty('--proyecto-primario', savedColor);
+    colorInput.value = savedColor;
+  }
+  if (savedFont) {
+    document.documentElement.style.setProperty('--proyecto-font', savedFont);
+    fontInput.value = savedFont;
+  }
+
+  // Escuchar cambios
+  colorInput.addEventListener('input', (e) => {
+    document.documentElement.style.setProperty('--proyecto-primario', e.target.value);
+    localStorage.setItem('p-color-' + window.location.pathname, e.target.value);
+  });
+
+  fontInput.addEventListener('change', (e) => {
+    document.documentElement.style.setProperty('--proyecto-font', e.target.value);
+    localStorage.setItem('p-font-' + window.location.pathname, e.target.value);
+  });
+});
+  
+let slideIndex = 0;
+const slides = document.getElementsByClassName("slide");
+
+function mostrarSlide(n) {
+  if (n >= slides.length) slideIndex = 0;
+  if (n < 0) slideIndex = slides.length - 1;
+  
+  for (let i = 0; i < slides.length; i++) {
+    slides[i].classList.remove("active");
+  }
+  slides[slideIndex].classList.add("active");
+  actualizarDots();
+}
+
+function cambiarSlide(n) {
+  mostrarSlide(slideIndex += n);
+}
+
+function actualizarDots() {
+  const dotsContainer = document.getElementById("carruselDots");
+  dotsContainer.innerHTML = "";
+  for (let i = 0; i < slides.length; i++) {
+    let dot = document.createElement("span");
+    dot.className = "dot" + (i === slideIndex ? " active" : "");
+    dot.onclick = () => { slideIndex = i; mostrarSlide(slideIndex); };
+    dotsContainer.appendChild(dot);
+  }
+}
+
+// Auto-play cada 5 segundos
+setInterval(() => cambiarSlide(1), 5000);
+
+// Inicializar al cargar
+document.addEventListener('DOMContentLoaded', () => {
+  actualizarDots();
+});
+</script>
+</head>
+<body>
+
+<!-- NAVBAR (dinámico por rol) -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="publico-inicio.html" class="navbar-logo">
+      <img src="assets/img/logo.png" alt="Logo SocialHub" class="navbar-logo-icon">
+      <div class="navbar-logo-text">
+        <span class="navbar-logo-title">SocialHub</span>
+        <span class="navbar-logo-sub">Servicio Social</span>
+      </div>
+    </a>
+    <div class="navbar-links" id="nav-links"></div>
+    <div class="navbar-right" id="nav-right"></div>
+  </div>
+</nav>
+
+
+<div class="project-hero">
+  <div class="project-hero-inner" style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;">
+    
+    <div class="hero-text-side">
+      <div style="display:flex; gap:12px; margin-bottom:16px;">
+        <span class="tag tag-azul" id ="proyecto-categoria">cargando..</span>
+        <span id="proyecto-estado"class="tag" style="background:rgba(16,185,129,0.25); color:#6ee7b7;">cargando..</span>
+      </div>
+      <h1 id="proyecto-titulo" style="font-size:40px; font-weight:800; color:white; margin-bottom:12px;">
+        Cargando..
+      </h1>
+      <p id="proyecto-resumen" style="color:rgba(255,255,255,0.8); font-size:17px; line-height:1.6;">
+        Cargando...
+      </p>
+    </div>
+
+    <div class="hero-gallery-side">
+      <div class="carrusel-contenedor">
+        <div class="carrusel-slides" id="carruselSlides">
+          <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=600" class="slide active">
+          <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=600" class="slide">
+          <img src="https://img.freepik.com/foto-gratis/ninos-jugando-cesped_1098-504.jpg?semt=ais_hybrid&w=740&q=80" class="slide">
+        </div>
+        
+        <button class="carrusel-btn prev" onclick="cambiarSlide(-1)">&#10094;</button>
+        <button class="carrusel-btn next" onclick="cambiarSlide(1)">&#10095;</button>
+        
+        <div class="carrusel-dots" id="carruselDots"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="project-layout">
+  <!-- MAIN -->
+  <div>
+
+    <!--VIDEO-->
+  <div class="project-section">
+    <div class="video-responsive-container" >
+        <iframe 
+            id = "videoproject"
+            src="" 
+            title="YouTube video player" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            referrerpolicy="strict-origin-when-cross-origin" 
+            allowfullscreen>
+        </iframe>
+    </div>
+</div>
+
+    <div class="action-bar" id="action-bar" style="display:none;">
+
+      <div>
+        <div class="action-bar-label">Este es tu proyecto</div>
+        <div class="action-bar-sub">Puedes editar y actualizar métricas</div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <a  class="btn btn-outline btn-sm" id ='btn-agregar-widget'>Editar proyecto</a>
+        <a class="btn btn-sm" style="background:#0ea5e9;color:#fff;"
+           onclick="document.getElementById('modal-registro-persona').classList.add('open')">+ Registrar persona</a>
+        <a class="btn btn-verde btn-sm" onclick="document.getElementById('modal-widget').classList.add('open')">Agregar Widget</a>
+      </div>
+    </div>
+
+    <!-- METRICAS -->
+    <div class="grid-stack" id="widgets-container"></div>
+
+    <template id="widget-template-kpi">
+      <div class="grid-stack-item">
+          <div style="position:absolute; top:6px; right:8px; z-index:10; display:flex; gap:6px; align-items:center;">
+              <span class="widget-obligatorio-badge" style="display:none; font-size:10px; background:#f1f5f9; color:#64748b; padding:2px 6px; border-radius:99px;"> 🔒</span>
+              <button class="btn-editar-widget"   style="background:none; border:none; font-size:15px; cursor:pointer; color:#94a3b8;" title="Editar">✏</button>
+              <button class="btn-eliminar-widget" style="background:none; border:none; font-size:15px; cursor:pointer; color:#94a3b8;" title="Eliminar">&times;</button>
+          </div>
+          <div class="grid-stack-item-content">
+              <div class="widget-card card-kpi">
+                  <div class="widget-header">
+                      <h4 class="widget-title">Métrica</h4>
+                      <span class="widget-operation" style="font-size:11px; color:#94a3b8; font-weight:500;"></span>
+                  </div>
+                  <div class="widget-body">
+                      <span class="widget-value">0</span>
+                      <span class="widget-unit" style="font-size:12px; color:#94a3b8; margin-left:4px;"></span>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </template>
+
+  <template id="widget-template-graph">
+      <div class="grid-stack-item">
+          <div style="position:absolute; top:6px; right:8px; z-index:10; display:flex; gap:6px;">
+              <button class="btn-editar-widget"   style="background:none; border:none; font-size:15px; cursor:pointer; color:#94a3b8;" title="Editar">✏</button>
+              <button class="btn-eliminar-widget" style="background:none; border:none; font-size:15px; cursor:pointer; color:#94a3b8;" title="Eliminar">&times;</button>
+          </div>
+          <div class="grid-stack-item-content">
+              <div class="widget-card card-graph">
+                  <div class="widget-header">
+                      <h4 class="widget-title">Gráfica</h4>
+                  </div>
+                  <div class="widget-body" style="position:relative; height:calc(100% - 40px);">
+                      <canvas class="widget-chart"></canvas>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </template>
+
+            <!--poniendo las publicaciones del foro relacionadas a este proyecto (lo puse dentro de este div pero si no lo quieren aca lo sacamos)-->
+    <div class="info-card-title" style="margin-top:24px;">
+      <div class="project-section-title">
+        💬 Publicaciones del proyecto
+      </div>
+
+      <div id="project-posts">
+        Cargando publicaciones...
+      </div>
+    </div>
+
+
+
+    <!--this is los testimonios pq faltaban chavos-->
+    <div class="card" style="margin-top:24px;">
+      <div class="card-body">
+
+        <div
+          style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:16px;
+          "
+        >
+          <h3 class="project-section-title" style="margin:0;">
+            💬 Testimonios
+          </h3>
+
+          <button
+            id="add-testimonio-btn"
+            class="btn btn-primary btn-sm"
+            style="display:none;"
+          >
+            ➕ Agregar testimonio
+          </button>
+        </div>
+
+        <div id="testimonios-list"></div>
+
+        <div
+          id="testimonio-form"
+          style="display:none;margin-top:16px;"
+        >
+          <textarea
+            id="testimonio-text"
+            class="form-input"
+            placeholder="Escribe el testimonio..."
+            style="width:100%;min-height:100px;"
+          ></textarea>
+
+          <button
+            id="save-testimonio-btn"
+            class="btn btn-primary btn-sm"
+            style="margin-top:10px;"
+          >
+            Guardar testimonio
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div>
+
+    <div class="info-card">
+      <div class="info-card-title">Información general</div>
+      <div class="info-row"><span  class="info-key">Estado</span><span data-proyecto = "estado"  class="tag tag-verde">cargando..</span></div>
+      <div class="info-row"><span  class="info-key">Categoría</span><span data-proyecto="categoria" class="info-val">cargando..</span></div>
+      <div class="info-row"><span  class="info-key">ODS</span><span id="proyecto-ods" class="info-val">cargando..</span></div>
+      <div class="info-row"><span  class="info-key">Periodo</span><span data-proyecto="periodo"class="info-val">cargando..</span></div>
+      <div class="info-row"><span  class="info-key">Inicio</span><span id="proyecto-inicio" class="info-val">cargando..</span></div>
+      <div class="info-row"><span  class="info-key">Fin estimado</span><span id="proyecto-fin" class="info-val">cargando..</span></div>
+      <div class = "info-row"><span class = "info-key">Población(es) Objetivo</span><span data-proyecto="poblacion" class="info-val">cargando..</span></div>
+    </div>
+
+    <!-- LIDER -->
+    <div class="lider-card">
+      <div class="info-card-title">Líder del proyecto</div>
+      <div class="lider-header">
+        <div class="avatar avatar-md" style="background:linear-gradient(135deg,#1e40af,#3b82f6);">A</div>
+        <div>
+          <div class="lider-info-name">Ana Martínez García</div>
+          <div class="lider-info-role">Lic. Ciencias de la Educación · 7mo semestre</div>
+        </div>
+      </div>
+      <div style="font-size:13px;color:var(--gris-500);margin-bottom:14px;line-height:1.6;">
+        Especialista en didáctica y desarrollo curricular. Tiene experiencia previa con poblaciones vulnerables.
+      </div>
+      <a href="lider-perfil.html" class="btn btn-outline" style="width:100%;justify-content:center;">Ver perfil completo →</a>
+    </div>
+
+
+  </div>
+  <!--MODAL WIDGET-->
+  <div class="modal-overlay" id="modal-widget">
+  <div class="modal-box" style="max-width:560px;">
+    <div class="modal-head">
+      <div class="modal-head-title" id="modal-titulo-cambiante">Configurar Tarjeta KPI</div>
+      <button type="button" class="modal-close-btn"
+              onclick="document.getElementById('modal-widget').classList.remove('open')">✕</button>
+    </div>
+ 
+    <div class="modal-bdy" style="max-height:70vh; overflow-y:auto;">
+      <form id="form-crear-widget">
+ 
+        <label class="form-label-s">Título del Widget *</label>
+        <input type="text" id="widget-nombre" class="form-input" required
+               placeholder="Ej: Progreso de Alumnos">
+ 
+        <label class="form-label-s mt-3">Tipo de Visualización *</label>
+        <select id="widget-plantilla" class="form-select">
+          <option value="1">Tarjeta KPI (Solo Número)</option>
+          <option value="2">Gráfica Dinámica</option>
+        </select>
+ 
+        <div id="wrapper-tipo-grafica" style="display:none;">
+          <label class="form-label-s mt-3">Tipo de Gráfica *</label>
+          <select id="widget-tipo-grafica" class="form-select">
+            <option value="bar">Barras Verticales</option>
+            <option value="line">Línea de Tendencia</option>
+            <option value="pie">Gráfica de Pastel</option>
+          </select>
+        </div>
+ 
+        <label class="form-label-s mt-3">Origen de la Métrica *</label>
+        <div style="display:flex; gap:16px; flex-wrap:wrap; margin-bottom:8px;">
+          <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+            <input type="radio" name="metrica-origen" id="metrica-tipo-general"   value="general"   checked>
+            Métricas Generales
+          </label>
+          <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+            <input type="radio" name="metrica-origen" id="metrica-tipo-existente" value="existente">
+            Del Proyecto
+          </label>
+          <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+            <input type="radio" name="metrica-origen" id="metrica-tipo-nueva"     value="nueva">
+            Crear nueva
+          </label>
+        </div>
+ 
+        <div id="wrapper-metrica-seleccion">
+          <label class="form-label-s" id="label-combo-metrica">Selecciona la Métrica General:</label>
+          <select id="widget-metrica" class="form-select"></select>
+        </div>
+ 
+        <div id="wrapper-metrica-nueva" style="display:none;">
+          <label class="form-label-s mt-3">Nombre de la Nueva Métrica</label>
+          <input type="text" id="nueva-metrica-nombre" class="form-input"
+                 placeholder="Ej: Arboles_Plantados">
+          <label class="form-label-s mt-3">Unidad de Medida</label>
+          <input type="text" id="nueva-metrica-unidad" class="form-input"
+                 placeholder="Ej: Kg, Piezas">
+        </div>
+ 
+        <div id="wrapper-operacion">
+          <label class="form-label-s mt-3">Operación matemática base *</label>
+          <select id="widget-operacion" class="form-select" required>
+            <option value="SUM">SUMAR todos los valores</option>
+            <option value="AVG">PROMEDIO de los valores</option>
+            <option value="COUNT">CONTAR el número de registros</option>
+            <option value="MAX">Valor MÁXIMO</option>
+            <option value="MIN">Valor MÍNIMO</option>
+          </select>
+        </div>
+ 
+        <div id="wrapper-captura-datos">
+          <label class="form-label-s mt-3">Método de captura de datos</label>
+          <select id="metrica-entrada-tipo" class="form-select">
+            <option value="ninguno">Sin datos por ahora</option>
+            <option value="manual">Escribir un valor único ahora mismo</option>
+            <option value="csv">Cargar historial desde archivo CSV</option>
+          </select>
+
+          <div id="wrapper-entrada-manual" style="display:none;">
+            <label class="form-label-s mt-3">Valor actual a registrar</label>
+            <input type="number" id="widget-valor-inicial" class="form-input"
+                   placeholder="Ej: 80" step="any">
+          </div>
+
+          <div id="wrapper-entrada-csv" style="display:none;">
+            <label class="form-label-s mt-3">Archivo .csv</label>
+            <input type="file" id="widget-archivo-csv" class="form-input" accept=".csv">
+            <small style="color:var(--gris-400); font-size:12px;">
+              💡 Una columna debe llamarse igual que la <strong>unidad</strong> de la métrica
+              (ej: <code>Kg</code>) y opcionalmente una columna <code>fecha</code>.
+            </small>
+          </div>
+        </div>
+ 
+        <label class="form-label-s mt-3">Color de la tarjeta</label>
+        <input type="color" id="widget-color" value="#6366f1">
+ 
+        <div style="display:flex; gap:8px; margin-top:24px;">
+          <button type="submit" class="btn-primary">Guardar y Renderizar</button>
+          <button type="button" class="btn-secondary"
+                  onclick="document.getElementById('modal-widget').classList.remove('open')">
+            Cancelar
+          </button>
+        </div>
+ 
+      </form>
+    </div>
+  </div>
+</div>
+
+  <!-- ─── MODAL EDITAR WIDGET — ── -->
+  <div class="modal-overlay" id="modal-editar-widget">
+  <div class="modal-box" style="max-width:480px;">
+    <div class="modal-head">
+      <div class="modal-head-title">Editar Widget</div>
+      <button type="button" class="modal-close-btn"
+              onclick="document.getElementById('modal-editar-widget').classList.remove('open')">✕</button>
+    </div>
+ 
+    <div class="modal-bdy">
+      <form id="form-editar-widget">
+        <input type="hidden" id="editar-widget-id">
+        <input type="hidden" id="editar-widget-obligatorio">
+ 
+        <label class="form-label-s">Título del Widget *</label>
+        <input type="text" id="editar-widget-nombre" class="form-input" required>
+ 
+        <!-- Oculto en widgets obligatorios via JS -->
+        <div id="editar-wrapper-operacion">
+          <label class="form-label-s mt-3">Operación</label>
+          <select id="editar-widget-operacion" class="form-select">
+            <option value="SUM">SUMAR todos los valores</option>
+            <option value="AVG">PROMEDIO de los valores</option>
+            <option value="COUNT">CONTAR registros</option>
+            <option value="MAX">Valor MÁXIMO</option>
+            <option value="MIN">Valor MÍNIMO</option>
+          </select>
+        </div>
+        <div id="editar-wrapper-tipo-grafica" style="display:none;">
+            <label class="form-label-s mt-3">Tipo de Gráfica</label>
+            <select id="editar-widget-tipo-grafica" class="form-select">
+                <option value="bar">Barras Verticales</option>
+                <option value="line">Línea de Tendencia</option>
+                <option value="pie">Gráfica de Pastel</option>
+            </select>
+        </div>
+        <label class="form-label-s mt-3">Color</label>
+        <input type="color" id="editar-widget-color" value="#6366f1">
+ 
+        <!-- Oculto en widgets obligatorios via JS -->
+        <div id="editar-wrapper-valor">
+          <label class="form-label-s mt-3">Agregar valor al historial</label>
+          <div style="display:flex; gap:8px;">
+            <input type="number" id="editar-nuevo-valor" class="form-input"
+                   placeholder="Ej: 120" step="any" style="flex:1;">
+            <input type="date" id="editar-nueva-fecha" class="form-input" style="flex:1;">
+          </div>
+          <small style="color:var(--gris-400); font-size:12px;">
+            Déjalo vacío si solo quieres cambiar el título o color.
+          </small>
+        </div>
+ 
+        <div style="display:flex; gap:8px; margin-top:24px;">
+          <button type="submit" class="btn-primary">Guardar cambios</button>
+          <button type="button" class="btn-secondary"
+                  onclick="document.getElementById('modal-editar-widget').classList.remove('open')">
+            Cancelar
+          </button>
+        </div>
+ 
+      </form>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo-text">SocialHub</div>
+        <p class="footer-desc">Plataforma de gestión y visualización de proyectos de servicio social universitario.</p>
+      </div>
+      <div>
+        <div class="footer-heading">Explorar</div>
+        <div class="footer-links">
+          <a href="publico-proyectos.html" class="footer-link">Todos los proyectos</a>
+          <a href="foro.html" class="footer-link">Foro comunitario</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-heading">Universidad</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Servicio Social</a>
+          <a href="#" class="footer-link">Contacto</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 SocialHub · Departamento de Servicio Social</span>
+    </div>
+  </div>
+</footer>
+
+<button id="btn-open-customizer" class="btn-customizer-toggle" onclick="toggleCustomizer()" style="display:none;">
+  
+</button>
+
+<div id="customizer-sidebar" class="customizer-sidebar">
+  <div class="customizer-header">
+    <h3 style="margin:0; font-size:18px; color:white;">Diseño del Proyecto</h3>
+    <button onclick="toggleCustomizer()" class="close-sidebar">&times;</button>
+  </div>
+  <div class="customizer-body">
+    <div class="custom-group">
+      <label>Color de Identidad</label>
+      <p class="custom-sub">Cambia el color del encabezado (Hero)</p>
+      <input type="color" id="primaryColorPicker" value="#1e40af">
+    </div>
+
+    <div class="custom-group">
+      <label>Tipografía de Títulos</label>
+      <p class="custom-sub">Selecciona un estilo visual</p>
+      <select id="fontPicker" class="custom-select">
+        <option value="'Sora', sans-serif">Sora (Moderna)</option>
+        <option value="'DM Sans', sans-serif">DM Sans (Limpia)</option>
+        <option value="'Georgia', serif">Georgia (Elegante)</option>
+      </select>
+    </div>
+    
+    <button onclick="resetStyles()" class="btn-reset">Restablecer valores</button>
+  </div>
+</div>
+<!-- ─── MODAL REGISTRAR BENEFICIARIO / PRESTADOR ─── -->
+<div class="modal-overlay" id="modal-registro-persona">
+  <div class="modal-box" style="max-width:520px;">
+    <div class="modal-head">
+      <div class="modal-head-title" id="modal-registro-titulo">Registrar Persona</div>
+      <button type="button" class="modal-close-btn"
+              onclick="document.getElementById('modal-registro-persona').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-bdy" style="max-height:75vh; overflow-y:auto;">
+
+      <!-- Selector de tipo -->
+      <div style="display:flex; gap:16px; flex-wrap:wrap; margin-bottom:16px;">
+        <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+          <input type="radio" name="registro-tipo" id="registro-tipo-beneficiario" value="beneficiario" checked>
+          Beneficiario
+        </label>
+        <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+          <input type="radio" name="registro-tipo" id="registro-tipo-prestador" value="prestador">
+          Prestador de servicio
+        </label>
+      </div>
+
+      <!-- Selector de modo (manual / CSV) — compartido -->
+      <div style="display:flex; gap:12px; margin-bottom:20px; border-bottom:1px solid var(--gris-200, #e2e8f0); padding-bottom:16px;">
+        <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+          <input type="radio" name="registro-modo" id="registro-modo-manual" value="manual" checked>
+          Registro individual
+        </label>
+        <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+          <input type="radio" name="registro-modo" id="registro-modo-csv" value="csv">
+          Cargar desde CSV
+        </label>
+      </div>
+
+      <!-- ── MODO MANUAL ── -->
+      <div id="wrapper-registro-manual">
+
+        <!-- Formulario beneficiario -->
+        <form id="form-registro-beneficiario">
+          <label class="form-label-s">Nombre *</label>
+          <input type="text" id="benef-nombre" class="form-input" placeholder="Ej: María López" required>
+
+          <label class="form-label-s mt-3">Género</label>
+          <select id="benef-genero" class="form-select">
+            <option value="">— Sin especificar —</option>
+            <option value="masculino">Masculino</option>
+            <option value="femenino">Femenino</option>
+            <option value="otro">Otro</option>
+            <option value="prefiero_no_decir">Prefiero no decir</option>
+          </select>
+
+          <label class="form-label-s mt-3">Edad</label>
+          <input type="number" id="benef-edad" class="form-input" placeholder="Ej: 34" min="0" max="120">
+
+          <label class="form-label-s mt-3">Fecha de registro</label>
+          <input type="date" id="benef-fecha" class="form-input">
+
+          <div style="display:flex; gap:8px; margin-top:24px;">
+            <button type="submit" class="btn-primary">Registrar beneficiario</button>
+            <button type="button" class="btn-secondary"
+                    onclick="document.getElementById('modal-registro-persona').classList.remove('open')">Cancelar</button>
+          </div>
+        </form>
+
+        <!-- Formulario prestador -->
+        <form id="form-registro-prestador" style="display:none;">
+          <label class="form-label-s">Estatus</label>
+          <select id="prest-estatus" class="form-select">
+            <option value="activo">Activo</option>
+            <option value="inactivo">Inactivo</option>
+          </select>
+
+          <label class="form-label-s mt-3">Fecha de alta</label>
+          <input type="date" id="prest-fecha" class="form-input">
+
+          <div style="display:flex; gap:8px; margin-top:24px;">
+            <button type="submit" class="btn-primary">Registrar prestador</button>
+            <button type="button" class="btn-secondary"
+                    onclick="document.getElementById('modal-registro-persona').classList.remove('open')">Cancelar</button>
+          </div>
+        </form>
+
+      </div><!-- /wrapper-registro-manual -->
+
+      <!-- ── MODO CSV ── -->
+      <div id="wrapper-registro-csv" style="display:none;">
+
+        <!-- Hint beneficiario -->
+        <div id="csv-hint-beneficiario">
+          <small style="display:block; color:var(--gris-400,#94a3b8); font-size:12px; margin-bottom:12px;">
+            💡 Columnas esperadas: <code>nombre</code> (obligatoria) · <code>genero</code> · <code>edad</code> · <code>fecha_registro</code><br>
+            Géneros válidos: <code>masculino</code>, <code>femenino</code>, <code>otro</code>, <code>prefiero_no_decir</code>
+          </small>
+        </div>
+
+        <!-- Hint prestador -->
+        <div id="csv-hint-prestador" style="display:none;">
+          <small style="display:block; color:var(--gris-400,#94a3b8); font-size:12px; margin-bottom:12px;">
+            💡 Columnas esperadas: <code>estatus</code> · <code>fecha_alta</code><br>
+            Si omites <code>estatus</code> se usará <code>activo</code>. Si omites <code>fecha_alta</code> se usa la fecha de hoy.
+          </small>
+        </div>
+
+        <label class="form-label-s">Archivo .csv *</label>
+        <input type="file" id="registro-archivo-csv" class="form-input" accept=".csv">
+
+        <!-- Preview -->
+        <div id="csv-preview" style="display:none; margin-top:12px;">
+          <p id="csv-preview-resumen" style="font-size:13px; color:var(--gris-600,#475569); margin-bottom:6px;"></p>
+          <div style="overflow-x:auto; max-height:160px; border:1px solid var(--gris-200,#e2e8f0); border-radius:6px;">
+            <table id="csv-preview-tabla"
+                   style="width:100%; font-size:12px; border-collapse:collapse;"></table>
+          </div>
+          <p id="csv-preview-errores" style="color:#ef4444; font-size:12px; margin-top:6px;"></p>
+        </div>
+
+        <div style="display:flex; gap:8px; margin-top:20px;">
+          <button type="button" id="btn-importar-csv" class="btn-primary" disabled>Importar registros</button>
+          <button type="button" class="btn-secondary"
+                  onclick="document.getElementById('modal-registro-persona').classList.remove('open')">Cancelar</button>
+        </div>
+
+      </div><!-- /wrapper-registro-csv -->
+
+    </div>
+  </div>
+</div>
+
+<script type = "module" src = "projectjs/widget.js"></script>
+<script type="module" src="projectjs/detalle.js"></script>
+</body>
+</html>

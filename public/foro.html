@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SocialHub — Foro Comunitario</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="foro.css">
+<script src="auth.js"></script>
+<script src="js/navbar.js"></script>
+<script src="js/foro.js"></script>
+
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="publico-inicio.html" class="navbar-logo">
+      <img src="assets/img/logo.png" alt="Logo SocialHub" class="navbar-logo-icon">
+      <div class="navbar-logo-text">
+        <span class="navbar-logo-title">SocialHub</span>
+        <span class="navbar-logo-sub">Servicio Social</span>
+      </div>
+    </a>
+    <div class="navbar-links" id="nav-links"></div>
+    <div class="navbar-right" id="nav-right"></div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <h1 class="page-title">Foro Comunitario</h1>
+    <p class="page-subtitle">Comparte experiencias, preguntas y logros con la comunidad de servicio social</p>
+  </div>
+</div>
+
+<div class="foro-layout">
+
+  <!-- MAIN -->
+  <div>
+
+    <!-- NUEVA PUBLICACIÓN (solo lider/admin) -->
+    <div class="new-post-card" id="new-post-card" style="display:none;">
+    
+      <div class="new-post-row">
+
+
+      <div
+        id="foro-current-avatar"
+        class="avatar avatar-sm"
+        style="
+          background:
+          linear-gradient(
+            135deg,
+            #1e40af,
+            #3b82f6
+          );
+        "
+      >
+        ?
+      </div>
+
+
+      <div
+        style="
+          display:flex;
+          flex-direction:column;
+          gap:10px;
+          flex:1;
+        "
+      >
+
+        <select
+          id="post-project"
+          class="form-input"
+        >
+          <option value="">
+            Selecciona un proyecto
+          </option>
+        </select>
+
+        <input
+          id="post-text"
+          type="text"
+          class="new-post-input"
+          placeholder="¿Qué quieres compartir con la comunidad?"
+        >
+
+        <input
+        id="post-media"
+        type="file"
+        accept="image/*"
+        class="form-input"
+      >
+
+      </div>
+
+      <button
+        id="publish-post-btn"
+        class="btn btn-primary btn-sm"
+      >
+        Publicar
+      </button>
+
+</div>
+    </div>
+
+
+    <!-- POSTS -->
+    <div class="foro-posts" id="foro-posts">
+      </div> 
+
+    </div> 
+
+  </div> 
+
+</div> 
+
+
+<footer class="footer">
+  <strong>SocialHub</strong> · Tecnológico de Monterrey Campus Puebla ·
+  Oficina de Servicio Social
+</footer>
+
+</body>
+</html>

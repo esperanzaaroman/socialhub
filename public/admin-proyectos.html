@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SocialHub — Todos los Proyectos</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="admin-proyectos.css">
+<script src="auth.js"></script>
+<script src="js/navbar.js"></script>
+<script src="js/admin-proyectos.js"></script>
+</head>
+<body>
+
+<!-- NAVBAR ADMIN -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="admin-dashboard.html" class="navbar-logo">
+      <img src="assets/img/logo.png" alt="Logo SocialHub" class="navbar-logo-icon">
+      <div class="navbar-logo-text">
+        <div class="navbar-logo-title">SocialHub</div>
+        <div class="navbar-logo-sub">Servicio Social</div>
+      </div>
+    </a>
+    <div class="navbar-links" id="nav-links">
+    </div>
+    <div class="navbar-right" id="nav-right">
+    </div>
+  </div>
+</nav>
+
+<div class="dash-layout">
+  <!-- SIDEBAR -->
+  <aside class="dash-sidebar">
+    <div class="sidebar-user">
+      <div class="sidebar-user-wrap">
+        <div class="avatar avatar-md" style="background:linear-gradient(135deg,var(--morado),var(--azul-tec));">🛡️</div>
+        <div>
+          <div class="sidebar-user-name" id="welcome-name">Panel admin.</div>
+          <div class="sidebar-user-role">Administrador</div>
+        </div>
+      </div>
+    </div>
+    <div class="sidebar-section-label">General</div>
+    <a href="admin-dashboard.html" class="sidebar-link"><span class="icon">📈</span> Dashboard Global</a>
+    <a href="admin-proyectos.html" class="sidebar-link active"><span class="icon">🗂️</span> Todos los Proyectos</a>
+    <a href="foro.html" class="sidebar-link"><span class="icon">💬</span> Foro</a>
+    <div class="sidebar-section-label" style="margin-top:12px;">Sistema</div>
+    <a
+      href="#"
+      class="sidebar-link"
+      onclick="logout()"
+    >
+      <span class="icon">🚪</span>
+      Cerrar sesión
+    </a>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="dash-main">
+    <!-- HEADER -->
+    <div class="page-head">
+      <div>
+        <div class="page-head-title" id >🗂️ Todos los Proyectos</div>
+        <div class="page-head-sub"></div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn btn-sm" style="background:var(--verde-dark);color:#fff;border-color:var(--verde-dark);" onclick="document.getElementById('modalNuevoProyecto').classList.add('open')">+ Nuevo proyecto</button>
+      </div>
+    </div>
+
+
+
+    <!-- KPI ROW -->
+    <div class="kpi-row" style="grid-template-columns:repeat(3,1fr);">
+      <div class="kpi-mini">
+        <span class="kpi-mini-icon">📂</span>
+        <div>
+          <div class="kpi-mini-val num-project">cargando..</div>
+          <div class="kpi-mini-lab">Total proyectos</div>
+        </div>
+      </div>
+      <div class="kpi-mini">
+        <span class="kpi-mini-icon" style="color:var(--verde)">✅</span>
+        <div>
+          <div class="kpi-mini-val num-project-act" style="color:var(--verde)">24</div>
+          <div class="kpi-mini-lab">Activos</div>
+        </div>
+      </div>
+      <div class="kpi-mini">
+        <span class="kpi-mini-icon" style="color:var(--naranja)">⏸</span>
+        <div>
+          <div class="kpi-mini-val num-InAct" style="color:var(--naranja)">5</div>
+          <div class="kpi-mini-lab">Inactivos</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar-bar">
+      <div class="search-wrap">
+        <span class="search-ic">🔍</span>
+        <input type="text" class="search-inp" placeholder="Buscar por nombre, líder, categoría...">
+      </div>
+      <select class="filter-pill">
+        <option>Todos los estados</option>
+        <option>Activo</option>
+        <option>Pausado</option>
+        <option>Completado</option>
+      </select>
+      <select class="filter-pill">
+        <option>Todas las categorías</option>
+        <option>Educación</option>
+        <option>Salud</option>
+        <option>Medio Ambiente</option>
+        <option>Tecnología</option>
+        <option>Arte y Cultura</option>
+        <option>Comunidad</option>
+      </select>
+      <select class="filter-pill">
+        <option>Todos los periodos</option>
+        <option>Invierno 2024</option>
+        <option>Feb–Jun 2024</option>
+        <option>Verano 2024</option>
+        <option>Ago–Dic 2024</option>
+      </select>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrap">
+      <div class="table-header">
+        <div class="table-header-title">Listado de proyectos</div>
+        <span class="results-count">Mostrando 1–10 de <span class="num-project"> cargando</span> resultados</span>
+      </div>
+
+      <div style="overflow-x:auto;">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th style="width:280px;">Proyecto</th>
+              <th>Estado</th>
+              <th>Líder</th>
+              <th>Periodo</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id = "tabla-proyectos">
+            
+          </tbody>
+          <template id = "template-fila-proyecto">
+            <tr>
+              <td>
+                  <div class="proj-name-cell">
+                      <div class="proj-icon-badge">📚</div>
+                      <div>
+                          <div class="proj-cell-name" data-proyecto="nombre"></div>
+                          <div class="proj-cell-ods">
+                              ODS <span data-proyecto="ods"></span> · <span data-proyecto="categoria"></span>
+                          </div>
+                      </div>
+                  </div>
+              </td>
+              <td>
+                  <span class="status-badge" data-proyecto="estado"></span>
+              </td>
+              <td>
+                  <div class="lider-cell">
+                      <a href="lider-perfil.html" data-proyecto="lider"></a>
+                  </div>
+              </td>
+              <td data-proyecto="periodo"></td>
+              <td>
+                  <div class="action-btns">
+                      <a href="proyecto-detalle.html" class="action-btn ab-view btn-ver-detalle">👁 Ver</a>
+                  </div>
+              </td>
+            </tr>
+          </template>
+        </table>
+      </div>
+
+      <!-- PAGINATION -->
+      <div class="pagination">
+        <div class="pag-info">Mostrando 1–8 de <span class="num-project"></span> proyectos</div>
+        <div class="pag-btns">
+          <button class="pag-btn">← Anterior</button>
+          <button class="pag-btn active">1</button>
+          <button class="pag-btn">2</button>
+          <button class="pag-btn">3</button>
+          <button class="pag-btn">4</button>
+          <button class="pag-btn">Siguiente →</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL FILTROS AVANZADOS -->
+<div class="modal-overlay" id="modalFiltros">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-head-title">⚙ Filtros Avanzados</div>
+      <button class="modal-close-btn" onclick="document.getElementById('modalFiltros').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-bdy">
+      <div class="form-grid-2">
+        <div>
+          <label class="form-label-s">Estado</label>
+          <select class="form-inp-s">
+            <option>Todos</option>
+            <option>Activo</option>
+            <option>Pausado</option>
+            <option>Completado</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label-s">Categoría</label>
+          <select class="form-inp-s">
+            <option>Todas</option>
+            <option>Educación</option>
+            <option>Salud</option>
+            <option>Medio Ambiente</option>
+            <option>Tecnología</option>
+            <option>Comunidad</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label-s">ODS</label>
+          <select class="form-inp-s">
+            <option>Todos</option>
+            <option>ODS 2</option>
+            <option>ODS 3</option>
+            <option>ODS 4</option>
+            <option>ODS 9</option>
+            <option>ODS 11</option>
+            <option>ODS 15</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label-s">Periodo</label>
+          <select class="form-inp-s">
+            <option>Todos</option>
+            <option>Invierno 2024</option>
+            <option>Feb–Jun 2024</option>
+            <option>Verano 2024</option>
+            <option>Ago–Dic 2024</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label-s">Beneficiarios mínimos</label>
+          <input type="number" class="form-inp-s" placeholder="Ej. 50">
+        </div>
+        <div>
+          <label class="form-label-s">Horas mínimas</label>
+          <input type="number" class="form-inp-s" placeholder="Ej. 100">
+        </div>
+      </div>
+      <div>
+        <label class="form-label-s">Avance mínimo (%)</label>
+        <input type="range" min="0" max="100" value="0" style="width:100%;accent-color:var(--azul-tec);">
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-sm" style="background:var(--gris-100);color:var(--gris-600);" onclick="document.getElementById('modalFiltros').classList.remove('open')">Cancelar</button>
+      <button class="btn btn-primary btn-sm" onclick="document.getElementById('modalFiltros').classList.remove('open')">Aplicar filtros</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EXPORTAR -->
+<div class="modal-overlay" id="modalExport">
+  <div class="modal-box" style="max-width:400px">
+    <div class="modal-head">
+      <div class="modal-head-title">⬇ Exportar Reporte</div>
+      <button class="modal-close-btn" onclick="document.getElementById('modalExport').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-bdy">
+      <p style="font-size:14px;color:var(--gris-600);margin-bottom:16px;">Selecciona el formato y rango de datos a exportar.</p>
+      <label class="form-label-s">Formato</label>
+      <select class="form-inp-s">
+        <option>CSV (Excel)</option>
+        <option>PDF — Reporte ejecutivo</option>
+        <option>JSON (API)</option>
+      </select>
+      <label class="form-label-s">Incluir</label>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;">
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gris-700);cursor:pointer;"><input type="checkbox" checked style="accent-color:var(--azul-tec)"> Datos generales de proyectos</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gris-700);cursor:pointer;"><input type="checkbox" checked style="accent-color:var(--azul-tec)"> Métricas de beneficiarios</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gris-700);cursor:pointer;"><input type="checkbox" style="accent-color:var(--azul-tec)"> Horas por voluntario</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gris-700);cursor:pointer;"><input type="checkbox" style="accent-color:var(--azul-tec)"> Distribución ODS</label>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-sm" style="background:var(--gris-100);color:var(--gris-600);" onclick="document.getElementById('modalExport').classList.remove('open')">Cancelar</button>
+      <button class="btn btn-verde btn-sm" onclick="document.getElementById('modalExport').classList.remove('open')">⬇ Descargar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MODAL NUEVO PROYECTO ===================== -->
+<div class="modal-overlay" id="modalNuevoProyecto">
+  <form id="form-proyecto">
+  <div class="modal-box" style="max-width:640px;">
+    <div class="modal-head">
+      <div class="modal-head-title">Nuevo Proyecto</div>
+      <button type = "button"class="modal-close-btn" onclick="document.getElementById('modalNuevoProyecto').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-bdy" style="max-height:70vh;overflow-y:auto;">
+
+      <!-- Nombre -->
+      <label class="form-label-s">Nombre del proyecto *</label>
+      <input type="text" id="input-titulo" class="form-input" placeholder="Ej. Tutorías en colonias vulnerables">
+
+      <!-- Descripción corta -->
+      <label class="form-label-s">Descripción corta * <span style="color:var(--gris-400);font-weight:400;">(máx. 200 caracteres)</span></label>
+      <textarea  class="form-textarea" rows = "2" id="input-resumen" placeholder="¿Qué problema resuelve? ¿A quién beneficia?"></textarea>
+
+      <!-- Descripción larga -->
+      <label class="form-label-s">Descripción larga</label>
+      <textarea  class="form-textarea" id="input-desc" placeholder="Resumen"></textarea>
+
+      <!-- Categoría / ODS -->
+      <div class="form-grid-2">
+        <div>
+          <label class="form-label-s">Categoría *</label>
+          <select class="form-select select-catalogo" data-catalogo="categorias" id="categoria">
+            Cargando..
+          </select>
+        </div>
+        <div>
+          <label class="form-label-s">ODS principal *</label>
+          <select class="form-select select-catalogo" data-catalogo="ods" id="ods">
+            Cargando..
+          </select>
+        </div>
+      </div>
+
+      <!-- Periodo / Estado -->
+      <div class="form-grid-2">
+        <div>
+          <label class="form-label-s">Periodo *</label>
+          <select class="form-inp-s" id="input-periodo">
+            <option value="">Seleccionar...</option>
+            <option value="regular">Regular (Ago–Dic / Feb–Jun)</option>
+            <option value="intensivo invierno">Intensivo invierno</option>
+            <option value="intensivo verano">Intensivo verano</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label-s">Estado inicial *</label>
+          <select class="form-inp-s"id="input-estado">
+            <option value="activo">Activo</option>
+            <option value="completado">Inactivo</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Fechas -->
+      <div class="form-grid-2">
+        <div>
+          <label class="form-label-s">Fecha de inicio *</label>
+          <input type="date" class="form-inp-s" id="input-finicio">
+        </div>
+        <div>
+          <label class="form-label-s">Fecha de fin estimada *</label>
+          <input type="date" class="form-inp-s" id="input-ffin">
+        </div>
+      </div>
+
+      <!--Video URL -->
+      <div class="form-grid-2">
+        <div>
+          <label class="form-label-s">URL de video (YouTube)</label>
+          <input type="url" class="form-inp-s" placeholder="https://youtube.com/watch?v=..." maxlength="100" id = "input-video">
+        </div>
+      
+
+      
+        <div>
+          <label class="form-label-s">Población Objetivo</label>
+          <select class="form-inp-s select-catalogo" data-catalogo="poblaciones"id="input-poblacion">
+            cargando..
+          </select>
+        </div>
+      </div>
+
+      <!-- Asignar líder -->
+      <label class="form-label-s">Asignar líder</label>
+      <select class="form-inp-s select-catalogo" data-catalogo="lideres" style="margin-bottom:0;" id = "input-lider">
+        <option value="">Sin asignar (asignar después)</option>
+      </select>
+      <p style="font-size:11px;color:var(--gris-400);margin-top:4px;margin-bottom:0;">Puedes asignar o cambiar el líder en cualquier momento desde el detalle del proyecto.</p>
+
+    </div>
+    <div class="modal-ft">
+      <button type = "button" class = "btn btn-sm" style="background:var(--gris-100);color:var(--gris-600);" onclick="document.getElementById('modalNuevoProyecto').classList.remove('open')">Cancelar</button>
+      <button type = "submit" class="btn btn-sm" style="background:var(--verde-dark);color:#fff;border-color:var(--verde-dark);" onclick="document.getElementById('modalNuevoProyecto').classList.remove('open')">✓ Crear proyecto</button>
+    </div>
+  </div>
+  </form>
+</div>
+
+<!-- ===================== MODAL NUEVO LÍDER ===================== -->
+<div class="modal-overlay" id="modalNuevoLider">
+  <div class="modal-box" style="max-width:580px;">
+    <div class="modal-head">
+      <div class="modal-head-title">👤 Nuevo Líder Social</div>
+      <button class="modal-close-btn" onclick="document.getElementById('modalNuevoLider').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-bdy" style="max-height:70vh;overflow-y:auto;">
+
+      <!-- Nombre de usuario -->
+      <label class="form-label-s">Nombre completo *</label>
+      <input type="text" class="form-inp-s" placeholder="Ej. Ana Martínez García" maxlength="50">
+
+      <!-- Correo / Contraseña -->
+      <div class="form-grid-2">
+        <div>
+          <label class="form-label-s">Correo institucional *</label>
+          <input type="email" class="form-inp-s" placeholder="nombre@tec.mx" maxlength="50">
+        </div>
+        <div>
+          <label class="form-label-s">Contraseña temporal *</label>
+          <input type="password" class="form-inp-s" placeholder="Mín. 8 caracteres" maxlength="50">
+        </div>
+      </div>
+
+      <!-- Carrera / Estado -->
+      <div class="form-grid-2">
+        <div>
+          <label class="form-label-s">Carrera *</label>
+          <input type="text" class="form-inp-s" placeholder="Ej. Lic. Ciencias de la Educación" maxlength="100">
+        </div>
+        <div>
+          <label class="form-label-s">Estado de la cuenta</label>
+          <select class="form-inp-s">
+            <option value="activo">Activo</option>
+            <option value="inactivo">Inactivo</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Teléfono -->
+      <label class="form-label-s">Teléfono</label>
+      <input type="tel" class="form-inp-s" placeholder="Ej. 2221234567" maxlength="10">
+
+      <!-- Biografía -->
+      <label class="form-label-s">Biografía breve</label>
+      <textarea class="form-inp-s" rows="3" placeholder="Descripción del líder, experiencia relevante, áreas de interés..." maxlength="200" style="resize:vertical;"></textarea>
+
+      <!-- LinkedIn / Instagram -->
+      <div class="form-grid-2">
+        <div>
+          <label class="form-label-s">LinkedIn <span style="color:var(--gris-400);font-weight:400;">(usuario)</span></label>
+          <input type="text" class="form-inp-s" placeholder="ana-martinez-garcia" maxlength="50">
+        </div>
+        <div>
+          <label class="form-label-s">Instagram <span style="color:var(--gris-400);font-weight:400;">(usuario)</span></label>
+          <input type="text" class="form-inp-s" placeholder="@ana.martinez" maxlength="50">
+        </div>
+      </div>
+
+      <div style="background:var(--azul-light);border-radius:var(--radius-sm);padding:10px 14px;font-size:12px;color:#1e40af;margin-top:4px;">
+        ℹ️ Se creará un usuario de tipo <strong>Líder</strong> en el sistema. El líder recibirá un correo de activación y podrá cambiar su contraseña al iniciar sesión por primera vez.
+      </div>
+
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-sm" style="background:var(--gris-100);color:var(--gris-600);" onclick="document.getElementById('modalNuevoLider').classList.remove('open')">Cancelar</button>
+      <button class="btn btn-sm" style="background:var(--morado);color:#fff;border-color:var(--morado);" onclick="document.getElementById('modalNuevoLider').classList.remove('open')">✓ Crear líder</button>
+    </div>
+  </div>
+</div>
+<script>
+fetch("/api/catalogos/datos-formulario")
+  .then(res => res.json())
+  .then(respuesta => {
+    const { categorias, ods, lideres, poblaciones } = respuesta.data;
+
+    const todosLosSelects = document.querySelectorAll(".select-catalogo");
+
+    todosLosSelects.forEach(select => {
+        const tipoCatalogo = select.dataset.catalogo; 
+
+        if (tipoCatalogo === "categorias") {
+            select.innerHTML = categorias.map(c => 
+                `<option value="${c.id_categoria}">${c.nombre}</option>`
+            ).join('');
+        } 
+        else if (tipoCatalogo === "ods") {
+            select.innerHTML = ods.map(o => 
+                `<option value="${o.id_ods}">${o.nombre}</option>`
+            ).join('');
+        } 
+        else if (tipoCatalogo === "lideres") {
+            select.innerHTML = lideres.map(l => 
+                `<option value="${l.id_lider}">${l.username}</option>`
+            ).join('');
+        }
+        else if(tipoCatalogo==="poblaciones"){
+          select.innerHTML=poblaciones.map(p =>
+            `<option value = "${p.id_poblacion}">${p.nombre}</option>`
+          ).join('');
+        }
+    });
+
+  })
+  .catch(err => console.error("Error al poblar los catálogos dinámicos:", err));
+</script>
+<script src="projectjs/projects.js"></script>
+<script src="projectjs/crear.js"></script>
+<script>
+document.querySelectorAll('.modal-overlay').forEach(function(m) {
+  m.addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('open');
+  });
+});
+</script>
+
+</body>
+</html>
