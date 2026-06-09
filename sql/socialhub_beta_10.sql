@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-06-2026 a las 22:48:20
+-- Tiempo de generación: 09-06-2026 a las 12:59:06
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -65,6 +65,55 @@ CREATE TABLE `beneficiarios` (
   `genero` enum('masculino','femenino','otro','prefiero_no_decir') DEFAULT NULL,
   `edad` tinyint(3) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `beneficiarios`
+--
+
+INSERT INTO `beneficiarios` (`id_beneficiario`, `id_proyecto`, `nombre`, `fecha_registro`, `genero`, `edad`) VALUES
+(1, 1, 'Chorizo Mariano', '2026-06-09 00:00:00', 'masculino', 34),
+(2, 1, 'Juan Pérez', '2026-01-15 00:00:00', 'masculino', 34),
+(3, 1, 'María López', '2026-01-18 00:00:00', 'femenino', 28),
+(4, 1, 'Carlos Hernández', '2026-01-22 00:00:00', 'masculino', 41),
+(5, 1, 'Ana García', '2026-01-25 00:00:00', 'femenino', 19),
+(6, 1, 'Luis Martínez', '2026-02-01 00:00:00', 'masculino', 52),
+(7, 1, 'Sofía Ramírez', '2026-02-05 00:00:00', 'femenino', 31),
+(8, 1, 'Diego Torres', '2026-02-09 00:00:00', 'otro', 24),
+(9, 1, 'Valentina Cruz', '2026-02-12 00:00:00', 'prefiero_no_decir', 27),
+(10, 1, 'Jorge Mendoza', '2026-02-18 00:00:00', 'masculino', 45),
+(11, 1, 'Fernanda Ruiz', '2026-02-23 00:00:00', 'femenino', 38),
+(12, 1, 'Ricardo Castro', '2026-03-01 00:00:00', 'masculino', 22),
+(13, 1, 'Daniela Flores', '2026-03-04 00:00:00', 'femenino', 29),
+(14, 1, 'Miguel Vargas', '2026-03-08 00:00:00', 'masculino', 36),
+(15, 1, 'Paula Jiménez', '2026-03-12 00:00:00', 'otro', 33),
+(16, 1, 'Andrés Navarro', '2026-03-17 00:00:00', 'masculino', 48),
+(17, 1, 'Camila Ortega', '2026-03-21 00:00:00', 'femenino', 26),
+(18, 1, 'Roberto Silva', '2026-03-25 00:00:00', 'prefiero_no_decir', 55),
+(19, 1, 'Elena Morales', '2026-03-29 00:00:00', 'femenino', 43),
+(20, 1, 'Fernando Reyes', '2026-04-03 00:00:00', 'masculino', 30),
+(21, 1, 'Natalia Castillo', '2026-04-07 00:00:00', 'femenino', 21),
+(22, 1, 'hermosa bella', '2026-06-09 00:00:00', 'femenino', 10),
+(23, 4, 'Juan Pérez', '2026-01-15 00:00:00', 'masculino', 34),
+(24, 4, 'María López', '2026-01-18 00:00:00', 'femenino', 28),
+(25, 4, 'Carlos Hernández', '2026-01-22 00:00:00', 'masculino', 41),
+(26, 4, 'Ana García', '2026-01-25 00:00:00', 'femenino', 19),
+(27, 4, 'Luis Martínez', '2026-02-01 00:00:00', 'masculino', 52),
+(28, 4, 'Sofía Ramírez', '2026-02-05 00:00:00', 'femenino', 31),
+(29, 4, 'Diego Torres', '2026-02-09 00:00:00', 'otro', 24),
+(30, 4, 'Valentina Cruz', '2026-02-12 00:00:00', 'prefiero_no_decir', 27),
+(31, 4, 'Jorge Mendoza', '2026-02-18 00:00:00', 'masculino', 45),
+(32, 4, 'Fernanda Ruiz', '2026-02-23 00:00:00', 'femenino', 38),
+(33, 4, 'Ricardo Castro', '2026-03-01 00:00:00', 'masculino', 22),
+(34, 4, 'Daniela Flores', '2026-03-04 00:00:00', 'femenino', 29),
+(35, 4, 'Miguel Vargas', '2026-03-08 00:00:00', 'masculino', 36),
+(36, 4, 'Paula Jiménez', '2026-03-12 00:00:00', 'otro', 33),
+(37, 4, 'Andrés Navarro', '2026-03-17 00:00:00', 'masculino', 48),
+(38, 4, 'Camila Ortega', '2026-03-21 00:00:00', 'femenino', 26),
+(39, 4, 'Roberto Silva', '2026-03-25 00:00:00', 'prefiero_no_decir', 55),
+(40, 4, 'Elena Morales', '2026-03-29 00:00:00', 'femenino', 43),
+(41, 4, 'Fernando Reyes', '2026-04-03 00:00:00', 'masculino', 30),
+(42, 4, 'Natalia Castillo', '2026-04-07 00:00:00', 'femenino', 21),
+(43, 7, 'hermosa bella', '2026-06-09 00:00:00', 'femenino', 34);
 
 -- --------------------------------------------------------
 
@@ -143,15 +192,38 @@ CREATE TABLE `dashboard_widget` (
 --
 
 INSERT INTO `dashboard_widget` (`id_widget`, `id_proyecto`, `id_metrica`, `id_plantilla`, `nombre_widget`, `pos_x`, `pos_y`, `ancho`, `alto`, `ui_config`, `operacion`, `es_obligatorio`) VALUES
-(164, 1, 1, 1, 'Beneficiarios Totales', 0, 0, 4, 3, '{\"color\":\"#6366f1\"}', 'COUNT', 1),
+(164, 1, 1, 1, 'Beneficiarios Totales', 0, 6, 4, 3, '{\"color\":\"#6366f1\"}', 'COUNT', 1),
 (165, 2, 1, 1, 'Beneficiarios Totales', 0, 0, 4, 3, '{\"color\":\"#6366f1\"}', 'COUNT', 1),
-(166, 3, 1, 1, 'Beneficiarios Totales', 0, 0, 4, 3, '{\"color\":\"#6366f1\"}', 'COUNT', 1),
-(167, 1, 2, 1, 'Prestadores Activos', 4, 0, 4, 3, '{\"color\":\"#10b981\"}', 'COUNT', 1),
+(166, 3, 1, 1, 'Beneficiarios Totales', 0, 0, 4, 4, '{\"color\":\"#6366f1\"}', 'COUNT', 1),
+(167, 1, 2, 1, 'Prestadores Activos', 4, 6, 4, 3, '{\"color\":\"#10b981\"}', 'COUNT', 1),
 (168, 2, 2, 1, 'Prestadores Activos', 4, 0, 4, 3, '{\"color\":\"#10b981\"}', 'COUNT', 1),
-(169, 3, 2, 1, 'Prestadores Activos', 4, 0, 4, 3, '{\"color\":\"#10b981\"}', 'COUNT', 1),
-(170, 1, 3, 1, 'Horas de Servicio', 8, 0, 4, 3, '{\"color\":\"#f59e0b\"}', 'SUM', 1),
+(169, 3, 2, 1, 'Prestadores Activos', 6, 0, 4, 4, '{\"color\":\"#10b981\"}', 'COUNT', 1),
+(170, 1, 3, 1, 'Horas de Servicio', 8, 6, 4, 3, '{\"color\":\"#f59e0b\"}', 'SUM', 1),
 (171, 2, 3, 1, 'Horas de Servicio', 8, 0, 4, 3, '{\"color\":\"#f59e0b\"}', 'SUM', 1),
-(172, 3, 3, 1, 'Horas de Servicio', 8, 0, 4, 3, '{\"color\":\"#f59e0b\"}', 'SUM', 1);
+(172, 3, 3, 1, 'Horas de Servicio', 0, 4, 8, 2, '{\"color\":\"#f59e0b\"}', 'SUM', 1),
+(188, 1, 1, 2, 'Beneficiarios por Genero', 0, 9, 12, 5, '{\"color\":\"#6366f1\",\"tipo_grafica\":\"pie\",\"agrupacion_beneficiarios\":\"genero\"}', 'SUM', 0),
+(189, 1, 1, 2, 'Beneficiarios por Edad', 0, 0, 12, 6, '{\"color\":\"#6366f1\",\"tipo_grafica\":\"line\",\"agrupacion_beneficiarios\":\"edad\"}', 'SUM', 0),
+(201, 7, 1, 1, 'Beneficiarios Totales', 0, 0, 4, 3, '{\"color\":\"#6366f1\"}', 'COUNT', 1),
+(202, 7, 2, 1, 'Prestadores Activos', 4, 0, 4, 3, '{\"color\":\"#10b981\"}', 'COUNT', 1),
+(203, 7, 3, 1, 'Horas de Servicio', 8, 0, 4, 3, '{\"color\":\"#f59e0b\"}', 'SUM', 1),
+(207, 8, 1, 1, 'Beneficiarios Totales', 0, 0, 4, 3, '{\"color\":\"#6366f1\"}', 'COUNT', 1),
+(208, 8, 2, 1, 'Prestadores Activos', 4, 0, 4, 3, '{\"color\":\"#10b981\"}', 'COUNT', 1),
+(209, 8, 3, 1, 'Horas de Servicio', 8, 0, 4, 3, '{\"color\":\"#f59e0b\"}', 'SUM', 1),
+(210, 9, 1, 1, 'Beneficiarios Totales', 0, 0, 4, 3, '{\"color\":\"#6366f1\"}', 'COUNT', 1),
+(211, 9, 2, 1, 'Prestadores Activos', 4, 0, 4, 3, '{\"color\":\"#10b981\"}', 'COUNT', 1),
+(212, 9, 3, 1, 'Horas de Servicio', 8, 0, 4, 3, '{\"color\":\"#f59e0b\"}', 'SUM', 1),
+(213, 10, 1, 1, 'Beneficiarios Totales', 0, 0, 4, 3, '{\"color\":\"#6366f1\"}', 'COUNT', 1),
+(214, 10, 2, 1, 'Prestadores Activos', 4, 0, 4, 3, '{\"color\":\"#10b981\"}', 'COUNT', 1),
+(215, 10, 3, 1, 'Horas de Servicio', 8, 0, 4, 3, '{\"color\":\"#f59e0b\"}', 'SUM', 1),
+(216, 11, 1, 1, 'Beneficiarios Totales', 0, 0, 4, 3, '{\"color\":\"#6366f1\"}', 'COUNT', 1),
+(217, 11, 2, 1, 'Prestadores Activos', 4, 0, 4, 3, '{\"color\":\"#10b981\"}', 'COUNT', 1),
+(218, 11, 3, 1, 'Horas de Servicio', 8, 0, 4, 3, '{\"color\":\"#f59e0b\"}', 'SUM', 1),
+(219, 12, 1, 1, 'Beneficiarios Totales', 0, 0, 4, 3, '{\"color\":\"#6366f1\"}', 'COUNT', 1),
+(220, 12, 2, 1, 'Prestadores Activos', 4, 0, 4, 3, '{\"color\":\"#10b981\"}', 'COUNT', 1),
+(221, 12, 3, 1, 'Horas de Servicio', 8, 0, 4, 3, '{\"color\":\"#f59e0b\"}', 'SUM', 1),
+(222, 13, 1, 1, 'Beneficiarios Totales', 0, 0, 4, 3, '{\"color\":\"#6366f1\"}', 'COUNT', 1),
+(223, 13, 2, 1, 'Prestadores Activos', 4, 0, 4, 3, '{\"color\":\"#10b981\"}', 'COUNT', 1),
+(224, 13, 3, 1, 'Horas de Servicio', 8, 0, 4, 3, '{\"color\":\"#f59e0b\"}', 'SUM', 1);
 
 -- --------------------------------------------------------
 
@@ -165,6 +237,16 @@ CREATE TABLE `horas_proyecto` (
   `horas` decimal(10,2) NOT NULL,
   `fecha` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `horas_proyecto`
+--
+
+INSERT INTO `horas_proyecto` (`id_horas`, `id_proyecto`, `horas`, `fecha`) VALUES
+(1, 4, 1200.00, '2026-06-08 21:58:50'),
+(3, 1, 5.00, '2026-06-08 22:26:02'),
+(4, 4, 120.00, '2026-06-09 00:00:00'),
+(5, 7, 12000.00, '2026-06-09 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -196,7 +278,8 @@ CREATE TABLE `lider` (
 
 INSERT INTO `lider` (`id_lider`, `carrera`, `estado`) VALUES
 (1, 'ITC', 'activo'),
-(2, 'ITC', 'activo');
+(2, 'ITC', 'activo'),
+(3, 'finanzas', 'activo');
 
 -- --------------------------------------------------------
 
@@ -219,7 +302,15 @@ CREATE TABLE `lider_proyecto` (
 INSERT INTO `lider_proyecto` (`id_lider`, `id_proyecto`, `fecha_asignacion`, `rol`, `estado`) VALUES
 (1, 1, '2026-06-04 18:30:17', NULL, 'activo'),
 (1, 2, '2026-06-05 18:29:22', NULL, 'activo'),
-(2, 3, '2026-06-05 18:59:31', NULL, 'activo');
+(1, 8, '2026-06-09 01:14:05', NULL, 'activo'),
+(1, 9, '2026-06-09 01:22:30', NULL, 'activo'),
+(1, 11, '2026-06-09 01:32:36', NULL, 'activo'),
+(1, 12, '2026-06-09 01:35:14', NULL, 'activo'),
+(1, 13, '2026-06-09 01:41:27', NULL, 'activo'),
+(2, 3, '2026-06-05 18:59:31', NULL, 'activo'),
+(2, 7, '2026-06-08 22:47:42', NULL, 'activo'),
+(2, 10, '2026-06-09 01:29:43', NULL, 'activo'),
+(3, 4, '2026-06-08 21:22:48', NULL, 'activo');
 
 -- --------------------------------------------------------
 
@@ -255,7 +346,10 @@ CREATE TABLE `metricas_proyecto` (
 INSERT INTO `metricas_proyecto` (`id_metrica`, `nombre`, `unidad`, `es_general`, `id_proyecto`) VALUES
 (1, 'Beneficiarios Totales', 'Beneficiarios', 1, NULL),
 (2, 'Prestadores Activos', 'Prestadores', 1, NULL),
-(3, 'Horas de Servicio', 'Horas', 1, NULL);
+(3, 'Horas de Servicio', 'Horas', 1, NULL),
+(33, 'Chaparritas Ricas', 'Chaparritas', 0, 1),
+(34, 'Chaparritas hermosas ayudadas', 'Chaparritas', 0, 7),
+(35, 'Hermosas', 'Chaparritas', 0, 7);
 
 -- --------------------------------------------------------
 
@@ -359,6 +453,20 @@ CREATE TABLE `poblacion_proyecto` (
   `id_proyecto` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `poblacion_proyecto`
+--
+
+INSERT INTO `poblacion_proyecto` (`id_poblacion`, `id_proyecto`) VALUES
+(1, 4),
+(1, 7),
+(1, 8),
+(1, 9),
+(1, 10),
+(1, 11),
+(1, 12),
+(1, 13);
+
 -- --------------------------------------------------------
 
 --
@@ -373,19 +481,29 @@ CREATE TABLE `proyecto` (
   `id_categoria` int(11) DEFAULT NULL,
   `fecha_inicio` date DEFAULT NULL,
   `fecha_fin` date DEFAULT NULL,
-  `periodo` enum('regular','Intensivo Invierno','Intensivo verano') DEFAULT NULL,
+  `periodo` enum('Ago-Dic','Feb-Jun','Intensivo Invierno','Intensivo verano') DEFAULT NULL,
   `video_url` varchar(150) DEFAULT NULL,
-  `estado` enum('activo','inactivo') DEFAULT 'inactivo'
+  `estado` enum('activo','inactivo') DEFAULT 'inactivo',
+  `color_primario` varchar(20) DEFAULT '#1e40af',
+  `font_titulo` varchar(100) DEFAULT '''Sora'', sans-serif'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `proyecto`
 --
 
-INSERT INTO `proyecto` (`id_proyecto`, `nombre`, `descripcion_corta`, `descripcion_larga`, `id_categoria`, `fecha_inicio`, `fecha_fin`, `periodo`, `video_url`, `estado`) VALUES
-(1, 'chaparritas peligrosas', 'hola soy chaparrita', 'jiji ', 1, '2026-06-04', '2026-07-05', 'regular', 'https://www.youtube.com/watch?v=QDia3e12czc', 'activo'),
-(2, 'Hermoso', 'ser hermoso', '123', 1, '2026-06-05', '2026-06-06', 'regular', 'https://www.youtube.com/watch?v=QDia3e12czc', 'activo'),
-(3, 'reina y madre', 'hermosa', '123', 1, '2026-06-16', '2026-06-05', 'Intensivo Invierno', 'https://www.youtube.com/watch?v=QDia3e12czc', 'activo');
+INSERT INTO `proyecto` (`id_proyecto`, `nombre`, `descripcion_corta`, `descripcion_larga`, `id_categoria`, `fecha_inicio`, `fecha_fin`, `periodo`, `video_url`, `estado`, `color_primario`, `font_titulo`) VALUES
+(1, 'chaparritas peligrosas', 'hola soy chaparrita', 'jiji ', 1, '2026-06-04', '2026-07-05', 'Ago-Dic', 'https://www.youtube.com/watch?v=QDia3e12czc', 'activo', '#1647da', '\'DM Sans\', sans-serif'),
+(2, 'Hermoso', 'ser hermoso', '123', 1, '2026-06-05', '2026-06-06', 'Ago-Dic', 'https://www.youtube.com/watch?v=QDia3e12czc', 'activo', '#b416fe', '\'Sora\', sans-serif'),
+(3, 'reina y madre', 'hermosa', '123', 1, '2026-06-16', '2026-06-05', 'Intensivo Invierno', 'https://www.youtube.com/watch?v=QDia3e12czc', 'activo', '#1e40af', '\'Sora\', sans-serif'),
+(4, 'Proyecto de Lupita', 'Dar hogar a todos los gatos del mundo', 'hola soy amante de los gatos', 1, '2026-06-12', '2026-06-19', 'Ago-Dic', 'https://www.youtube.com/watch?v=f5bOhXoN614&list=RDf5bOhXoN614&start_radio=1', 'activo', '#1e40af', '\'Sora\', sans-serif'),
+(7, 'Perritos Bonitos', 'Los perros feos', 'FUERA perros feos (pug)', 1, '2026-06-08', '2026-06-09', 'Intensivo Invierno', 'https://www.youtube.com/watch?v=QDia3e12czc', 'activo', '#1e40af', '\'Sora\', sans-serif'),
+(8, 'xd', 'xd', 'xd', 1, '0000-00-00', '0000-00-00', '', '', 'activo', '#1e40af', '\'Sora\', sans-serif'),
+(9, 'f', 'f', 'f', 1, '2026-06-03', '2026-06-14', 'Intensivo verano', 'https://www.youtube.com/watch?v=QDia3e12czc', 'activo', '#1e40af', '\'Sora\', sans-serif'),
+(10, 'e', 'e', 'e', 1, '2026-06-09', '2026-06-14', '', '', 'inactivo', '#1e40af', '\'Sora\', sans-serif'),
+(11, 'a', 'a', 'a', 1, '2026-06-09', '2026-06-28', 'Feb-Jun', '', 'inactivo', '#1e40af', '\'Sora\', sans-serif'),
+(12, 'r', 'r', 'r', 1, '2026-06-10', '2026-06-14', 'Feb-Jun', '', 'inactivo', '#1e40af', '\'Sora\', sans-serif'),
+(13, 'x', 'x', 'x', 1, '2026-06-01', '2026-06-14', 'Intensivo Invierno', 'https://www.youtube.com/watch?v=QDia3e12czc', 'inactivo', '#1e40af', '\'Sora\', sans-serif');
 
 -- --------------------------------------------------------
 
@@ -405,7 +523,15 @@ CREATE TABLE `proyecto_ods` (
 INSERT INTO `proyecto_ods` (`id_proyecto`, `id_ods`) VALUES
 (1, 3),
 (2, 15),
-(3, 1);
+(3, 1),
+(4, 8),
+(7, 3),
+(8, 1),
+(9, 1),
+(10, 1),
+(11, 1),
+(12, 1),
+(13, 1);
 
 -- --------------------------------------------------------
 
@@ -419,6 +545,14 @@ CREATE TABLE `proyecto_prestador` (
   `estatus` varchar(20) DEFAULT 'activo',
   `fecha_alta` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `proyecto_prestador`
+--
+
+INSERT INTO `proyecto_prestador` (`id_proyecto_prestador`, `id_proyecto`, `estatus`, `fecha_alta`) VALUES
+(1, 1, 'activo', '2026-06-09 00:00:00'),
+(2, 7, 'activo', '2026-06-09 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -455,7 +589,15 @@ CREATE TABLE `registro_proyectos` (
 INSERT INTO `registro_proyectos` (`id_registro`, `id_proyecto`, `id_admin`, `fecha_registro`) VALUES
 (1, 1, 1, '2026-06-04 18:30:17'),
 (2, 2, 1, '2026-06-05 18:29:22'),
-(3, 3, 1, '2026-06-05 18:59:31');
+(3, 3, 1, '2026-06-05 18:59:31'),
+(4, 4, 1, '2026-06-08 21:22:48'),
+(5, 7, 1, '2026-06-08 22:47:42'),
+(6, 8, 1, '2026-06-09 01:14:05'),
+(7, 9, 1, '2026-06-09 01:22:30'),
+(8, 10, 1, '2026-06-09 01:29:43'),
+(9, 11, 1, '2026-06-09 01:32:36'),
+(10, 12, 1, '2026-06-09 01:35:14'),
+(11, 13, 1, '2026-06-09 01:41:27');
 
 -- --------------------------------------------------------
 
@@ -475,7 +617,8 @@ CREATE TABLE `testimonio` (
 --
 
 INSERT INTO `testimonio` (`id_testimonio`, `id_proyecto`, `texto`, `fecha_hora`) VALUES
-(1, 1, 'las mejores chaparritas', '2026-06-07 00:23:08');
+(1, 1, 'las mejores chaparritas', '2026-06-07 00:23:08'),
+(2, 1, 'Hola soy chaparrita, y tu', '2026-06-08 20:11:00');
 
 -- --------------------------------------------------------
 
@@ -501,7 +644,8 @@ CREATE TABLE `usuario` (
 
 INSERT INTO `usuario` (`id_usuario`, `username`, `correo`, `contrasena`, `fecha_registro`, `foto_perfil`, `telefono`, `linkedin`, `cvu`) VALUES
 (1, 'Admin', 'admin@gmail.com', '$2b$10$9JZw7omSAtz4idJ9rlh8Me4DcvBiZl7jlMGc2wUhiQoc.g/bgUC42', NULL, NULL, NULL, NULL, NULL),
-(2, 'mariani', 'hermosa@reina.com', '$2b$10$zGAxUDV.Z9q.86dicxNfI.JgebONEQPDKEbhwXBdKF5Q0Yepx9K4G', '2026-06-05', 'uploads/perfiles/perfil-2-1780726813693.JPG', NULL, NULL, NULL);
+(2, 'mariani', 'hermosa@reina.com', '$2b$10$zGAxUDV.Z9q.86dicxNfI.JgebONEQPDKEbhwXBdKF5Q0Yepx9K4G', '2026-06-05', 'uploads/perfiles/perfil-2-1780726813693.JPG', NULL, NULL, NULL),
+(3, 'Lupis', 'lupis@chiquis.com', '$2b$10$lmmUkuD2CCnkWdffykH3kuFCOVZneFtAbuutjmsfYChnRUUMWwjMW', '2026-06-08', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -524,7 +668,19 @@ CREATE TABLE `valores_metricas` (
 --
 
 INSERT INTO `valores_metricas` (`id_valor`, `id_metrica`, `id_archivo`, `fecha`, `valor_decimal`, `valor_entero`, `valor_texto`) VALUES
-(507, 3, NULL, '2026-06-08 06:00:00', 20.00, NULL, NULL);
+(507, 3, NULL, '2026-06-08 06:00:00', 20.00, NULL, NULL),
+(508, 3, NULL, '2026-06-08 06:00:00', 80.00, NULL, NULL),
+(509, 3, NULL, '2026-06-08 06:00:00', 13.00, NULL, NULL),
+(510, 33, NULL, '2026-06-09 03:02:56', 1.00, NULL, NULL),
+(511, 33, NULL, '2026-06-08 06:00:00', 120.00, NULL, NULL),
+(512, 33, NULL, '2026-06-08 06:00:00', 5254.00, NULL, NULL),
+(513, 33, NULL, '2026-06-08 06:00:00', 67.00, NULL, NULL),
+(514, 33, NULL, '2026-06-08 06:00:00', 1111111.00, NULL, NULL),
+(515, 33, NULL, '2026-06-08 06:00:00', 9.00, NULL, NULL),
+(516, 3, NULL, '2026-06-08 06:00:00', 7.00, NULL, NULL),
+(517, 34, NULL, '2026-06-09 06:00:00', 42.00, NULL, NULL),
+(518, 34, NULL, '2026-06-08 06:00:00', 11.00, NULL, NULL),
+(519, 35, NULL, '2026-06-09 10:55:12', 12.00, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -556,9 +712,11 @@ CREATE TABLE `vista_proyecto_completo` (
 ,`id_categoria` int(11)
 ,`fecha_inicio` date
 ,`fecha_fin` date
-,`periodo` enum('regular','Intensivo Invierno','Intensivo verano')
+,`periodo` enum('Ago-Dic','Feb-Jun','Intensivo Invierno','Intensivo verano')
 ,`video_url` varchar(150)
 ,`estado` enum('activo','inactivo')
+,`color_primario` varchar(20)
+,`font_titulo` varchar(100)
 ,`categoria` varchar(30)
 ,`ods` mediumtext
 ,`poblacion` mediumtext
@@ -629,7 +787,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vista_proyecto_completo`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_proyecto_completo`  AS SELECT `p`.`id_proyecto` AS `id_proyecto`, `p`.`nombre` AS `nombre`, `p`.`descripcion_corta` AS `descripcion_corta`, `p`.`descripcion_larga` AS `descripcion_larga`, `p`.`id_categoria` AS `id_categoria`, `p`.`fecha_inicio` AS `fecha_inicio`, `p`.`fecha_fin` AS `fecha_fin`, `p`.`periodo` AS `periodo`, `p`.`video_url` AS `video_url`, `p`.`estado` AS `estado`, `c`.`nombre` AS `categoria`, group_concat(distinct `o`.`nombre` separator ', ') AS `ods`, group_concat(distinct `pbo`.`nombre` separator ', ') AS `poblacion`, group_concat(distinct `u`.`username` separator ', ') AS `lider` FROM (((((((`proyecto` `p` left join `proyecto_ods` `po` on(`p`.`id_proyecto` = `po`.`id_proyecto`)) left join `lider_proyecto` `lo` on(`p`.`id_proyecto` = `lo`.`id_proyecto`)) left join `poblacion_proyecto` `pp` on(`p`.`id_proyecto` = `pp`.`id_proyecto`)) left join `poblacion_objetivo` `pbo` on(`pp`.`id_poblacion` = `pbo`.`id_poblacion`)) left join `ods` `o` on(`po`.`id_ods` = `o`.`id_ods`)) left join `categoria` `c` on(`p`.`id_categoria` = `c`.`id_categoria`)) left join `usuario` `u` on(`lo`.`id_lider` = `u`.`id_usuario`)) GROUP BY `p`.`id_proyecto` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_proyecto_completo`  AS SELECT `p`.`id_proyecto` AS `id_proyecto`, `p`.`nombre` AS `nombre`, `p`.`descripcion_corta` AS `descripcion_corta`, `p`.`descripcion_larga` AS `descripcion_larga`, `p`.`id_categoria` AS `id_categoria`, `p`.`fecha_inicio` AS `fecha_inicio`, `p`.`fecha_fin` AS `fecha_fin`, `p`.`periodo` AS `periodo`, `p`.`video_url` AS `video_url`, `p`.`estado` AS `estado`, `p`.`color_primario` AS `color_primario`, `p`.`font_titulo` AS `font_titulo`, `c`.`nombre` AS `categoria`, group_concat(distinct `o`.`nombre` separator ', ') AS `ods`, group_concat(distinct `pbo`.`nombre` separator ', ') AS `poblacion`, group_concat(distinct `u`.`username` separator ', ') AS `lider` FROM (((((((`proyecto` `p` left join `proyecto_ods` `po` on(`p`.`id_proyecto` = `po`.`id_proyecto`)) left join `lider_proyecto` `lo` on(`p`.`id_proyecto` = `lo`.`id_proyecto`)) left join `poblacion_proyecto` `pp` on(`p`.`id_proyecto` = `pp`.`id_proyecto`)) left join `poblacion_objetivo` `pbo` on(`pp`.`id_poblacion` = `pbo`.`id_poblacion`)) left join `ods` `o` on(`po`.`id_ods` = `o`.`id_ods`)) left join `categoria` `c` on(`p`.`id_categoria` = `c`.`id_categoria`)) left join `usuario` `u` on(`lo`.`id_lider` = `u`.`id_usuario`)) GROUP BY `p`.`id_proyecto` ;
 
 --
 -- Índices para tablas volcadas
@@ -838,7 +996,7 @@ ALTER TABLE `archivos_csv`
 -- AUTO_INCREMENT de la tabla `beneficiarios`
 --
 ALTER TABLE `beneficiarios`
-  MODIFY `id_beneficiario` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_beneficiario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT de la tabla `categoria`
@@ -856,13 +1014,13 @@ ALTER TABLE `comentario_foro`
 -- AUTO_INCREMENT de la tabla `dashboard_widget`
 --
 ALTER TABLE `dashboard_widget`
-  MODIFY `id_widget` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=180;
+  MODIFY `id_widget` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=225;
 
 --
 -- AUTO_INCREMENT de la tabla `horas_proyecto`
 --
 ALTER TABLE `horas_proyecto`
-  MODIFY `id_horas` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_horas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `imagenes`
@@ -880,7 +1038,7 @@ ALTER TABLE `like_foro`
 -- AUTO_INCREMENT de la tabla `metricas_proyecto`
 --
 ALTER TABLE `metricas_proyecto`
-  MODIFY `id_metrica` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id_metrica` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT de la tabla `modificacion`
@@ -910,13 +1068,13 @@ ALTER TABLE `poblacion_objetivo`
 -- AUTO_INCREMENT de la tabla `proyecto`
 --
 ALTER TABLE `proyecto`
-  MODIFY `id_proyecto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_proyecto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `proyecto_prestador`
 --
 ALTER TABLE `proyecto_prestador`
-  MODIFY `id_proyecto_prestador` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_proyecto_prestador` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `publicacion_foro`
@@ -928,25 +1086,25 @@ ALTER TABLE `publicacion_foro`
 -- AUTO_INCREMENT de la tabla `registro_proyectos`
 --
 ALTER TABLE `registro_proyectos`
-  MODIFY `id_registro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_registro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `testimonio`
 --
 ALTER TABLE `testimonio`
-  MODIFY `id_testimonio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_testimonio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `valores_metricas`
 --
 ALTER TABLE `valores_metricas`
-  MODIFY `id_valor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=508;
+  MODIFY `id_valor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=520;
 
 --
 -- AUTO_INCREMENT de la tabla `visualizacion`
@@ -1105,45 +1263,3 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
-
---- adding columnas para porder personalizar perfillll
-ALTER TABLE proyecto
-ADD COLUMN color_primario VARCHAR(20) DEFAULT '#1e40af',
-ADD COLUMN font_titulo VARCHAR(100) DEFAULT "'Sora', sans-serif";
-
----sdding it to vista pq luego selecciona de vista para ediatr perfil
-CREATE OR REPLACE VIEW vista_proyecto_completo AS
-SELECT
-  p.id_proyecto,
-  p.nombre,
-  p.descripcion_corta,
-  p.descripcion_larga,
-  p.id_categoria,
-  p.fecha_inicio,
-  p.fecha_fin,
-  p.periodo,
-  p.video_url,
-  p.estado,
-  p.color_primario,
-  p.font_titulo,
-  c.nombre AS categoria,
-  GROUP_CONCAT(DISTINCT o.nombre SEPARATOR ', ') AS ods,
-  GROUP_CONCAT(DISTINCT pbo.nombre SEPARATOR ', ') AS poblacion,
-  GROUP_CONCAT(DISTINCT u.username SEPARATOR ', ') AS lider
-FROM proyecto p
-LEFT JOIN proyecto_ods po
-  ON p.id_proyecto = po.id_proyecto
-LEFT JOIN lider_proyecto lo
-  ON p.id_proyecto = lo.id_proyecto
-LEFT JOIN poblacion_proyecto pp
-  ON p.id_proyecto = pp.id_proyecto
-LEFT JOIN poblacion_objetivo pbo
-  ON pp.id_poblacion = pbo.id_poblacion
-LEFT JOIN ods o
-  ON po.id_ods = o.id_ods
-LEFT JOIN categoria c
-  ON p.id_categoria = c.id_categoria
-LEFT JOIN usuario u
-  ON lo.id_lider = u.id_usuario
-GROUP BY p.id_proyecto;

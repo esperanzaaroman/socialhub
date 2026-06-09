@@ -292,6 +292,8 @@ function mostrarMensajeCrearUsuario(mensaje, tipo) {
   cargarInfoBeneficiarios();
   cargarInfoPrestadores();
   cargarInfoHoras();
+  cargarOdsStats();
+  cargarIndicadoresClave();
   }
 );
 async function cargarInfoProyectos (){
@@ -806,5 +808,160 @@ function renderBeneficiariosEdad(beneficiarios) {
                 ${masAlto.cnt} beneficiarios (${Math.round((masAlto.cnt / beneficiarios.length) * 100)}% del total)
             </div>`;
         badge.style.display = 'block';
+    }
+}
+
+// ─── ODS ──────────────────────────────────────────────────────────────────────
+
+const ODS_META = {
+    1:  { emoji: '🏚️', color: '#e5243b' },
+    2:  { emoji: '🍽️', color: '#dda63a' },
+    3:  { emoji: '💊', color: '#4c9f38' },
+    4:  { emoji: '📚', color: '#c5192d' },
+    5:  { emoji: '⚤',  color: '#ff3a21' },
+    6:  { emoji: '💧', color: '#26bde2' },
+    7:  { emoji: '☀️', color: '#fcc30b' },
+    8:  { emoji: '📈', color: '#a21942' },
+    9:  { emoji: '💻', color: '#fd6925' },
+    10: { emoji: '⚖️', color: '#dd1367' },
+    11: { emoji: '🏘️', color: '#fd9d24' },
+    12: { emoji: '♻️', color: '#bf8b2e' },
+    13: { emoji: '🌡️', color: '#3f7e44' },
+    14: { emoji: '🌊', color: '#0a97d9' },
+    15: { emoji: '🌱', color: '#56c02b' },
+    16: { emoji: '⚖️', color: '#00689d' },
+    17: { emoji: '🤝', color: '#19486a' },
+};
+
+// Paleta de colores para ODS sin color propio mapeado
+const ODS_COLORES_EXTRA = [
+    'var(--azul)', 'var(--verde)', 'var(--naranja)',
+    'var(--morado)', '#14b8a6', '#ec4899', '#f59e0b'
+];
+
+async function cargarOdsStats() {
+    try {
+        const resp = await fetch('http://localhost:3000/api/ods/stats');
+        const json = await resp.json();
+        const lista = json.data?.ods || [];
+
+        renderOdsFilas(lista);
+        renderIndicadoresOds(lista);
+
+    } catch (err) {
+        console.error('Error cargando ODS stats:', err);
+        const contenedor = document.getElementById('ods-filas');
+        if (contenedor) contenedor.innerHTML =
+            '<div style="padding:16px;color:#ef4444;font-size:13px;">Error cargando datos ODS.</div>';
+    }
+}
+
+function renderOdsFilas(lista) {
+    const contenedor = document.getElementById('ods-filas');
+    if (!contenedor) return;
+
+    if (lista.length === 0) {
+        contenedor.innerHTML =
+            '<div style="padding:24px;text-align:center;color:var(--gris-400);font-size:13px;">Sin proyectos vinculados a ODS aún.</div>';
+        return;
+    }
+
+    const maxProyectos = Math.max(...lista.map(o => o.num_proyectos));
+
+    contenedor.innerHTML = lista.map((ods, i) => {
+        const meta   = ODS_META[ods.id_ods] || {};
+        const emoji  = meta.emoji || '🎯';
+        const color  = meta.color || ODS_COLORES_EXTRA[i % ODS_COLORES_EXTRA.length];
+        const pct    = maxProyectos > 0 ? Math.round((ods.num_proyectos / maxProyectos) * 100) : 0;
+        // Extraer número y nombre corto del string "ODS N: Nombre completo"
+        const match  = ods.nombre.match(/ODS\s*(\d+):\s*(.+)/i);
+        const numOds = match ? match[1] : ods.id_ods;
+        const nombre = match ? match[2] : ods.nombre;
+
+        return `
+          <div class="ods-row">
+            <span class="ods-name">
+              <span style="font-size:16px;">${emoji}</span>
+              ODS ${numOds} · ${nombre}
+            </span>
+            <div class="ods-bar-wrap">
+              <div class="ods-bar-bg">
+                <div class="ods-bar-fill" style="width:${pct}%;background:${color};transition:width .6s ease;"></div>
+              </div>
+            </div>
+            <span class="ods-count" style="color:${color}">${ods.num_proyectos}</span>
+            <span class="ods-pct">${ods.num_beneficiarios.toLocaleString()}</span>
+          </div>`;
+    }).join('');
+}
+
+// ─── Indicadores Clave ────────────────────────────────────────────────────────
+
+async function renderIndicadoresOds(odsLista) {
+    // ODS más cubierto (ya viene ordenado por num_proyectos DESC)
+    const topOds = odsLista[0];
+    if (topOds) {
+        const match   = topOds.nombre.match(/ODS\s*(\d+):\s*(.+)/i);
+        const numOds  = match ? match[1] : topOds.id_ods;
+        const nombre  = match ? match[2] : topOds.nombre;
+        const el      = document.getElementById('ind-ods-top');
+        const badge   = document.getElementById('ind-ods-top-nombre');
+        if (el)    el.innerText    = `ODS ${numOds}`;
+        if (badge) badge.innerText = nombre;
+    }
+}
+
+async function cargarIndicadoresClave() {
+    try {
+        // ── 1. Crecimiento YoY de beneficiarios ──────────────────────────────
+        const respBen  = await fetch('http://localhost:3000/api/beneficiarios');
+        const jsonBen  = await respBen.json();
+        const bens     = jsonBen.data || [];
+
+        const anioActual   = new Date().getFullYear();
+        const anioAnterior = anioActual - 1;
+
+        const benEsteAnio  = bens.filter(b => new Date(b.fecha_registro).getFullYear() === anioActual).length;
+        const benAnioAnt   = bens.filter(b => new Date(b.fecha_registro).getFullYear() === anioAnterior).length;
+
+        const elCrecBen   = document.getElementById('ind-crecimiento-ben');
+        const badgeCrecBen = document.getElementById('ind-crecimiento-ben-badge');
+
+        if (elCrecBen) {
+            if (benAnioAnt === 0 && benEsteAnio === 0) {
+                elCrecBen.innerText = 'Sin datos';
+            } else if (benAnioAnt === 0) {
+                elCrecBen.innerText = `+${benEsteAnio} este año`;
+                if (badgeCrecBen) badgeCrecBen.innerText = '↑ Nuevo';
+            } else {
+                const pct = Math.round(((benEsteAnio - benAnioAnt) / benAnioAnt) * 100);
+                elCrecBen.innerText = `${pct >= 0 ? '+' : ''}${pct}%`;
+                if (badgeCrecBen) {
+                    badgeCrecBen.innerText = pct >= 0 ? '↑ Bueno' : '↓ Baja';
+                    badgeCrecBen.className = `ind-badge ${pct >= 0 ? 'up' : 'down'}`;
+                }
+            }
+        }
+
+        // ── 2. Tasa de retención de prestadores ──────────────────────────────
+        // Definida como: prestadores activos / total prestadores históricos
+        const respPre = await fetch('http://localhost:3000/api/prestadores');
+        const jsonPre = await respPre.json();
+        const pres    = jsonPre.data || [];
+
+        const totalPre  = pres.length;
+        const activosPre = pres.filter(p => (p.estatus || '').toLowerCase() === 'activo').length;
+        const tasaRet   = totalPre > 0 ? Math.round((activosPre / totalPre) * 100) : 0;
+
+        const elRet   = document.getElementById('ind-retencion-pre');
+        const badgeRet = document.getElementById('ind-retencion-pre-badge');
+        if (elRet)    elRet.innerText   = `${tasaRet}%`;
+        if (badgeRet) {
+            badgeRet.innerText  = tasaRet >= 70 ? '↑ Alta' : tasaRet >= 40 ? '→ Media' : '↓ Baja';
+            badgeRet.className  = `ind-badge ${tasaRet >= 70 ? 'up' : tasaRet >= 40 ? '' : 'down'}`;
+        }
+
+    } catch (err) {
+        console.error('Error cargando indicadores clave:', err);
     }
 }
